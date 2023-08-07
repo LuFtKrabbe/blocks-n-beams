@@ -21,8 +21,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "lint": "eslint .",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "lint": "eslint .; tsc --noEmit",
     "format": "prettier --write src//**/*.{js,jsx,ts,tsx,css} --config .prettierrc",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --watchAll=false --coverage",

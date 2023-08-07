@@ -37,7 +37,7 @@
     "@typescript-eslint",
     "prettier"
   ],
-  "ignorePatterns": ["reportWebVitals.ts", "**/test/", "**/features/counter-temp/"],
+  "ignorePatterns": ["reportWebVitals.ts", "**/test/", "**/features/counter-temp/", "**/build/", "**/coverage/"],
   "rules": {
     "curly": "error",
     "eqeqeq": "warn",
