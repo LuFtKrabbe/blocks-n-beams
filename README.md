@@ -45,13 +45,13 @@ The application is powered by CommerceTools 🌐, a leading provider of commerce
 1. Clone repository `git clone https://github.com/LuFtKrabbe/eCommerce-App.git`
 2. Run `cd eCommerce-App` to change your current directory
 3. Install project dependencies `npm install`
-4. Run `npm run build` to build the project or `npm run serve` to execute local web server that will serve our app locally.
+4. Run `npm run build` to build the project or `npm start` to execute local web server that will serve our app locally.
 
 ---
 
 ## Scripts
 
-- Run `npm run start` to serve project locally in development mode.
+- Run `npm start` to serve project locally in development mode.
 - Run `npm run build` to build project in production mode.
 - Run `npm run lint` to show linter and compiler errors.
 - Run `npm run format` to fix code formatting issues.
