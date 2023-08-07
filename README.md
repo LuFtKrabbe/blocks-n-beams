@@ -51,7 +51,12 @@ The application is powered by CommerceTools 🌐, a leading provider of commerce
 
 ## Scripts
 
-- Run `npm run test` to execute all tests.
-- Run `npm run lint` to fix linter errors.
-- Run `npm run format` to fix code formatting errors.
-- Run `npm run coverage` to execute all tests with coverage report.
+- Run `npm run start` to serve project locally in development mode.
+- Run `npm run build` to build project in production mode.
+- Run `npm run lint` to show linter and compiler errors.
+- Run `npm run format` to fix code formatting issues.
+- Run `npm run test` to run all tests.
+- Run `npm run test:coverage` to run all tests with coverage report.
+- Run `npm run eject` to unpack all create-react-app scripts and dependencies.\
+  Convert project to regular webpack build. **Note: this is a one-way operation. Once you eject, you can’t go back!**
+- Run `npm run prepare` to install husky scripts.
