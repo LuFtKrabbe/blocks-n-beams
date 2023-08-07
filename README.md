@@ -1,50 +1,62 @@
-# eCommerce-App
+# eCommerce Application 🛍️🌐
 
-This platform replicates real-world shopping experiences in a digital environment!
+This is final [task](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/eCommerce-Application/Readme.md) for RS School JS Frontend Developer 2023Q1 course.
 
-# Getting Started with Create React App
+eCommerce-app is a platform that replicates real-world shopping experiences in a digital environment 🏪. It's a comprehensive online shopping portal that provides an interactive and seamless experience to users. From product discovery to checkout, the application ensures a smooth journey for the user, enhancing their engagement and boosting their purchasing confidence 🚀.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+Users can browse through a vast range of products 📚👗👟, view detailed descriptions, add their favorite items to the basket 🛒, and proceed to checkout 💳. It includes features such as user registration and login 📝🔐, product search 🔍, product categorization, and sorting to make the shopping experience more streamlined and convenient.
 
-## Available Scripts
+An important aspect of our application is that it's responsive 📲, ensuring it looks great on various devices with a minimum resolution of 390px. This feature makes the shopping experience enjoyable, irrespective of the device users prefer.
 
-In the project directory, you can run:
+Key pages in the application include:
 
-### `npm start`
+- Login and Registration pages 🖥️
+- Main page 🏠
+- Catalog Product page 📋
+- Detailed Product page 🔎
+- User Profile page 👤
+- Basket page 🛒
+- About Us page 🙋‍♂️🙋‍♀️
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The application is powered by CommerceTools 🌐, a leading provider of commerce solutions for B2C and B2B enterprises. CommerceTools offers a cloud-native, microservices-based commerce platform that enables brands to create unique and engaging digital commerce experiences.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## Technology Stack 💻📚
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React
+- Redux
+- Typescript
+- Webpack
+- Jest
+- Husky
+- Ant Design
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## How to build and execute project locally
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisite software:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [Node.js 18.x LTS](https://nodejs.org/)
 
-### `npm run eject`
+### Setup process:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Clone repository `git clone https://github.com/LuFtKrabbe/eCommerce-App.git`
+2. Run `cd eCommerce-App` to change your current directory
+3. Install project dependencies `npm install`
+4. Run `npm run build` to build the project or `npm start` to execute local web server that will serve our app locally.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Scripts
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Run `npm start` to serve project locally in development mode.
+- Run `npm run build` to build project in production mode.
+- Run `npm run lint` to show linter and compiler errors.
+- Run `npm run format` to fix code formatting issues.
+- Run `npm run test` to run all tests.
+- Run `npm run test:coverage` to run all tests with coverage report.
+- Run `npm run eject` to unpack all create-react-app scripts and dependencies.\
+  Convert project to regular webpack build. **Note: this is a one-way operation. Once you eject, you can’t go back!**
+- Run `npm run prepare` to install husky scripts.
