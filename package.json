@@ -21,8 +21,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "lint": "eslint .; tsc --noEmit",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "lint": "(eslint . && tsc --noEmit) || tsc --noEmit",
     "format": "prettier --write src//**/*.{js,jsx,ts,tsx,css} --config .prettierrc",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --watchAll=false --coverage",
@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "cross-env": "^7.0.3",
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
     "eslint-plugin-prettier": "^5.0.0",
