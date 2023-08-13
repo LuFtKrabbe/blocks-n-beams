@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  margin: 0 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  text-shadow:
+    1px 1px 1px silver,
+    -1px 1px 1px silver;
+}
+
+.title,
+.link {
+  color: red;
+}
+.title {
+  font-size: 10rem;
+  animation-name: rotateAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.btn {
+  margin-top: 2rem;
+}
+
+@keyframes rotateAnimation {
+  0% {
+    transform: skew(4deg, 0deg) scaleX(1);
+  }
+  10% {
+    transform: skew(1deg, 0deg) scaleY(0.9);
+  }
+  50% {
+    transform: skew(-4deg, 0deg) scaleX(1);
+  }
+  60% {
+    transform: skew(-1deg, 0deg) scaleY(0.9);
+  }
+  100% {
+    transform: skew(4deg, 0deg) scaleX(1);
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .container {
+    font-size: 1.5rem;
+  }
+  .title {
+    font-size: 8rem;
+  }
+}
