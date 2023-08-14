@@ -2,6 +2,8 @@ import { Button, Form, FormInstance, Input } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import apiRoot from '../../api/ClientBuilder';
+
 import styles from './login.module.css';
 
 type FieldType = {
@@ -14,22 +16,26 @@ const Login: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: string) => {
+  const onFinish = ({ email, password }: FieldType) => {
     setConfirmLoading(true);
-    const isSuccessLogin = true;
-    try {
-      //Simulate sending a message
-      console.log(values);
-      setTimeout(() => {
-        if (isSuccessLogin) {
-          navigate('/main'); // don't delete this line
+
+    const apiLogin = async (email: string, password: string) => {
+      try {
+        const res = await apiRoot.login().post({ body: { email, password } }).execute();
+        const { firstName, lastName, id: customerId } = res.body.customer;
+        console.log(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+        navigate('/main');
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
         }
-      }, 2000);
-    } finally {
-      //Simulate loading
-      setTimeout(() => {
-        setConfirmLoading(false); // don't delete this line
-      }, 1000);
+      } finally {
+        setConfirmLoading(false);
+      }
+    };
+
+    if (email !== undefined && password !== undefined) {
+      void apiLogin(email, password);
     }
   };
 

@@ -1,6 +1,9 @@
+import { CustomerDraft } from '@commercetools/platform-sdk';
 import { Button, Form, FormInstance, Input, Select } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import apiRoot from '../../api/ClientBuilder';
 
 import styles from './registration.module.css';
 
@@ -20,22 +23,39 @@ const Registration: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: string) => {
+  const onFinish = ({ email, password, name, surname, birthday, street, city, country }: FieldType) => {
     setConfirmLoading(true);
-    const isSuccessLogin = true;
-    try {
-      //Simulate sending a message
-      console.log(values);
-      setTimeout(() => {
-        if (isSuccessLogin) {
-          navigate('/main'); // don't delete this line
+
+    const apiCreateCustomer = async (customerDraft: CustomerDraft) => {
+      try {
+        await apiRoot.customers().post({ body: customerDraft }).execute();
+        navigate('/main');
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
         }
-      }, 2000);
-    } finally {
-      //Simulate loading
-      setTimeout(() => {
+      } finally {
         setConfirmLoading(false); // don't delete this line
-      }, 1000);
+      }
+    };
+
+    if (email !== undefined && password !== undefined) {
+      const customerDraft: CustomerDraft = {
+        email,
+        password,
+        dateOfBirth: birthday || '',
+        firstName: name || '',
+        lastName: surname || '',
+        addresses: [
+          {
+            country: country || '',
+            city: city || '',
+            streetName: street || '',
+          },
+        ],
+      };
+
+      void apiCreateCustomer(customerDraft);
     }
   };
 
@@ -137,10 +157,10 @@ const Registration: FC = (): JSX.Element => {
         rules={[{ required: true, message: 'Please input country!' }]}
       >
         <Select placeholder="Select country" allowClear>
-          <Select.Option value="Germany">Germany</Select.Option>
-          <Select.Option value="United States">United States</Select.Option>
-          <Select.Option value="Australia">Australia</Select.Option>
-          <Select.Option value="Spain">Spain</Select.Option>
+          <Select.Option value="DE">Germany</Select.Option>
+          <Select.Option value="US">United States</Select.Option>
+          <Select.Option value="AU">Australia</Select.Option>
+          <Select.Option value="ES">Spain</Select.Option>
         </Select>
       </Form.Item>
 
