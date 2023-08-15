@@ -1,14 +1,15 @@
 import { Button, Form, FormInstance, Input, Select } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import isEmail from 'validator/lib/isEmail';
 
 import styles from './registration.module.css';
 
 type FieldType = {
   email?: string;
   password?: string;
-  name?: string;
-  surname?: string;
+  firstName?: string;
+  lastName?: string;
   birthday?: string;
   street?: string;
   city?: string;
@@ -56,13 +57,13 @@ const Registration: FC = (): JSX.Element => {
       className={styles.form}
     >
       <Form.Item<FieldType>
-        label="Name"
-        name="name"
+        label="First Name"
+        name="firstName"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your name!' },
+          { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
             pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter valid name!',
+            message: 'Please enter a valid first name.',
           },
         ]}
         hasFeedback
@@ -71,13 +72,13 @@ const Registration: FC = (): JSX.Element => {
       </Form.Item>
 
       <Form.Item<FieldType>
-        label="Surname"
-        name="surname"
+        label="Last Name"
+        name="lastName"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your surname!' },
+          { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
             pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter valid surname!',
+            message: 'Please enter a valid last name.',
           },
         ]}
         hasFeedback
@@ -90,10 +91,10 @@ const Registration: FC = (): JSX.Element => {
         name="birthday"
         tooltip="year-month-day"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your birthday!' },
+          { required: true, whitespace: true, message: 'Please enter your birthday date.' },
           {
             pattern: /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
-            message: 'Please enter valid birthday!',
+            message: 'Please enter a valid date.',
           },
         ]}
         hasFeedback
@@ -105,10 +106,10 @@ const Registration: FC = (): JSX.Element => {
         label="Street"
         name="street"
         rules={[
-          { required: true, whitespace: true, message: 'Please input street!' },
+          { required: true, whitespace: true, message: 'Please enter a street.' },
           {
             pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter valid street!',
+            message: 'Please enter a valid street.',
           },
         ]}
         hasFeedback
@@ -120,10 +121,10 @@ const Registration: FC = (): JSX.Element => {
         label="City"
         name="city"
         rules={[
-          { required: true, whitespace: true, message: 'Please input city!' },
+          { required: true, whitespace: true, message: 'Please enter a city.' },
           {
             pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter valid city!',
+            message: 'Please enter a valid city.',
           },
         ]}
         hasFeedback
@@ -134,13 +135,13 @@ const Registration: FC = (): JSX.Element => {
       <Form.Item<FieldType>
         name="country"
         label="Country"
-        rules={[{ required: true, message: 'Please input country!' }]}
+        rules={[{ required: true, message: 'Please select a country.' }]}
       >
         <Select placeholder="Select country" allowClear>
-          <Select.Option value="Germany">Germany</Select.Option>
-          <Select.Option value="United States">United States</Select.Option>
-          <Select.Option value="Australia">Australia</Select.Option>
-          <Select.Option value="Spain">Spain</Select.Option>
+          <Select.Option value="DE">Germany</Select.Option>
+          <Select.Option value="US">United States</Select.Option>
+          <Select.Option value="AU">Australia</Select.Option>
+          <Select.Option value="ES">Spain</Select.Option>
         </Select>
       </Form.Item>
 
@@ -148,10 +149,16 @@ const Registration: FC = (): JSX.Element => {
         label="Email"
         name="email"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your email!' },
           {
-            pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-            message: 'Please enter valid email!',
+            required: true,
+            whitespace: true,
+            validator: (_, value: string) => {
+              if (value) {
+                return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter valid email.');
+              } else {
+                return Promise.reject('Please input your email.');
+              }
+            },
           },
         ]}
         hasFeedback
@@ -163,10 +170,10 @@ const Registration: FC = (): JSX.Element => {
         label="Password"
         name="password"
         rules={[
-          { required: true, message: 'Please input your password!' },
+          { required: true, message: 'Please input your password.' },
           {
             pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,12}$/,
-            message: 'Please enter valid password!',
+            message: 'Please enter valid password.',
           },
         ]}
         hasFeedback
@@ -182,14 +189,14 @@ const Registration: FC = (): JSX.Element => {
         rules={[
           {
             required: true,
-            message: 'Please confirm your password!',
+            message: 'Please confirm your password.',
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
               if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error('The new password that you entered do not match!'));
+              return Promise.reject(new Error('The new password that you entered do not match.'));
             },
           }),
         ]}
