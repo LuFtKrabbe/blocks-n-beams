@@ -2,13 +2,13 @@ import { Button, Form, FormInstance, Input } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import apiRoot from '../../api/ClientBuilder';
+import { customerSignIn } from '../../api/customerApi';
 
 import styles from './login.module.css';
 
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
 const Login: FC = (): JSX.Element => {
@@ -19,24 +19,16 @@ const Login: FC = (): JSX.Element => {
   const onFinish = ({ email, password }: FieldType) => {
     setConfirmLoading(true);
 
-    const apiLogin = async (email: string, password: string) => {
+    const login = async () => {
       try {
-        const res = await apiRoot.login().post({ body: { email, password } }).execute();
-        const { firstName, lastName, id: customerId } = res.body.customer;
-        console.log(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+        await customerSignIn({ username: email, password });
         navigate('/main');
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
       } finally {
         setConfirmLoading(false);
       }
     };
 
-    if (email !== undefined && password !== undefined) {
-      void apiLogin(email, password);
-    }
+    void login();
   };
 
   const onReset = () => {
