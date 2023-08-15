@@ -13,6 +13,7 @@ import { makePersistentTokenCache } from './TokenCache';
 export enum FlowTypes {
   ANONYMOUS = 'ANONYMOUS',
   PASSWORD = 'PASSWORD',
+  DEFAULT = 'DEFAULT',
 }
 
 export const projectKey = process.env.REACT_APP_CTP_PROJECT_KEY || '';
@@ -112,6 +113,9 @@ let currentApiClient = getDefaultApiClient();
 
 export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions): void => {
   switch (flowType) {
+    case FlowTypes.DEFAULT:
+      currentApiClient = getDefaultApiClient();
+      break;
     case FlowTypes.ANONYMOUS:
       currentApiClient = getAnonApiClient();
       break;

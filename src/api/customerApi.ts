@@ -1,7 +1,7 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
 
-import getApiRoot, { FlowTypes, changeApiClient } from './Client';
+import getApiRoot, { FlowTypes, changeApiClient, projectKey } from './Client';
 
 type NewCustomerFields = {
   email: string;
@@ -56,4 +56,10 @@ export const createCustomerDraft = (values: NewCustomerFields): CustomerDraft =>
       },
     ],
   };
+};
+
+export const customerLogOut = (username: string) => {
+  const tokenKey = window.btoa(`${projectKey}-${username}`);
+  localStorage.removeItem(tokenKey);
+  changeApiClient(FlowTypes.DEFAULT);
 };
