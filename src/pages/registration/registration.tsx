@@ -1,4 +1,5 @@
-import { Button, Form, FormInstance, Input, Select } from 'antd';
+import { Button, DatePicker, Form, FormInstance, Input, Select } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
@@ -10,18 +11,22 @@ type FieldType = {
   password?: string;
   firstName?: string;
   lastName?: string;
-  birthday?: string;
+  birthday?: Dayjs;
   street?: string;
   city?: string;
   country?: string;
 };
+
+const MIN_AGE = 16;
+const MAX_AGE = 99;
 
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: string) => {
+  const onFinish = (values: FieldType) => {
+    console.log('VALUES', values);
     setConfirmLoading(true);
     const isSuccessLogin = true;
     try {
@@ -89,17 +94,27 @@ const Registration: FC = (): JSX.Element => {
       <Form.Item<FieldType>
         label="Birthday"
         name="birthday"
-        tooltip="year-month-day"
         rules={[
-          { required: true, whitespace: true, message: 'Please enter your birthday date.' },
           {
-            pattern: /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
-            message: 'Please enter a valid date.',
+            required: true,
+            whitespace: true,
+            validator: (_, value: Dayjs) => {
+              const now = dayjs(Date.now());
+              const age = now.diff(value, 'year');
+              console.log(age);
+              if (value) {
+                return age >= MIN_AGE && age <= MAX_AGE
+                  ? Promise.resolve()
+                  : Promise.reject(`Please enter a valid date. Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
+              } else {
+                return Promise.reject('Please enter your date of birth');
+              }
+            },
           },
         ]}
         hasFeedback
       >
-        <Input placeholder="xxxx-xx-xx" />
+        <DatePicker />
       </Form.Item>
 
       <Form.Item<FieldType>
