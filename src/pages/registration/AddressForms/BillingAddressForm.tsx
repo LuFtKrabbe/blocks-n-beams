@@ -10,7 +10,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
       <Checkbox>Set as default billing address</Checkbox>
       <Form.Item<RegistrationFormType>
         label="First Name"
-        name="billingFirstName"
+        name={['billingAddress', 'firstName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
@@ -25,7 +25,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Last Name"
-        name="billingLastName"
+        name={['billingAddress', 'lastName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
@@ -40,7 +40,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Address Line 1"
-        name="billingStreetName"
+        name={['billingAddress', 'streetName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter billing address.' },
           {
@@ -55,7 +55,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Address line 2"
-        name="billingAdditionalStreetInfo"
+        name={['billingAddress', 'additionalStreetInfo']}
         rules={[
           { required: false, whitespace: true },
           {
@@ -70,7 +70,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Region"
-        name="billingRegion"
+        name={['billingAddress', 'region']}
         rules={[
           { whitespace: true },
           {
@@ -85,7 +85,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="City"
-        name="billingCity"
+        name={['billingAddress', 'city']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter city name.' },
           {
@@ -99,7 +99,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
       </Form.Item>
 
       <Form.Item<RegistrationFormType>
-        name="billingCountry"
+        name={['billingAddress', 'country']}
         label="Country"
         rules={[{ required: true, message: 'Please select a country.' }]}
       >
@@ -113,7 +113,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Postal code"
-        name="billingPostalCode"
+        name={['billingAddress', 'postalCode']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter postal code.' },
           {
@@ -128,7 +128,7 @@ const BillingAddressForm: FC = (): JSX.Element => {
 
       <Form.Item<RegistrationFormType>
         label="Phone"
-        name="billingPhone"
+        name={['billingAddress', 'phone']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your phone number.' },
           {

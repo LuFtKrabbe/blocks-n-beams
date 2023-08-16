@@ -1,4 +1,4 @@
-import { Checkbox, Form, Input, Select, Space } from 'antd';
+import { Checkbox, Form, Input, Select, Space, Switch } from 'antd';
 import { FC } from 'react';
 
 import { RegistrationFormType } from '../registration';
@@ -8,10 +8,12 @@ const ShippingAddressForm: FC = (): JSX.Element => {
     <Space direction="vertical">
       <h2>Shipping Address:</h2>
       <Checkbox>Set as default shipping address</Checkbox>
-      <Checkbox>Use the same address as for billing</Checkbox>
+      <Space>
+        <Switch /> <span>Use the same address as for billing</span>
+      </Space>
       <Form.Item<RegistrationFormType>
         label="First Name"
-        name="shippingFirstName"
+        name={['shippingAddress', 'firstName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
@@ -23,10 +25,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Last Name"
-        name="shippingLastName"
+        name={['shippingAddress', 'lastName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
@@ -38,10 +39,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Address Line 1"
-        name="shippingStreetName"
+        name={['shippingAddress', 'streetName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter billing address.' },
           {
@@ -53,10 +53,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Address line 2"
-        name="shippingAdditionalStreetInfo"
+        name={['shippingAddress', 'additionalStreetInfo']}
         rules={[
           { required: false, whitespace: true },
           {
@@ -68,10 +67,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Region"
-        name="shippingRegion"
+        name={['shippingAddress', 'region']}
         rules={[
           { whitespace: true },
           {
@@ -83,10 +81,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="City"
-        name="shippingCity"
+        name={['shippingAddress', 'city']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter city name.' },
           {
@@ -98,9 +95,8 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
-        name="shippingCountry"
+        name={['shippingAddress', 'country']}
         label="Country"
         rules={[{ required: true, message: 'Please select a country.' }]}
       >
@@ -111,10 +107,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
           <Select.Option value="ES">Spain</Select.Option>
         </Select>
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Postal code"
-        name="shippingPostalCode"
+        name={['shippingAddress', 'postalCode']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter postal code.' },
           {
@@ -126,10 +121,9 @@ const ShippingAddressForm: FC = (): JSX.Element => {
       >
         <Input />
       </Form.Item>
-
       <Form.Item<RegistrationFormType>
         label="Phone"
-        name="shippingPhone"
+        name={['shippingAddress', 'phone']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your phone number.' },
           {

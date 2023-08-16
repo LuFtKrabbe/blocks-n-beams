@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, FormInstance, Input } from 'antd';
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,24 +15,30 @@ export type RegistrationFormType = {
   firstName?: string;
   lastName?: string;
   birthday?: Dayjs;
-  billingFirstName?: string;
-  billingLastName?: string;
-  billingStreetName?: string;
-  billingAdditionalStreetInfo?: string;
-  billingCity?: string;
-  billingRegion?: string;
-  billingCountry?: string;
-  billingPostalCode?: string;
-  billingPhone?: string;
-  shippingFirstName?: string;
-  shippingLastName?: string;
-  shippingStreetName?: string;
-  shippingAdditionalStreetInfo?: string;
-  shippingCity?: string;
-  shippingRegion?: string;
-  shippingCountry?: string;
-  shippingPostalCode?: string;
-  shippingPhone?: string;
+
+  billingAddress?: {
+    firstName?: string;
+    lastName?: string;
+    streetName?: string;
+    additionalStreetInfo?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+    postalCode?: string;
+    phone?: string;
+  };
+
+  shippingAddress?: {
+    firstName?: string;
+    lastName?: string;
+    streetName?: string;
+    additionalStreetInfo?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+    postalCode?: string;
+    phone?: string;
+  };
 };
 
 const MIN_AGE = 16;
@@ -70,145 +76,162 @@ const Registration: FC = (): JSX.Element => {
   return (
     <Form
       name="basic"
-      labelCol={{ span: 8 }}
+      labelCol={{ span: 9 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 400 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}
       autoComplete="off"
       ref={formRef}
       className={styles.form}
     >
-      <Form.Item<RegistrationFormType>
-        label="First Name"
-        name="firstName"
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter your first name.' },
-          {
-            pattern: /^[ A-Za-z]{1,12}$/,
-            message: 'Please enter a valid first name.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
+      <Row justify={'center'}>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            label="First Name"
+            name="firstName"
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter your first name.' },
+              {
+                pattern: /^[ A-Za-z]{1,12}$/,
+                message: 'Please enter a valid first name.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
 
-      <Form.Item<RegistrationFormType>
-        label="Last Name"
-        name="lastName"
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter your last name.' },
-          {
-            pattern: /^[ A-Za-z]{1,12}$/,
-            message: 'Please enter a valid last name.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
+          <Form.Item<RegistrationFormType>
+            label="Last Name"
+            name="lastName"
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter your last name.' },
+              {
+                pattern: /^[ A-Za-z]{1,12}$/,
+                message: 'Please enter a valid last name.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
 
-      <Form.Item<RegistrationFormType>
-        label="Birthday"
-        name="birthday"
-        rules={[
-          {
-            required: true,
-            whitespace: true,
-            validator: (_, value: Dayjs) => {
-              const now = dayjs(Date.now());
-              const age = now.diff(value, 'year');
-              console.log(age);
-              if (value) {
-                return age >= MIN_AGE && age <= MAX_AGE
-                  ? Promise.resolve()
-                  : Promise.reject(`Please enter a valid date. Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
-              } else {
-                return Promise.reject('Please enter your date of birth');
-              }
-            },
-          },
-        ]}
-        hasFeedback
-      >
-        <DatePicker />
-      </Form.Item>
+          <Form.Item<RegistrationFormType>
+            label="Birthday"
+            name="birthday"
+            rules={[
+              {
+                required: true,
+                whitespace: true,
+                validator: (_, value: Dayjs) => {
+                  const now = dayjs(Date.now());
+                  const age = now.diff(value, 'year');
+                  console.log(age);
+                  if (value) {
+                    return age >= MIN_AGE && age <= MAX_AGE
+                      ? Promise.resolve()
+                      : Promise.reject(`Please enter a valid date. Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
+                  } else {
+                    return Promise.reject('Please enter your date of birth');
+                  }
+                },
+              },
+            ]}
+            hasFeedback
+          >
+            <DatePicker />
+          </Form.Item>
 
-      <Form.Item<RegistrationFormType>
-        label="Email"
-        name="email"
-        rules={[
-          {
-            required: true,
-            whitespace: true,
-            validator: (_, value: string) => {
-              if (value) {
-                return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter valid email.');
-              } else {
-                return Promise.reject('Please input your email.');
-              }
-            },
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
+          <Form.Item<RegistrationFormType>
+            label="Email"
+            name="email"
+            rules={[
+              {
+                required: true,
+                whitespace: true,
+                validator: (_, value: string) => {
+                  if (value) {
+                    return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter valid email.');
+                  } else {
+                    return Promise.reject('Please input your email.');
+                  }
+                },
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
 
-      <Form.Item<RegistrationFormType>
-        label="Password"
-        name="password"
-        rules={[
-          { required: true, message: 'Please input your password.' },
-          {
-            pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,12}$/,
-            message: 'Please enter valid password.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input.Password />
-      </Form.Item>
+          <Form.Item<RegistrationFormType>
+            label="Password"
+            name="password"
+            rules={[
+              { required: true, message: 'Please input your password.' },
+              {
+                pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,12}$/,
+                message: 'Please enter valid password.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input.Password />
+          </Form.Item>
 
-      <Form.Item
-        name="confirm"
-        label="Confirm Password"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'Please confirm your password.',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('The new password that you entered do not match.'));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <BillingAddressForm />
-      <ShippingAddressForm />
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        {!confirmLoading ? (
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Form.Item
+            name="confirm"
+            label="Confirm Password"
+            dependencies={['password']}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: 'Please confirm your password.',
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('The new password that you entered do not match.'));
+                },
+              }),
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={32} justify={'center'}>
+        <Col>
+          <BillingAddressForm />
+        </Col>
+        <Col>
+          <ShippingAddressForm />
+        </Col>
+      </Row>
+
+      <Row gutter={32} justify={'center'}>
+        <Col>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            {!confirmLoading ? (
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            ) : (
+              <Button type="primary" loading>
+                Submit
+              </Button>
+            )}
+          </Form.Item>
+        </Col>
+        <Col>
+          <Button className={styles.button} htmlType="button" onClick={onReset}>
+            Reset
           </Button>
-        ) : (
-          <Button type="primary" loading>
-            Submit
-          </Button>
-        )}
-        <Button className={styles.button} htmlType="button" onClick={onReset}>
-          Reset
-        </Button>
-      </Form.Item>
+        </Col>
+      </Row>
     </Form>
   );
 };
