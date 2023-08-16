@@ -1,20 +1,38 @@
-import { Button, DatePicker, Form, FormInstance, Input, Select } from 'antd';
+import { Button, DatePicker, Form, FormInstance, Input } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
+import BillingAddressForm from './AddressForms/BillingAddressForm';
+import ShippingAddressForm from './AddressForms/ShippingAddressForm';
+
 import styles from './registration.module.css';
 
-type FieldType = {
+export type RegistrationFormType = {
   email?: string;
   password?: string;
   firstName?: string;
   lastName?: string;
   birthday?: Dayjs;
-  street?: string;
-  city?: string;
-  country?: string;
+  billingFirstName?: string;
+  billingLastName?: string;
+  billingStreetName?: string;
+  billingAdditionalStreetInfo?: string;
+  billingCity?: string;
+  billingRegion?: string;
+  billingCountry?: string;
+  billingPostalCode?: string;
+  billingPhone?: string;
+  shippingFirstName?: string;
+  shippingLastName?: string;
+  shippingStreetName?: string;
+  shippingAdditionalStreetInfo?: string;
+  shippingCity?: string;
+  shippingRegion?: string;
+  shippingCountry?: string;
+  shippingPostalCode?: string;
+  shippingPhone?: string;
 };
 
 const MIN_AGE = 16;
@@ -25,7 +43,7 @@ const Registration: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: FieldType) => {
+  const onFinish = (values: RegistrationFormType) => {
     console.log('VALUES', values);
     setConfirmLoading(true);
     const isSuccessLogin = true;
@@ -61,13 +79,13 @@ const Registration: FC = (): JSX.Element => {
       ref={formRef}
       className={styles.form}
     >
-      <Form.Item<FieldType>
+      <Form.Item<RegistrationFormType>
         label="First Name"
         name="firstName"
         rules={[
           { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
-            pattern: /^[ A-Za-z]{2,12}$/,
+            pattern: /^[ A-Za-z]{1,12}$/,
             message: 'Please enter a valid first name.',
           },
         ]}
@@ -76,13 +94,13 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<RegistrationFormType>
         label="Last Name"
         name="lastName"
         rules={[
           { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
-            pattern: /^[ A-Za-z]{2,12}$/,
+            pattern: /^[ A-Za-z]{1,12}$/,
             message: 'Please enter a valid last name.',
           },
         ]}
@@ -91,7 +109,7 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<RegistrationFormType>
         label="Birthday"
         name="birthday"
         rules={[
@@ -117,50 +135,7 @@ const Registration: FC = (): JSX.Element => {
         <DatePicker />
       </Form.Item>
 
-      <Form.Item<FieldType>
-        label="Street"
-        name="street"
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter a street.' },
-          {
-            pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter a valid street.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<FieldType>
-        label="City"
-        name="city"
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter a city.' },
-          {
-            pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter a valid city.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<FieldType>
-        name="country"
-        label="Country"
-        rules={[{ required: true, message: 'Please select a country.' }]}
-      >
-        <Select placeholder="Select country" allowClear>
-          <Select.Option value="DE">Germany</Select.Option>
-          <Select.Option value="US">United States</Select.Option>
-          <Select.Option value="AU">Australia</Select.Option>
-          <Select.Option value="ES">Spain</Select.Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item<FieldType>
+      <Form.Item<RegistrationFormType>
         label="Email"
         name="email"
         rules={[
@@ -181,7 +156,7 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<RegistrationFormType>
         label="Password"
         name="password"
         rules={[
@@ -218,7 +193,8 @@ const Registration: FC = (): JSX.Element => {
       >
         <Input.Password />
       </Form.Item>
-
+      <BillingAddressForm />
+      <ShippingAddressForm />
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         {!confirmLoading ? (
           <Button type="primary" htmlType="submit">
