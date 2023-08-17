@@ -1,15 +1,34 @@
 import { Checkbox, Form, Input, Select, Space, Switch } from 'antd';
-import { FC } from 'react';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 
 import { RegistrationFormType } from '../registration';
 
-const ShippingAddressForm: FC = (): JSX.Element => {
+type Props = {
+  isDefaultShippingAddress?: boolean;
+  setIsDefaultShippingAddress: Dispatch<SetStateAction<boolean>>;
+  shippingAsBilling: boolean;
+  setShippingAsBilling: Dispatch<SetStateAction<boolean>>;
+};
+
+const ShippingAddressForm: FC<Props> = (props: Props): JSX.Element => {
+  const { shippingAsBilling, setShippingAsBilling, setIsDefaultShippingAddress } = props;
+  const shippingAddressSwitchOnChange = (checked: boolean) => {
+    setShippingAsBilling(checked);
+  };
+
+  const defaultAddressCheckboxOnChange = (event: CheckboxChangeEvent) => {
+    setIsDefaultShippingAddress(event.target.checked);
+  };
+
+
   return (
     <Space direction="vertical">
       <h2>Shipping Address:</h2>
-      <Checkbox>Set as default shipping address</Checkbox>
+      <Checkbox onChange={defaultAddressCheckboxOnChange}>Set as default shipping address</Checkbox>
       <Space>
-        <Switch /> <span>Use the same address as for billing</span>
+        <Switch onChange={shippingAddressSwitchOnChange} />
+        <span>Use the same address as for billing</span>
       </Space>
       <Form.Item<RegistrationFormType>
         label="First Name"

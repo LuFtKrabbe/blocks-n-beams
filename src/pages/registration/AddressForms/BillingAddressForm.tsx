@@ -1,13 +1,25 @@
 import { Checkbox, Form, Input, Select, Space } from 'antd';
-import { FC } from 'react';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { Dispatch, FC, SetStateAction } from 'react';
 
 import { RegistrationFormType } from '../registration';
 
-const BillingAddressForm: FC = (): JSX.Element => {
+type Props = {
+  isDefaultBillingAddress?: boolean;
+  setIsDefaultBillingAddress: Dispatch<SetStateAction<boolean>>;
+};
+
+const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
+  const { setIsDefaultBillingAddress } = props;
+
+  const defaultAddressCheckboxOnChange = (event: CheckboxChangeEvent) => {
+    setIsDefaultBillingAddress(event.target.checked);
+  };
+
   return (
     <Space direction="vertical">
       <h2>Billing Address:</h2>
-      <Checkbox>Set as default billing address</Checkbox>
+      <Checkbox onChange={defaultAddressCheckboxOnChange}>Set as default billing address</Checkbox>
       <Form.Item<RegistrationFormType>
         label="First Name"
         name={['billingAddress', 'firstName']}

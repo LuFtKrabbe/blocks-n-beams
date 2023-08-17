@@ -46,6 +46,9 @@ const MAX_AGE = 99;
 
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+  const [shippingAsBilling, setShippingAsBilling] = useState<boolean>(false);
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false); // FIXME: Try to change naming
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false); // FIXME: Try to change naming
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
@@ -205,10 +208,18 @@ const Registration: FC = (): JSX.Element => {
 
       <Row gutter={32} justify={'center'}>
         <Col>
-          <BillingAddressForm />
+          <BillingAddressForm
+            isDefaultBillingAddress={isDefaultBillingAddress}
+            setIsDefaultBillingAddress={setIsDefaultBillingAddress}
+          />
         </Col>
         <Col>
-          <ShippingAddressForm />
+          <ShippingAddressForm
+            isDefaultShippingAddress={isDefaultShippingAddress}
+            setIsDefaultShippingAddress={setIsDefaultShippingAddress}
+            shippingAsBilling={shippingAsBilling}
+            setShippingAsBilling={setShippingAsBilling}
+          />
         </Col>
       </Row>
 
