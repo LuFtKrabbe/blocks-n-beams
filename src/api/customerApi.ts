@@ -1,5 +1,6 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
+import { message } from 'antd';
 
 import getApiRoot, { FlowTypes, changeApiClient, projectKey } from './Client';
 
@@ -26,9 +27,10 @@ export default class CustomerApi {
       changeApiClient(FlowTypes.PASSWORD, { username, password });
 
       const { firstName, lastName, id: customerId } = res.body.customer;
-      console.log(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+      await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
     } catch (error) {
       console.error(error);
+      await message.error(`Login failed`); // TODO: Add reason to message
     }
   };
 
