@@ -3,7 +3,7 @@ import { Button, Form, FormInstance, Input, Select } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { createCustomerDraft, customerSignIn, customerSignUp } from '../../api/customerApi';
+import CustomerApi from '../../api/customerApi';
 
 import styles from './registration.module.css';
 
@@ -29,8 +29,8 @@ const Registration: FC = (): JSX.Element => {
 
     const createCustomer = async (customerDraft: CustomerDraft) => {
       try {
-        await customerSignUp(customerDraft);
-        await customerSignIn({ username: email, password });
+        await CustomerApi.customerSignUp(customerDraft);
+        await CustomerApi.customerSignIn({ username: email, password });
 
         navigate('/main');
       } catch (error) {
@@ -42,7 +42,7 @@ const Registration: FC = (): JSX.Element => {
       }
     };
 
-    const customerDraft = createCustomerDraft(values);
+    const customerDraft = CustomerApi.createCustomerDraft(values);
     void createCustomer(customerDraft);
   };
 

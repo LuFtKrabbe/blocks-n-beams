@@ -14,52 +14,54 @@ type NewCustomerFields = {
   country?: string;
 };
 
-export const customerSignIn = async ({ username, password }: UserAuthOptions) => {
-  try {
-    const res = await getApiRoot()
-      .me()
-      .login()
-      .post({ body: { email: username, password } })
-      .execute();
+export default class CustomerApi {
+  static customerSignIn = async ({ username, password }: UserAuthOptions) => {
+    try {
+      const res = await getApiRoot()
+        .me()
+        .login()
+        .post({ body: { email: username, password } })
+        .execute();
 
-    changeApiClient(FlowTypes.PASSWORD, { username, password });
+      changeApiClient(FlowTypes.PASSWORD, { username, password });
 
-    const { firstName, lastName, id: customerId } = res.body.customer;
-    console.log(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const customerSignUp = async (customerDraft: CustomerDraft) => {
-  try {
-    await getApiRoot().customers().post({ body: customerDraft }).execute();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const createCustomerDraft = (values: NewCustomerFields): CustomerDraft => {
-  const { email, password, firstName, lastName, birthday, street, city, country } = values;
-
-  return {
-    email,
-    password,
-    dateOfBirth: birthday || '',
-    firstName: firstName || '',
-    lastName: lastName || '',
-    addresses: [
-      {
-        country: country || '',
-        city: city || '',
-        streetName: street || '',
-      },
-    ],
+      const { firstName, lastName, id: customerId } = res.body.customer;
+      console.log(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
-};
 
-export const customerLogOut = (username: string) => {
-  const tokenKey = window.btoa(`${projectKey}-${username}`);
-  localStorage.removeItem(tokenKey);
-  changeApiClient(FlowTypes.DEFAULT);
-};
+  static customerSignUp = async (customerDraft: CustomerDraft) => {
+    try {
+      await getApiRoot().customers().post({ body: customerDraft }).execute();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  static createCustomerDraft = (values: NewCustomerFields): CustomerDraft => {
+    const { email, password, firstName, lastName, birthday, street, city, country } = values;
+
+    return {
+      email,
+      password,
+      dateOfBirth: birthday || '',
+      firstName: firstName || '',
+      lastName: lastName || '',
+      addresses: [
+        {
+          country: country || '',
+          city: city || '',
+          streetName: street || '',
+        },
+      ],
+    };
+  };
+
+  static customerLogOut = (username: string) => {
+    const tokenKey = window.btoa(`${projectKey}-${username}`);
+    localStorage.removeItem(tokenKey);
+    changeApiClient(FlowTypes.DEFAULT);
+  };
+}

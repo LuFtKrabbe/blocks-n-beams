@@ -2,7 +2,7 @@ import { Button, Form, FormInstance, Input } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { customerSignIn } from '../../api/customerApi';
+import CustomerApi from '../../api/customerApi';
 
 import styles from './login.module.css';
 
@@ -21,7 +21,7 @@ const Login: FC = (): JSX.Element => {
 
     const login = async () => {
       try {
-        await customerSignIn({ username: email, password });
+        await CustomerApi.customerSignIn({ username: email, password });
         navigate('/main');
       } finally {
         setConfirmLoading(false);
