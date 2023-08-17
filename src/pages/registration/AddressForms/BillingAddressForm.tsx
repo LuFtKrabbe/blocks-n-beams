@@ -1,6 +1,8 @@
 import { Checkbox, Form, Input, Select, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Rule } from 'antd/es/form';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
 
 import { RegistrationFormType } from '../registration';
 
@@ -16,17 +18,33 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
     setIsDefaultBillingAddress(event.target.checked);
   };
 
+  const [selectedCountry, setSelectedCountry] = useState<PostalCodeLocale | 'any'>('any');
+
+  const validatePostalCode = (_: Rule, value: string | undefined) => {
+    if (value && isPostalCode(value, selectedCountry)) {
+      return Promise.resolve();
+    } else {
+      if (value) {
+        return Promise.reject('Please enter a valid postal code.');
+      } else {
+        return Promise.reject('Please enter a postal code.');
+      }
+    }
+  };
+
   return (
     <Space direction="vertical">
       <h2>Billing Address:</h2>
+
       <Checkbox onChange={defaultAddressCheckboxOnChange}>Set as default billing address</Checkbox>
+
       <Form.Item<RegistrationFormType>
         label="First Name"
         name={['billingAddress', 'firstName']}
         rules={[
           { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
-            pattern: /^[ A-Za-z]{1,12}$/,
+            pattern: /^[ A-Za-z]{1,16}$/,
             message: 'Please enter a valid first name.',
           },
         ]}
@@ -41,7 +59,7 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
-            pattern: /^[ A-Za-z]{1,12}$/,
+            pattern: /^[ A-Za-z]{1,16}$/,
             message: 'Please enter a valid last name.',
           },
         ]}
@@ -56,7 +74,7 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { required: true, whitespace: true, message: 'Please enter billing address.' },
           {
-            pattern: /^[\d A-Za-z]{2,12}$/,
+            pattern: /^[\d A-Za-z-]{1,32}$/,
             message: 'Please enter a valid address.',
           },
         ]}
@@ -69,9 +87,9 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         label="Address line 2"
         name={['billingAddress', 'additionalStreetInfo']}
         rules={[
-          { required: false, whitespace: true },
+          { whitespace: true },
           {
-            pattern: /^[\d A-Za-z]{2,12}$/,
+            pattern: /^[\d A-Za-z-]{1,32}$/,
             message: 'Please enter a valid address.',
           },
         ]}
@@ -101,7 +119,7 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { required: true, whitespace: true, message: 'Please enter city name.' },
           {
-            pattern: /^[ A-Za-z]{2,12}$/,
+            pattern: /^[ A-Za-z-]{1,32}$/,
             message: 'Please enter a valid city.',
           },
         ]}
@@ -115,7 +133,7 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         label="Country"
         rules={[{ required: true, message: 'Please select a country.' }]}
       >
-        <Select placeholder="Select country" allowClear>
+        <Select placeholder="Select country" allowClear onChange={setSelectedCountry}>
           <Select.Option value="DE">Germany</Select.Option>
           <Select.Option value="US">United States</Select.Option>
           <Select.Option value="AU">Australia</Select.Option>
@@ -127,10 +145,10 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
         label="Postal code"
         name={['billingAddress', 'postalCode']}
         rules={[
-          { required: true, whitespace: true, message: 'Please enter postal code.' },
           {
-            pattern: /^\d{4,6}$/, // TODO: validator isPostalCode(str, locale)
-            message: 'Please enter a valid postal code.',
+            required: true,
+            whitespace: true,
+            validator: validatePostalCode,
           },
         ]}
         hasFeedback
