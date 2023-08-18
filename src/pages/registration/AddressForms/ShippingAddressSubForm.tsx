@@ -11,7 +11,7 @@ type Props = {
   setShippingAsBilling: Dispatch<SetStateAction<boolean>>;
 };
 
-const ShippingAddressForm: FC<Props> = (props: Props): JSX.Element => {
+const ShippingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const { shippingAsBilling, setShippingAsBilling, setIsDefaultShippingAddress } = props;
 
   const [selectedCountry, setSelectedCountry] = useState<PostalCodeLocale | 'any'>('any');
@@ -224,4 +224,4 @@ const ShippingAddressForm: FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default ShippingAddressForm;
+export default ShippingAddressSubForm;

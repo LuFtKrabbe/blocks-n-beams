@@ -4,8 +4,8 @@ import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
-import BillingAddressForm from './AddressForms/BillingAddressForm';
-import ShippingAddressForm from './AddressForms/ShippingAddressForm';
+import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
+import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
 
 import styles from './registration.module.css';
 
@@ -176,13 +176,13 @@ const Registration: FC = (): JSX.Element => {
 
       <Row gutter={32} justify={'center'}>
         <Col>
-          <BillingAddressForm
+          <BillingAddressSubForm
             isDefaultBillingAddress={isDefaultBillingAddress}
             setIsDefaultBillingAddress={setIsDefaultBillingAddress}
           />
         </Col>
         <Col>
-          <ShippingAddressForm
+          <ShippingAddressSubForm
             isDefaultShippingAddress={isDefaultShippingAddress}
             setIsDefaultShippingAddress={setIsDefaultShippingAddress}
             shippingAsBilling={shippingAsBilling}

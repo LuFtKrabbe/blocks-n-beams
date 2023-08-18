@@ -9,7 +9,7 @@ type Props = {
   setIsDefaultBillingAddress: Dispatch<SetStateAction<boolean>>;
 };
 
-const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
+const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const { setIsDefaultBillingAddress } = props;
 
   const defaultAddressCheckboxOnChange = (event: CheckboxChangeEvent) => {
@@ -172,4 +172,4 @@ const BillingAddressForm: FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default BillingAddressForm;
+export default BillingAddressSubForm;
