@@ -1,4 +1,4 @@
-import { CustomerDraft } from '@commercetools/platform-sdk';
+import { MyCustomerDraft } from '@commercetools/platform-sdk';
 import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space } from 'antd';
 import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
+import { RegistrationFormType } from '../../types';
 
 import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
@@ -28,9 +29,9 @@ const Registration: FC = (): JSX.Element => {
     const { email, password } = values;
     setConfirmLoading(true);
 
-    const createCustomer = async (customerDraft: CustomerDraft) => {
+    const createCustomer = async (myCustomerDraft: MyCustomerDraft) => {
       try {
-        await CustomerApi.customerSignUp(customerDraft);
+        await CustomerApi.customerSignUp(myCustomerDraft);
         await CustomerApi.customerSignIn({ username: email, password });
 
         navigate('/main');
@@ -43,8 +44,13 @@ const Registration: FC = (): JSX.Element => {
       }
     };
 
-    const customerDraft = CustomerApi.createCustomerDraft(values);
-    void createCustomer(customerDraft);
+    const myCustomerDraft = CustomerApi.createMyCustomerDraft({
+      ...values,
+      isDefaultBillingAddress,
+      isDefaultShippingAddress,
+      shippingAsBilling,
+    });
+    void createCustomer(myCustomerDraft);
   };
 
   const onReset = () => {
@@ -58,13 +64,14 @@ const Registration: FC = (): JSX.Element => {
       </p>
       <Form
         name="basic"
-        labelCol={{ span: 9 }}
-        wrapperCol={{ span: 16 }}
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
+        labelWrap
         initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
         ref={formRef}
-        className={classNames(styles.form)}
+        className={styles.form}
       >
         <Row justify={'center'}>
           <Col>
@@ -76,6 +83,21 @@ const Registration: FC = (): JSX.Element => {
                 {
                   pattern: /^[ A-Za-z]{1,12}$/,
                   message: 'Please enter a valid first name.',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<RegistrationFormType>
+              label="Last Name"
+              name="lastName"
+              rules={[
+                { required: true, whitespace: true, message: 'Please enter your last name.' },
+                {
+                  pattern: /^[ A-Za-z]{1,12}$/,
+                  message: 'Please enter a valid last name.',
                 },
               ]}
               hasFeedback

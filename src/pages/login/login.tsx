@@ -43,11 +43,12 @@ const Login: FC = (): JSX.Element => {
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        className={classNames(styles.form)}
+        style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
         initialValues={{ remember: true }}
         onFinish={onFinish}
         autoComplete="off"
         ref={formRef}
+        className={classNames(styles.form)}
       >
         <Form.Item<FieldType>
           label="Email"

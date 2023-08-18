@@ -1,31 +1,37 @@
-interface RegistrationFormType {
+import dayjs from 'dayjs';
+
+export interface RegistrationFormType {
   email: string;
   password: string;
   firstName?: string;
   lastName?: string;
-  birthday?: Dayjs;
+  birthday?: dayjs.Dayjs;
 
-  billingAddress?: {
+  billingAddress: {
     firstName?: string;
     lastName?: string;
     streetName?: string;
     additionalStreetInfo?: string;
     city?: string;
     region?: string;
-    country?: string;
+    country: string;
     postalCode?: string;
     phone?: string;
   };
 
-  shippingAddress?: {
+  shippingAddress: {
     firstName?: string;
     lastName?: string;
     streetName?: string;
     additionalStreetInfo?: string;
     city?: string;
     region?: string;
-    country?: string;
+    country: string;
     postalCode?: string;
     phone?: string;
   };
+
+  isDefaultBillingAddress?: boolean;
+  isDefaultShippingAddress?: boolean;
+  shippingAsBilling?: boolean;
 }
