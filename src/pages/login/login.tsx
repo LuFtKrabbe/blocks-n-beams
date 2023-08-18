@@ -4,11 +4,13 @@ import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
+import CustomerApi from '../../api/customerApi';
+
 import styles from './login.module.css';
 
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
 const Login: FC = (): JSX.Element => {
@@ -16,23 +18,19 @@ const Login: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: string) => {
+  const onFinish = ({ email, password }: FieldType) => {
     setConfirmLoading(true);
-    const isSuccessLogin = true;
-    try {
-      //Simulate sending a message
-      console.log(values);
-      setTimeout(() => {
-        if (isSuccessLogin) {
-          navigate('/main'); // don't delete this line
-        }
-      }, 2000);
-    } finally {
-      //Simulate loading
-      setTimeout(() => {
-        setConfirmLoading(false); // don't delete this line
-      }, 1000);
-    }
+
+    const login = async () => {
+      try {
+        await CustomerApi.customerSignIn({ username: email, password });
+        navigate('/main');
+      } finally {
+        setConfirmLoading(false);
+      }
+    };
+
+    void login();
   };
 
   const onReset = () => {
