@@ -1,8 +1,11 @@
+import { CustomerDraft } from '@commercetools/platform-sdk';
 import { Button, Col, DatePicker, Form, FormInstance, Input, Row } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
+
+import CustomerApi from '../../api/customerApi';
 
 import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
@@ -21,23 +24,26 @@ const Registration: FC = (): JSX.Element => {
   const formRef = useRef<FormInstance>(null);
 
   const onFinish = (values: RegistrationFormType) => {
-    console.log('VALUES', values);
+    const { email, password } = values;
     setConfirmLoading(true);
-    const isSuccessLogin = true;
-    try {
-      //Simulate sending a message
-      console.log(values);
-      setTimeout(() => {
-        if (isSuccessLogin) {
-          navigate('/main'); // don't delete this line
+
+    const createCustomer = async (customerDraft: CustomerDraft) => {
+      try {
+        await CustomerApi.customerSignUp(customerDraft);
+        await CustomerApi.customerSignIn({ username: email, password });
+
+        navigate('/main');
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
         }
-      }, 2000);
-    } finally {
-      //Simulate loading
-      setTimeout(() => {
+      } finally {
         setConfirmLoading(false); // don't delete this line
-      }, 1000);
-    }
+      }
+    };
+
+    const customerDraft = CustomerApi.createCustomerDraft(values);
+    void createCustomer(customerDraft);
   };
 
   const onReset = () => {
