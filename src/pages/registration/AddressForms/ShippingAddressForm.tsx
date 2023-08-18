@@ -4,8 +4,6 @@ import { Rule } from 'antd/es/form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
 
-import { RegistrationFormType } from '../registration';
-
 type Props = {
   isDefaultShippingAddress?: boolean;
   setIsDefaultShippingAddress: Dispatch<SetStateAction<boolean>>;

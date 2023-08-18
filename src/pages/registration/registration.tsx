@@ -9,38 +9,6 @@ import ShippingAddressForm from './AddressForms/ShippingAddressForm';
 
 import styles from './registration.module.css';
 
-export type RegistrationFormType = {
-  email?: string;
-  password?: string;
-  firstName?: string;
-  lastName?: string;
-  birthday?: Dayjs;
-
-  billingAddress?: {
-    firstName?: string;
-    lastName?: string;
-    streetName?: string;
-    additionalStreetInfo?: string;
-    city?: string;
-    region?: string;
-    country?: string;
-    postalCode?: string;
-    phone?: string;
-  };
-
-  shippingAddress?: {
-    firstName?: string;
-    lastName?: string;
-    streetName?: string;
-    additionalStreetInfo?: string;
-    city?: string;
-    region?: string;
-    country?: string;
-    postalCode?: string;
-    phone?: string;
-  };
-};
-
 const MIN_AGE = 16;
 const MAX_AGE = 99;
 
