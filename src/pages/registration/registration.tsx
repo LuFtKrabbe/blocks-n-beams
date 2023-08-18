@@ -1,4 +1,4 @@
-import { CustomerDraft } from '@commercetools/platform-sdk';
+import { MyCustomerDraft } from '@commercetools/platform-sdk';
 import { Button, Col, DatePicker, Form, FormInstance, Input, Row } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
+import { RegistrationFormType } from '../../types';
 
 import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
@@ -27,9 +28,9 @@ const Registration: FC = (): JSX.Element => {
     const { email, password } = values;
     setConfirmLoading(true);
 
-    const createCustomer = async (customerDraft: CustomerDraft) => {
+    const createCustomer = async (myCustomerDraft: MyCustomerDraft) => {
       try {
-        await CustomerApi.customerSignUp(customerDraft);
+        await CustomerApi.customerSignUp(myCustomerDraft);
         await CustomerApi.customerSignIn({ username: email, password });
 
         navigate('/main');
@@ -42,8 +43,13 @@ const Registration: FC = (): JSX.Element => {
       }
     };
 
-    const customerDraft = CustomerApi.createCustomerDraft(values);
-    void createCustomer(customerDraft);
+    const myCustomerDraft = CustomerApi.createMyCustomerDraft({
+      ...values,
+      isDefaultBillingAddress,
+      isDefaultShippingAddress,
+      shippingAsBilling,
+    });
+    void createCustomer(myCustomerDraft);
   };
 
   const onReset = () => {

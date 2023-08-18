@@ -41,7 +41,7 @@ const Login: FC = (): JSX.Element => {
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 400 }}
+      style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
       initialValues={{ remember: true }}
       onFinish={onFinish}
       autoComplete="off"
