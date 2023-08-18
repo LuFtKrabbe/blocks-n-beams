@@ -1,5 +1,4 @@
-import { Checkbox, Form, Input, Select, Space } from 'antd';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { Form, Input, Select, Space, Switch } from 'antd';
 import { Rule } from 'antd/es/form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
@@ -12,8 +11,8 @@ type Props = {
 const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const { setIsDefaultBillingAddress } = props;
 
-  const defaultAddressCheckboxOnChange = (event: CheckboxChangeEvent) => {
-    setIsDefaultBillingAddress(event.target.checked);
+  const defaultAddressCheckboxOnChange = (checked: boolean) => {
+    setIsDefaultBillingAddress(checked);
   };
 
   const [selectedCountry, setSelectedCountry] = useState<PostalCodeLocale | 'any'>('any');
@@ -34,7 +33,10 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
     <Space direction="vertical">
       <h2>Billing Address:</h2>
 
-      <Checkbox onChange={defaultAddressCheckboxOnChange}>Set as default billing address</Checkbox>
+      <Space>
+        <Switch onChange={defaultAddressCheckboxOnChange} />
+        <span>Set as default billing address</span>
+      </Space>
 
       <Form.Item<RegistrationFormType>
         label="First Name"

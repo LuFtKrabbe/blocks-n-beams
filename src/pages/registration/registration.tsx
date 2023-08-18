@@ -53,7 +53,7 @@ const Registration: FC = (): JSX.Element => {
   return (
     <Form
       name="basic"
-      labelCol={{ span: 9 }}
+      labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
       onFinish={onFinish}

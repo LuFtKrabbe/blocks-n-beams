@@ -1,5 +1,4 @@
-import { Checkbox, Form, Input, Select, Space, Switch } from 'antd';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { Form, Input, Select, Space, Switch } from 'antd';
 import { Rule } from 'antd/es/form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
@@ -20,8 +19,8 @@ const ShippingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
     setShippingAsBilling(checked);
   };
 
-  const defaultAddressCheckboxOnChange = (event: CheckboxChangeEvent) => {
-    setIsDefaultShippingAddress(event.target.checked);
+  const defaultAddressCheckboxOnChange = (checked: boolean) => {
+    setIsDefaultShippingAddress(checked);
   };
 
   const validator = (_: Rule, value: string | undefined) => {
@@ -56,7 +55,10 @@ const ShippingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
     <Space direction="vertical">
       <h2>Shipping Address:</h2>
 
-      <Checkbox onChange={defaultAddressCheckboxOnChange}>Set as default shipping address</Checkbox>
+      <Space>
+        <Switch onChange={defaultAddressCheckboxOnChange} />
+        <span>Set as default shipping address</span>
+      </Space>
 
       <Space>
         <Switch onChange={shippingAddressSwitchOnChange} />
