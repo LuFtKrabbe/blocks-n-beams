@@ -175,7 +175,7 @@ const Registration: FC = (): JSX.Element => {
               rules={[
                 { required: true, message: 'Please input your password.' },
                 {
-                  pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,12}$/,
+                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
                   message: 'Please enter valid password.',
                 },
               ]}
