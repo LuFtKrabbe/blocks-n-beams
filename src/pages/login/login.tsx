@@ -1,6 +1,7 @@
 import { Button, Form, FormInstance, Input } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
 
@@ -40,7 +41,7 @@ const Login: FC = (): JSX.Element => {
       name="basic"
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 400 }}
+      style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
       initialValues={{ remember: true }}
       onFinish={onFinish}
       autoComplete="off"
@@ -51,10 +52,16 @@ const Login: FC = (): JSX.Element => {
         label="Email"
         name="email"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your email!' },
           {
-            pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-            message: 'Please enter valid email!',
+            required: true,
+            whitespace: true,
+            validator: (_, value: string) => {
+              if (value) {
+                return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter a valid email.');
+              } else {
+                return Promise.reject('Please enter your email.');
+              }
+            },
           },
         ]}
         hasFeedback
@@ -66,10 +73,10 @@ const Login: FC = (): JSX.Element => {
         label="Password"
         name="password"
         rules={[
-          { required: true, message: 'Please input your password!' },
+          { required: true, message: 'Please enter your password.' },
           {
-            pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,12}$/,
-            message: 'Please enter valid password!',
+            pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,20}$/,
+            message: 'Please enter a valid password.',
           },
         ]}
         hasFeedback
