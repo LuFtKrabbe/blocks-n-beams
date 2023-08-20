@@ -75,7 +75,7 @@ const getAnonApiClient = (): Client => {
 
 const getUserApiClient = ({ username, password }: UserAuthOptions): Client => {
   console.log('getUserApiClient', username);
-  const tokenKey = window.btoa(`${projectKey}-${username}`);
+  const tokenKey = window.btoa(`${projectKey}-userClient`);
 
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
     host: process.env.REACT_APP_CTP_AUTH_URL || '',
@@ -132,7 +132,7 @@ export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions):
 };
 
 const getApiRoot = () => {
-  console.log(currentApiClient);
+  console.log('getApiRoot', currentApiClient);
   return createApiBuilderFromCtpClient(currentApiClient).withProjectKey({ projectKey });
 };
 

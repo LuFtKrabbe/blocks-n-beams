@@ -24,6 +24,7 @@ const Login: FC = (): JSX.Element => {
     const login = async () => {
       try {
         await CustomerApi.customerSignIn({ username: email, password });
+        await CustomerApi.getMyCustomerInfo(); // New user tokens stored in localStorage only after first request. So force it.
         navigate('/main');
       } finally {
         setConfirmLoading(false);

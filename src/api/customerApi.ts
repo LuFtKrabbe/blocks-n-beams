@@ -19,7 +19,7 @@ export default class CustomerApi {
       changeApiClient(FlowTypes.PASSWORD, { username, password });
 
       const { firstName, lastName, id: customerId } = res.body.customer;
-      await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+      await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`); // TODO: Remove notifications from api handlers
     } catch (error) {
       console.error(error);
       await message.error(`Login failed`); // TODO: Add reason to message
@@ -76,9 +76,21 @@ export default class CustomerApi {
     return customerDraft;
   };
 
-  static customerLogOut = (username: string) => {
-    const tokenKey = window.btoa(`${projectKey}-${username}`);
+  static customerLogOut = () => {
+    const tokenKey = window.btoa(`${projectKey}-userClient`);
     localStorage.removeItem(tokenKey);
     changeApiClient(FlowTypes.DEFAULT);
+  };
+
+  static getMyCustomerInfo = async () => {
+    try {
+      return await getApiRoot().me().get().execute();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  static customerIsLoggedIn = () => {
+    return localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
   };
 }

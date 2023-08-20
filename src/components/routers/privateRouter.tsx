@@ -1,7 +1,9 @@
 import { Navigate } from 'react-router-dom';
 
+import CustomerApi from '../../api/customerApi';
+
 export const PrivateRoute = ({ page }: { page: JSX.Element }) => {
-  const isRedirection = false; // plug: redirect condition.
+  const isRedirection = CustomerApi.customerIsLoggedIn(); // plug: redirect condition.
   if (isRedirection) {
     return <Navigate to="/main" replace={true} />;
   }
