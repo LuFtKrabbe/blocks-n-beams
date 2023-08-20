@@ -44,7 +44,7 @@ const Registration: FC = (): JSX.Element => {
       }
     };
 
-    const myCustomerDraft = CustomerApi.createMyCustomerDraft({
+    const myCustomerDraft: MyCustomerDraft = CustomerApi.createMyCustomerDraft({
       ...values,
       isDefaultBillingAddress,
       isDefaultShippingAddress,
@@ -81,7 +81,7 @@ const Registration: FC = (): JSX.Element => {
               rules={[
                 { required: true, whitespace: true, message: 'Please enter your first name.' },
                 {
-                  pattern: /^[ A-Za-z]{1,12}$/,
+                  pattern: /^[ A-Za-z-]{1,25}$/,
                   message: 'Please enter a valid first name.',
                 },
               ]}
@@ -96,22 +96,7 @@ const Registration: FC = (): JSX.Element => {
               rules={[
                 { required: true, whitespace: true, message: 'Please enter your last name.' },
                 {
-                  pattern: /^[ A-Za-z]{1,12}$/,
-                  message: 'Please enter a valid last name.',
-                },
-              ]}
-              hasFeedback
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item<RegistrationFormType>
-              label="Last Name"
-              name="lastName"
-              rules={[
-                { required: true, whitespace: true, message: 'Please enter your last name.' },
-                {
-                  pattern: /^[ A-Za-z]{1,12}$/,
+                  pattern: /^[ A-Za-z-]{1,25}$/,
                   message: 'Please enter a valid last name.',
                 },
               ]}
@@ -176,7 +161,8 @@ const Registration: FC = (): JSX.Element => {
                 { required: true, message: 'Please input your password.' },
                 {
                   pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
-                  message: 'Please enter valid password.',
+                  message:
+                    'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
                 },
               ]}
               hasFeedback

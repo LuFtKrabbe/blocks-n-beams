@@ -76,8 +76,9 @@ const Login: FC = (): JSX.Element => {
           rules={[
             { required: true, message: 'Please enter your password.' },
             {
-              pattern: /^(?=.*\d)(?=.*[!#$%&*@^])(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,20}$/,
-              message: 'Please enter a valid password.',
+              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
+              message:
+                'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
             },
           ]}
           hasFeedback
