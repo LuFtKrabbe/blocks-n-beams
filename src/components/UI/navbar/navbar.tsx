@@ -1,6 +1,7 @@
 import { UserAddOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
+import classNames from 'classnames';
 
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
@@ -33,7 +34,7 @@ const Navbar: FC = (): JSX.Element => {
         <Link to={'/login'}>Login</Link>
         <Link to={'/registration'}>Registration</Link>
       </div> */}
-      <Menu mode="horizontal" items={items} theme="dark" className={styles.menu} />
+      <Menu mode="horizontal" items={items} theme="dark" className={classNames(styles.menu)} />
     </>
   );
 };

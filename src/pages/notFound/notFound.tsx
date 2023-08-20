@@ -1,5 +1,6 @@
 import { HomeTwoTone } from '@ant-design/icons';
 import { Button } from 'antd';
+import classNames from 'classnames';
 import { FC } from 'react';
 
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -11,13 +12,13 @@ const NotFound: FC = (): JSX.Element => {
   const location = useLocation();
 
   return (
-    <div className={styles.container}>
-      <p className={styles.title}>404</p>
+    <div className={classNames(styles.container)}>
+      <p className={classNames(styles.title)}>404</p>
       <p>Sorry, but the page</p>
-      <p className={styles.link}>{location.pathname.split('/').pop()}</p>
+      <p className={classNames(styles.link)}>{location.pathname.split('/').pop()}</p>
       <p>not found!</p>
       <Button
-        className={styles.btn}
+        className={classNames(styles.btn)}
         type="primary"
         onClick={() => {
           navigate('/main');

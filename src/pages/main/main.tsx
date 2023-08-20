@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { FC } from 'react';
 
 import Navbar from '../../components/UI/navbar/navbar';
@@ -8,7 +9,7 @@ const Main: FC = (): JSX.Element => {
   return (
     <>
       <Navbar />
-      <div className={styles.container}>Main Page</div>;
+      <div className={classNames(styles.container)}>Main Page</div>;
     </>
   );
 };
