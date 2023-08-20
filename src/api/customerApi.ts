@@ -18,6 +18,8 @@ export default class CustomerApi {
 
       changeApiClient(FlowTypes.PASSWORD, { username, password });
 
+      await this.getMyCustomerInfo(); // New user tokens stored in localStorage only after first request. So force it.
+
       const { firstName, lastName, id: customerId } = res.body.customer;
       await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`); // TODO: Remove notifications from api handlers
     } catch (error) {

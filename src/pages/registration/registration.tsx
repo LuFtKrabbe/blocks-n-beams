@@ -33,7 +33,6 @@ const Registration: FC = (): JSX.Element => {
       try {
         await CustomerApi.customerSignUp(myCustomerDraft);
         await CustomerApi.customerSignIn({ username: email, password });
-        await CustomerApi.getMyCustomerInfo(); // New user tokens stored in localStorage only after first request. So force it.
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
