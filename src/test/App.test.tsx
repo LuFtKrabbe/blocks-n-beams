@@ -1,15 +1,21 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../app/store';
 import App from '../App';
+import { BrowserRouter } from 'react-router-dom';
 
-test('renders learn react link', () => {
+test('Simple test for App', async () => {
+  const promise = Promise.resolve()
+
   const { getByText } = render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>,
+    </BrowserRouter>
   );
 
-  expect(getByText(/learn/i)).toBeInTheDocument();
+  await act(() => promise);
+  expect(getByText(/Login/)).toBeInTheDocument();
 });
