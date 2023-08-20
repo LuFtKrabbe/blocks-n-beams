@@ -1,14 +1,17 @@
+import { CustomerDraft } from '@commercetools/platform-sdk';
 import { Button, Form, FormInstance, Input, Select } from 'antd';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import CustomerApi from '../../api/customerApi';
+
 import styles from './registration.module.css';
 
-type FieldType = {
-  email?: string;
-  password?: string;
-  name?: string;
-  surname?: string;
+type NewCustomerFields = {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
   birthday?: string;
   street?: string;
   city?: string;
@@ -20,23 +23,27 @@ const Registration: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
-  const onFinish = (values: string) => {
+  const onFinish = (values: NewCustomerFields) => {
+    const { email, password } = values;
     setConfirmLoading(true);
-    const isSuccessLogin = true;
-    try {
-      //Simulate sending a message
-      console.log(values);
-      setTimeout(() => {
-        if (isSuccessLogin) {
-          navigate('/main'); // don't delete this line
+
+    const createCustomer = async (customerDraft: CustomerDraft) => {
+      try {
+        await CustomerApi.customerSignUp(customerDraft);
+        await CustomerApi.customerSignIn({ username: email, password });
+
+        navigate('/main');
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
         }
-      }, 2000);
-    } finally {
-      //Simulate loading
-      setTimeout(() => {
+      } finally {
         setConfirmLoading(false); // don't delete this line
-      }, 1000);
-    }
+      }
+    };
+
+    const customerDraft = CustomerApi.createCustomerDraft(values);
+    void createCustomer(customerDraft);
   };
 
   const onReset = () => {
@@ -55,9 +62,9 @@ const Registration: FC = (): JSX.Element => {
       ref={formRef}
       className={styles.form}
     >
-      <Form.Item<FieldType>
-        label="Name"
-        name="name"
+      <Form.Item<NewCustomerFields>
+        label="First Name"
+        name="firstName"
         rules={[
           { required: true, whitespace: true, message: 'Please input your name!' },
           {
@@ -70,14 +77,14 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
-        label="Surname"
-        name="surname"
+      <Form.Item<NewCustomerFields>
+        label="Last Name"
+        name="lastName"
         rules={[
-          { required: true, whitespace: true, message: 'Please input your surname!' },
+          { required: true, whitespace: true, message: 'Please input your last name!' },
           {
             pattern: /^[ A-Za-z]{2,12}$/,
-            message: 'Please enter valid surname!',
+            message: 'Please enter valid last name!',
           },
         ]}
         hasFeedback
@@ -85,7 +92,7 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         label="Birthday"
         name="birthday"
         tooltip="year-month-day"
@@ -101,7 +108,7 @@ const Registration: FC = (): JSX.Element => {
         <Input placeholder="xxxx-xx-xx" />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         label="Street"
         name="street"
         rules={[
@@ -116,7 +123,7 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         label="City"
         name="city"
         rules={[
@@ -131,20 +138,20 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         name="country"
         label="Country"
         rules={[{ required: true, message: 'Please input country!' }]}
       >
         <Select placeholder="Select country" allowClear>
-          <Select.Option value="Germany">Germany</Select.Option>
-          <Select.Option value="United States">United States</Select.Option>
-          <Select.Option value="Australia">Australia</Select.Option>
-          <Select.Option value="Spain">Spain</Select.Option>
+          <Select.Option value="DE">Germany</Select.Option>
+          <Select.Option value="US">United States</Select.Option>
+          <Select.Option value="AU">Australia</Select.Option>
+          <Select.Option value="ES">Spain</Select.Option>
         </Select>
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         label="Email"
         name="email"
         rules={[
@@ -159,7 +166,7 @@ const Registration: FC = (): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<FieldType>
+      <Form.Item<NewCustomerFields>
         label="Password"
         name="password"
         rules={[
