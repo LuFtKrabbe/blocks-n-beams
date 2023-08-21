@@ -5,3 +5,9 @@
   height: 60vh;
   font-size: 5rem;
 }
+
+.logoutButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

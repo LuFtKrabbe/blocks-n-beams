@@ -33,7 +33,6 @@ const Registration: FC = (): JSX.Element => {
       try {
         await CustomerApi.customerSignUp(myCustomerDraft);
         await CustomerApi.customerSignIn({ username: email, password });
-
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
