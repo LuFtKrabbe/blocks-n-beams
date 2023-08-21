@@ -3,6 +3,9 @@ import { render, act, screen, cleanup } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Login from '../pages/login/login';
 import Registration from '../pages/registration/registration';
+import Main from '../pages/main/main';
+import NotFound from '../pages/notFound/notFound';
+import Navbar from '../components/UI/navbar/navbar';
 
 describe('App', () => {
   beforeEach(() => {
@@ -47,7 +50,7 @@ describe('App', () => {
         </Router>,
       );
     });
-    
+
     expect(screen.getAllByText(/First Name/i)[FIRST_ELEM]).toBeInTheDocument();
     expect(screen.getAllByText(/First Name/i)[SECOND_ELEM]).toBeInTheDocument();
     expect(screen.getAllByText(/Last Name/i)[FIRST_ELEM]).toBeInTheDocument();
@@ -67,5 +70,45 @@ describe('App', () => {
     expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
+  });
+
+  it('renders Main component', async () => {
+    await act(async () => {
+      render(
+        <Router>
+          <Main />;
+        </Router>,
+      );
+    });
+
+    const element = screen.getByText(/Main page/i);
+    expect(element).toBeInTheDocument();
+  });
+
+  it('renders NotFound component', async () => {
+    await act(async () => {
+      render(
+        <Router>
+          <NotFound />;
+        </Router>,
+      );
+    });
+
+    const element = screen.getByText(/404/i);
+    expect(element).toBeInTheDocument();
+  });
+
+  it('renders Navbar component', async () => {
+    await act(async () => {
+      render(
+        <Router>
+          <Navbar />;
+        </Router>,
+      );
+    });
+
+    expect(screen.getByText(/Main/i)).toBeInTheDocument();
+    expect(screen.getByText(/Login/i)).toBeInTheDocument();
+    expect(screen.getByText(/Registration/i)).toBeInTheDocument();
   });
 });
