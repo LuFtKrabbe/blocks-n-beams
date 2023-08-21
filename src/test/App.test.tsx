@@ -1,21 +1,37 @@
 import React from 'react';
-import { render, act } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../app/store';
-import App from '../App';
-import { BrowserRouter } from 'react-router-dom';
+import { render, act, screen, cleanup } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Login from '../pages/login/login';
 
-test('Simple test for App', async () => {
-  const promise = Promise.resolve()
+describe('App', () => {
+  beforeEach(() => {
+    window.matchMedia =
+      window.matchMedia ||
+      function () {
+        return {
+          matches: false,
+          addListener: function () {},
+          removeListener: function () {},
+        };
+      };
 
-  const { getByText } = render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>,
-    </BrowserRouter>
-  );
+    cleanup;
+  });
 
-  await act(() => promise);
-  expect(getByText(/Login/)).toBeInTheDocument();
+  afterEach(cleanup);
+
+  it('renders Login component', async () => {
+    await act(async () => {
+      render(
+        <Router>
+          <Login />;
+        </Router>
+      );
+    });
+
+    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
+  });
 });
