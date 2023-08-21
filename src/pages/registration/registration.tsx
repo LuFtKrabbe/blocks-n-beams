@@ -117,7 +117,6 @@ const Registration: FC = (): JSX.Element => {
                   validator: (_, value: Dayjs) => {
                     const now = dayjs(Date.now());
                     const age = now.diff(value, 'year');
-                    console.log(age);
                     if (value) {
                       return age >= MIN_AGE && age <= MAX_AGE
                         ? Promise.resolve()
