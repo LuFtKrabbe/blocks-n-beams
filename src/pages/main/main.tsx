@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { FC, useState } from 'react';
 
 import CustomerApi from '../../api/customerApi';
-import Navbar from '../../components/UI/navbar/navbar';
 
 import styles from './main.module.css';
 
@@ -17,7 +16,6 @@ const Main: FC = (): JSX.Element => {
 
   return (
     <>
-      <Navbar />
       <div className={classNames(styles.container)}>Main Page</div>
       <Space className={classNames(styles.logoutButtonContainer)}>
         {showLogout && (
