@@ -14,7 +14,7 @@ import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
 
 import styles from './registration.module.css';
 
-const MIN_AGE = 16;
+const MIN_AGE = 13;
 const MAX_AGE = 99;
 
 const Registration: FC = (): JSX.Element => {
@@ -84,7 +84,7 @@ const Registration: FC = (): JSX.Element => {
                 { required: true, whitespace: true, message: 'Please enter your first name.' },
                 {
                   pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid first name.',
+                  message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.',
                 },
               ]}
               hasFeedback
@@ -99,7 +99,7 @@ const Registration: FC = (): JSX.Element => {
                 { required: true, whitespace: true, message: 'Please enter your last name.' },
                 {
                   pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid last name.',
+                  message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
                 },
               ]}
               hasFeedback
@@ -186,7 +186,7 @@ const Registration: FC = (): JSX.Element => {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The new password that you entered do not match.'));
+                    return Promise.reject(new Error('The new password that you entered does not match.'));
                   },
                 }),
               ]}
