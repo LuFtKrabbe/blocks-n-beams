@@ -42,6 +42,7 @@ describe('App', () => {
   it('renders Registration component', async () => {
     const FIRST_ELEM = 0;
     const SECOND_ELEM = 1;
+    const THIRD_ELEM = 2;
 
     await act(async () => {
       render(
@@ -51,23 +52,37 @@ describe('App', () => {
       );
     });
 
+    expect(screen.getAllByText(/Already have an account?/i)[FIRST_ELEM]).toBeInTheDocument();
     expect(screen.getAllByText(/First Name/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/First Name/i)[SECOND_ELEM]).toBeInTheDocument();
     expect(screen.getAllByText(/Last Name/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Last Name/i)[SECOND_ELEM]).toBeInTheDocument();
     expect(screen.getByLabelText(/Birthday/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Address Line 1/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Address Line 2/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Address Line 1/i)[SECOND_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Address Line 2/i)[SECOND_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Region/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/Region/i)[SECOND_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/City/i)[FIRST_ELEM]).toBeInTheDocument();
-    expect(screen.getAllByText(/City/i)[SECOND_ELEM]).toBeInTheDocument();
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Password/i)[FIRST_ELEM]).toBeInTheDocument();
     expect(screen.getAllByText(/Password/i)[SECOND_ELEM]).toBeInTheDocument();
     expect(screen.getByLabelText(/Confirm Password/i)).toBeInTheDocument();
+
+    expect(screen.getAllByText(/Billing Address/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/First Name/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Last Name/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Address Line 1/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Address Line 2/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Region/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/City/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Country/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Postal code/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Phone/i)[FIRST_ELEM]).toBeInTheDocument();
+
+    expect(screen.getAllByText(/Shipping Address/i)[FIRST_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/First Name/i)[THIRD_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Last Name/i)[THIRD_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Address Line 1/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Address Line 2/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Region/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/City/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Country/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Postal code/i)[SECOND_ELEM]).toBeInTheDocument();
+    expect(screen.getAllByText(/Phone/i)[SECOND_ELEM]).toBeInTheDocument();
+
     expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
   });
