@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 import classNames from 'classnames';
 
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import styles from './navbar.module.css';
 
@@ -26,16 +26,24 @@ const items: MenuProps['items'] = [
   },
 ];
 
+const itemsMain: MenuProps['items'] = [
+  {
+    label: <Link to={'/main'}>Main</Link>,
+    key: 'main',
+    icon: <HomeOutlined />,
+  },
+];
+
 const Navbar: FC = (): JSX.Element => {
+  const location = useLocation();
+  const locationPath = location.pathname.split('/').pop();
   return (
-    <>
-      {/* <div className={styles.navbarWrap}>
-        <Link to={'/main'}>Main</Link>
-        <Link to={'/login'}>Login</Link>
-        <Link to={'/registration'}>Registration</Link>
-      </div> */}
-      <Menu mode="horizontal" items={items} theme="dark" className={classNames(styles.menu)} />
-    </>
+    <Menu
+      mode="horizontal"
+      items={locationPath === 'main' ? items : itemsMain}
+      theme="dark"
+      className={classNames(styles.menu)}
+    />
   );
 };
 
