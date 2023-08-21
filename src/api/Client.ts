@@ -136,5 +136,5 @@ const getApiRoot = () => {
   return createApiBuilderFromCtpClient(currentApiClient).withProjectKey({ projectKey });
 };
 
-export { getDefaultApiClient, getAnonApiClient, getUserApiClient, currentApiClient }
+export { getDefaultApiClient, getAnonApiClient, getUserApiClient, currentApiClient };
 export default getApiRoot;
