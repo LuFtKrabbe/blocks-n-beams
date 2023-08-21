@@ -37,7 +37,6 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
 };
 
 const getDefaultApiClient = (): Client => {
-  console.log('getDefaultApiClient');
   if (process.env.NODE_ENV === 'production') {
     return new ClientBuilder()
       .withProjectKey(projectKey)
@@ -74,7 +73,6 @@ const getAnonApiClient = (): Client => {
 };
 
 const getUserApiClient = ({ username, password }: UserAuthOptions): Client => {
-  console.log('getUserApiClient', username);
   const tokenKey = window.btoa(`${projectKey}-userClient`);
 
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
