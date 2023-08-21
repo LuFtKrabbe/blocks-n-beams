@@ -46,8 +46,8 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { required: true, whitespace: true, message: 'Please enter your first name.' },
           {
-            pattern: /^[ A-Za-z]{1,16}$/,
-            message: 'Please enter a valid first name.',
+            pattern: /^[ A-Za-z-]{1,25}$/, // TODO: if possible move regexes to constant value or enum.
+            message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.', // TODO: if possible move strings to enum.
           },
         ]}
         hasFeedback
@@ -61,8 +61,8 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { required: true, whitespace: true, message: 'Please enter your last name.' },
           {
-            pattern: /^[ A-Za-z]{1,16}$/,
-            message: 'Please enter a valid last name.',
+            pattern: /^[ A-Za-z-]{1,25}$/,
+            message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
           },
         ]}
         hasFeedback
@@ -77,7 +77,7 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           { required: true, whitespace: true, message: 'Please enter billing address.' },
           {
             pattern: /^[\d A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid address.',
+            message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
           },
         ]}
         hasFeedback
@@ -92,7 +92,7 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           { whitespace: true },
           {
             pattern: /^[\d A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid address.',
+            message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
           },
         ]}
         hasFeedback
@@ -106,8 +106,8 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         rules={[
           { whitespace: true },
           {
-            pattern: /^[ A-Za-z]{1,12}$/,
-            message: 'Please enter a valid region.',
+            pattern: /^[ A-Za-z-]{1,25}$/,
+            message: 'Please enter a valid region. Allowed alphabet, space and hyphen. Length: 1-25.',
           },
         ]}
         hasFeedback
@@ -122,7 +122,7 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           { required: true, whitespace: true, message: 'Please enter city name.' },
           {
             pattern: /^[ A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid city.',
+            message: 'Please enter a valid city. Allowed alphabet, space and hyphen. Length: 1-32.',
           },
         ]}
         hasFeedback
@@ -165,7 +165,7 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           { required: true, whitespace: true, message: 'Please enter your phone number.' },
           {
             pattern: /^\+?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4,6}$/,
-            message: 'Please enter a valid phone number.',
+            message: 'Please enter a valid phone number. (e.g. +79681112233)',
           },
         ]}
         hasFeedback
