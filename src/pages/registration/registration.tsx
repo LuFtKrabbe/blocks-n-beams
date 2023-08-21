@@ -1,5 +1,5 @@
 import { MyCustomerDraft } from '@commercetools/platform-sdk';
-import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space } from 'antd';
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message } from 'antd';
 import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
@@ -32,11 +32,14 @@ const Registration: FC = (): JSX.Element => {
     const createCustomer = async (myCustomerDraft: MyCustomerDraft) => {
       try {
         await CustomerApi.customerSignUp(myCustomerDraft);
-        await CustomerApi.customerSignIn({ username: email, password });
+        const res = await CustomerApi.customerSignIn({ username: email, password });
+
+        const { firstName, lastName, id: customerId } = res.body.customer;
+        await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
-          console.error(error.message);
+          await message.error(`Registration failed. ${error.message}`);
         }
       } finally {
         setConfirmLoading(false); // don't delete this line

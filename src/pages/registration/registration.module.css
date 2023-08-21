@@ -9,5 +9,6 @@
 
 .spaceWrapper {
   margin: 5% auto;
-  width: 100%;
+  display: flex;
+  width: 89%;
 }
