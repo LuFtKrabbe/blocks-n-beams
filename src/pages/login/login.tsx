@@ -1,4 +1,4 @@
-import { Button, Form, FormInstance, Input, Space } from 'antd';
+import { Button, Form, FormInstance, Input, Space, message } from 'antd';
 import classNames from 'classnames';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,8 +23,15 @@ const Login: FC = (): JSX.Element => {
 
     const login = async () => {
       try {
-        await CustomerApi.customerSignIn({ username: email, password });
+        const res = await CustomerApi.customerSignIn({ username: email, password });
+
+        const { firstName, lastName, id: customerId } = res.body.customer;
+        await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
         navigate('/main');
+      } catch (error) {
+        if (error instanceof Error) {
+          await message.error(`Login failed. ${error.message}`);
+        }
       } finally {
         setConfirmLoading(false);
       }
