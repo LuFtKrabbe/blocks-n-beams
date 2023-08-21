@@ -8,8 +8,8 @@ import AppRouter from './components/routers/appRouter';
 const App: FC = (): JSX.Element => {
   return (
     <>
-      <Navbar />;
-      <AppRouter />;
+      <Navbar />
+      <AppRouter />
     </>
   );
 };

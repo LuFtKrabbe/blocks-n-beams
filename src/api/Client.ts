@@ -54,7 +54,6 @@ const getDefaultApiClient = (): Client => {
 };
 
 const getAnonApiClient = (): Client => {
-  console.log('getAnonApiClient');
   const tokenKey = window.btoa(`${projectKey}-anonClient`);
   if (process.env.NODE_ENV === 'production') {
     return new ClientBuilder()
@@ -130,7 +129,6 @@ export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions):
 };
 
 const getApiRoot = () => {
-  console.log('getApiRoot', currentApiClient);
   return createApiBuilderFromCtpClient(currentApiClient).withProjectKey({ projectKey });
 };
 
