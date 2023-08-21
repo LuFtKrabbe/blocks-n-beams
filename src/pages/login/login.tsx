@@ -1,4 +1,4 @@
-import { Button, Form, FormInstance, Input, Space, message } from 'antd';
+import { Button, Col, Form, FormInstance, Input, Row, Space, message } from 'antd';
 import classNames from 'classnames';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -92,20 +92,26 @@ const Login: FC = (): JSX.Element => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          {!confirmLoading ? (
-            <Button type="primary" htmlType="submit">
-              Submit
+        <Row gutter={32} justify={'center'}>
+          <Col>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              {!confirmLoading ? (
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              ) : (
+                <Button type="primary" loading>
+                  Submit
+                </Button>
+              )}
+            </Form.Item>
+          </Col>
+          <Col>
+            <Button className={classNames(styles.button)} htmlType="button" onClick={onReset}>
+              Reset
             </Button>
-          ) : (
-            <Button type="primary" loading>
-              Submit
-            </Button>
-          )}
-          <Button className={classNames(styles.button)} htmlType="button" onClick={onReset}>
-            Reset
-          </Button>
-        </Form.Item>
+          </Col>
+        </Row>
       </Form>
       <p>
         Don't have an account? <a href="/registration">Sign Up</a>.
