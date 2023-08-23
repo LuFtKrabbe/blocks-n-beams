@@ -1,0 +1,14 @@
+.form {
+  margin: 0 auto;
+  margin-top: 5%;
+}
+
+.button {
+  margin-left: 1rem;
+}
+
+.spaceWrapper {
+  margin: 5% auto;
+  display: flex;
+  width: 89%;
+}
