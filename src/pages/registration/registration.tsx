@@ -1,5 +1,6 @@
 import { MyCustomerDraft } from '@commercetools/platform-sdk';
-import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message } from 'antd';
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message, ConfigProvider, Divider } from 'antd';
+import { MailOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
@@ -24,6 +25,7 @@ const Registration: FC = (): JSX.Element => {
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false); // FIXME: Try to change naming
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
+
 
   const onFinish = (values: RegistrationFormType) => {
     const { email, password } = values;
@@ -60,14 +62,13 @@ const Registration: FC = (): JSX.Element => {
   };
 
   return (
-    <Space className={classNames(styles.spaceWrapper)} direction="vertical" align="center">
-      <p>
-        Already have an account? <a href="/login">Sign In</a>.
-      </p>
+    <ConfigProvider>
+    <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
         name="basic"
-        labelCol={{ span: 10 }}
-        wrapperCol={{ span: 14 }}
+        colon={true}
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 15 }}
         labelWrap
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -75,9 +76,17 @@ const Registration: FC = (): JSX.Element => {
         ref={formRef}
         className={styles.form}
       >
-        <Row justify={'center'}>
-          <Col>
+        <Row
+          justify={'center'}
+          className={styles.registrationMain}
+        >
+          <Col span={24}>
+            <p className={styles.registrationTitle}>
+              Registration
+            </p>
+            <Divider className={styles.devider}/>
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="First Name"
               name="firstName"
               rules={[
@@ -93,6 +102,7 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Last Name"
               name="lastName"
               rules={[
@@ -108,6 +118,7 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Birthday"
               name="birthday"
               rules={[
@@ -131,10 +142,11 @@ const Registration: FC = (): JSX.Element => {
               ]}
               hasFeedback
             >
-              <DatePicker />
+              <DatePicker className={styles.datePicker}/>
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Email"
               name="email"
               rules={[
@@ -152,10 +164,11 @@ const Registration: FC = (): JSX.Element => {
               ]}
               hasFeedback
             >
-              <Input />
+              <Input suffix={<MailOutlined style={{ color: 'grey' }}/>}/>
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Password"
               name="password"
               rules={[
@@ -172,6 +185,7 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item
+              className={styles.regInput}
               name="confirm"
               label="Confirm Password"
               dependencies={['password']}
@@ -186,24 +200,32 @@ const Registration: FC = (): JSX.Element => {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The new password that you entered does not match.'));
+                    return Promise.reject(new Error('Passwords do not match.'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password visibilityToggle={false}/>
             </Form.Item>
+            <p className="toSignIn">
+              Already have an account? <a href="/login">Sign In</a>.
+            </p>
           </Col>
         </Row>
 
-        <Row gutter={32} justify={'center'}>
-          <Col>
+        <Row 
+          justify={'center'}
+          className={styles.registrationBilling}
+        >
+          <Col span={24}>
             <BillingAddressSubForm
               isDefaultBillingAddress={isDefaultBillingAddress}
               setIsDefaultBillingAddress={setIsDefaultBillingAddress}
             />
           </Col>
-          <Col>
+        </Row>
+        <Row justify={'center'}>
+          <Col span={18}>
             <ShippingAddressSubForm
               isDefaultShippingAddress={isDefaultShippingAddress}
               setIsDefaultShippingAddress={setIsDefaultShippingAddress}
@@ -228,13 +250,14 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
           </Col>
           <Col>
-            <Button className={classNames(styles.button)} htmlType="button" onClick={onReset}>
+            <Button className={styles.button} htmlType="button" onClick={onReset}>
               Reset
             </Button>
           </Col>
         </Row>
       </Form>
     </Space>
+    </ConfigProvider>
   );
 };
 
