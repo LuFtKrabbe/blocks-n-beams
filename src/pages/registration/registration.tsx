@@ -212,18 +212,34 @@ const Registration: FC = (): JSX.Element => {
             </p>
           </Col>
         </Row>
+      </Form> 
 
-        <Row 
-          justify={'center'}
-          className={styles.registrationBilling}
-        >
-          <Col span={24}>
-            <BillingAddressSubForm
-              isDefaultBillingAddress={isDefaultBillingAddress}
-              setIsDefaultBillingAddress={setIsDefaultBillingAddress}
-            />
-          </Col>
-        </Row>
+      <Form
+        name="basic26"
+        layout='vertical'
+        colon={true}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        labelWrap
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete="off"
+        ref={formRef}
+        className={styles.formAddresses}
+      >
+          <Row 
+            justify={'center'}
+            className={styles.registrationBilling}
+          >
+            <Col span={24}>
+              <BillingAddressSubForm
+                isDefaultBillingAddress={isDefaultBillingAddress}
+                setIsDefaultBillingAddress={setIsDefaultBillingAddress}
+              />
+            </Col>
+          </Row>
+
+
         <Row justify={'center'}>
           <Col span={18}>
             <ShippingAddressSubForm
@@ -256,6 +272,7 @@ const Registration: FC = (): JSX.Element => {
           </Col>
         </Row>
       </Form>
+
     </Space>
     </ConfigProvider>
   );

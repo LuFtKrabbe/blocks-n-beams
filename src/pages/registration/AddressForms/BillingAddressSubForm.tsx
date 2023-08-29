@@ -1,7 +1,9 @@
-import { Form, Input, Select, Space, Switch } from 'antd';
+import { Form, Input, Select, Space, Switch, Row, Col, Divider, Checkbox } from 'antd';
 import { Rule } from 'antd/es/form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
+import styles from './BillingAdress.module.css';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 import { RegistrationFormType } from '../../../types';
 
@@ -13,8 +15,8 @@ type Props = {
 const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const { setIsDefaultBillingAddress } = props;
 
-  const defaultAddressCheckboxOnChange = (checked: boolean) => {
-    setIsDefaultBillingAddress(checked);
+  const defaultAddressCheckboxOnChange = (e: CheckboxChangeEvent) => {
+    setIsDefaultBillingAddress(e.target.checked);
   };
 
   const [selectedCountry, setSelectedCountry] = useState<PostalCodeLocale | 'any'>('any');
@@ -32,75 +34,105 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   };
 
   return (
-    <Space direction="vertical">
-      <h2>Billing Address:</h2>
+    <Space 
+      direction='vertical'
+      className={styles.registrationBilling}
+    >
+      
+      <Row align={'middle'} justify={'space-between'} wrap={false} className={styles.registrationBillingHeader}>
+        <Col>
+          <h2>Billing Address</h2>
+        </Col>
+        <Col>
+          <Row align={'middle'} justify={'space-between'} wrap={false}>
+            <Col>
+              <span className={styles.billingDefaultText}>Set as default billing address</span>
+            </Col>
+            <Col>
+              <Checkbox onChange={defaultAddressCheckboxOnChange} className={styles.billingDefaultCheckbox}/>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
 
-      <Space>
-        <Switch onChange={defaultAddressCheckboxOnChange} />
-        <span>Set as default billing address</span>
-      </Space>
+      <Divider className={styles.devider}/>
+
+      <Row align={'top'} justify={'space-between'} wrap={false}>
+        <Col>
+          <Form.Item<RegistrationFormType>
+              className={styles.registrationBillingInputHalf}
+              label="First Name"
+              name={['billingAddress', 'firstName']}
+              rules={[
+                { required: true, whitespace: true, message: 'Please enter your first name.' },
+                {
+                  pattern: /^[ A-Za-z-]{1,25}$/, // TODO: if possible move regexes to constant value or enum.
+                  message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.', // TODO: if possible move strings to enum.
+                },
+              ]}
+              hasFeedback
+          >
+            <Input />
+          </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item<RegistrationFormType>
+              className={styles.registrationBillingInputHalf}
+              label="Last Name"
+              name={['billingAddress', 'lastName']}
+              rules={[
+                { required: true, whitespace: true, message: 'Please enter your last name.' },
+                {
+                  pattern: /^[ A-Za-z-]{1,25}$/,
+                  message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+        </Col>
+      </Row>
+
+      <Row align={'top'} justify={'space-between'} wrap={false}>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            label="Address Line 1"
+            name={['billingAddress', 'streetName']}
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter billing address.' },
+              {
+                pattern: /^[\d A-Za-z-]{1,32}$/,
+                message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item<RegistrationFormType>
+          className={styles.registrationBillingInputHalf}
+          label="Address line 2"
+          name={['billingAddress', 'additionalStreetInfo']}
+          rules={[
+            { whitespace: true },
+            {
+              pattern: /^[\d A-Za-z-]{1,32}$/,
+              message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
+            },
+          ]}
+          hasFeedback
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item<RegistrationFormType>
-        label="First Name"
-        name={['billingAddress', 'firstName']}
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter your first name.' },
-          {
-            pattern: /^[ A-Za-z-]{1,25}$/, // TODO: if possible move regexes to constant value or enum.
-            message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.', // TODO: if possible move strings to enum.
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        label="Last Name"
-        name={['billingAddress', 'lastName']}
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter your last name.' },
-          {
-            pattern: /^[ A-Za-z-]{1,25}$/,
-            message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        label="Address Line 1"
-        name={['billingAddress', 'streetName']}
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter billing address.' },
-          {
-            pattern: /^[\d A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        label="Address line 2"
-        name={['billingAddress', 'additionalStreetInfo']}
-        rules={[
-          { whitespace: true },
-          {
-            pattern: /^[\d A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
+        className={styles.registrationBillingInput}
         label="Region"
         name={['billingAddress', 'region']}
         rules={[
@@ -115,63 +147,76 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Form.Item<RegistrationFormType>
-        label="City"
-        name={['billingAddress', 'city']}
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter city name.' },
-          {
-            pattern: /^[ A-Za-z-]{1,32}$/,
-            message: 'Please enter a valid city. Allowed alphabet, space and hyphen. Length: 1-32.',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        name={['billingAddress', 'country']}
-        label="Country"
-        rules={[{ required: true, message: 'Please select a country.' }]}
-      >
-        <Select placeholder="Select country" allowClear onChange={setSelectedCountry}>
-          <Select.Option value="DE">Germany</Select.Option>
-          <Select.Option value="US">United States</Select.Option>
-          <Select.Option value="AU">Australia</Select.Option>
-          <Select.Option value="ES">Spain</Select.Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        label="Postal code"
-        name={['billingAddress', 'postalCode']}
-        rules={[
-          {
-            required: true,
-            whitespace: true,
-            validator: validatePostalCode,
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item<RegistrationFormType>
-        label="Phone"
-        name={['billingAddress', 'phone']}
-        rules={[
-          { required: true, whitespace: true, message: 'Please enter your phone number.' },
-          {
-            pattern: /^\+?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4,6}$/,
-            message: 'Please enter a valid phone number. (e.g. +79681112233)',
-          },
-        ]}
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
+      <Row align={'top'} justify={'space-between'} wrap={false}>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            label="City"
+            name={['billingAddress', 'city']}
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter city name.' },
+              {
+                pattern: /^[ A-Za-z-]{1,32}$/,
+                message: 'Please enter a valid city. Allowed alphabet, space and hyphen. Length: 1-32.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            label="Phone"
+            name={['billingAddress', 'phone']}
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter your phone number.' },
+              {
+                pattern: /^\+?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4,6}$/,
+                message: 'Please enter a valid phone number. (e.g. +79681112233)',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+        
+      <Row align={'top'} justify={'space-between'} wrap={false}>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            name={['billingAddress', 'country']}
+            label="Country"
+            rules={[{ required: true, message: 'Please select a country.' }]}
+          >
+            <Select placeholder="Select country" allowClear onChange={setSelectedCountry}>
+              <Select.Option value="DE">Germany</Select.Option>
+              <Select.Option value="US">United States</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            label="Postal code"
+            name={['billingAddress', 'postalCode']}
+            rules={[
+              {
+                required: true,
+                whitespace: true,
+                validator: validatePostalCode,
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+      
     </Space>
   );
 };
