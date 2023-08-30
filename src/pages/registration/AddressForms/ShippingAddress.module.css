@@ -1,0 +1,56 @@
+.registrationShipping {
+  padding: 15px 20px;
+  margin: 0 auto 20px auto;
+  background-color: rgb(226, 234, 240);
+  border-radius: 15px;
+  height: 90%;
+  overflow-y: hidden;
+  transition: all 500ms ease-in;
+}
+
+.registrationShippingClose {
+  padding: 15px 20px;
+  margin: 0% auto 5% auto;
+  background-color: rgb(226, 234, 240);
+  border-radius: 15px;
+  height: 40px;
+  overflow-y: hidden;
+  border-radius: 20px;
+  transition: all 500ms ease-in;
+}
+
+.registrationShippingHeader {
+  margin: 0 5px 0 5px;
+  width: calc(100%-10px);
+}
+
+.registrationShippingHeader h2 {
+  font-size: 1.2rem;
+}
+
+.shippingDefaultText {
+  margin: 0 10px 0 0;
+}
+
+.devider {
+  margin: 6px 0;
+}
+
+.registrationShippingInput {
+  margin: 0 5px 0 5px;
+  width: calc(100%-10px);
+}
+  
+.registrationShippingInputHalf {
+  margin: 0 5px 0 5px;
+}
+
+@media (min-width: 576px) {
+  .registrationShipping {
+    width: 480px;
+  }
+
+  .registrationShippingInputHalf {
+    width: 230px;
+  }
+}
