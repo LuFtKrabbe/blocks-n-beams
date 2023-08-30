@@ -61,7 +61,7 @@ const Login: FC = (): JSX.Element => {
         autoComplete="off"
         ref={formRef}
       >
-        <p className={styles.loginTitle}>Sign in to BM Shop</p>
+        <p className={styles.loginTitle}>Sign in to Block & Beams</p>
 
         <Divider className={styles.dividerTop} />
 
