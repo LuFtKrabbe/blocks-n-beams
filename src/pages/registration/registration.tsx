@@ -13,6 +13,7 @@ import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
 
 import styles from './registration.module.css';
+import { ValidationMessage, ValidationPattern } from './validationRules';
 
 const MIN_AGE = 13;
 const MAX_AGE = 99;
@@ -20,8 +21,8 @@ const MAX_AGE = 99;
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [shippingAsBilling, setShippingAsBilling] = useState<boolean>(false);
-  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false); // FIXME: Try to change naming
-  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false); // FIXME: Try to change naming
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false);
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
 
@@ -85,10 +86,10 @@ const Registration: FC = (): JSX.Element => {
               label="First Name"
               name="firstName"
               rules={[
-                { required: true, whitespace: true, message: 'Please enter your first name.' },
+                { required: true, whitespace: true, message: 'Please enter a first name.' },
                 {
-                  pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Name may contain alphabet, space and dash (length 1-25).',
+                  pattern: new RegExp(ValidationPattern.FirstName),
+                  message: ValidationMessage.FirstName,
                 },
               ]}
               hasFeedback
@@ -101,10 +102,10 @@ const Registration: FC = (): JSX.Element => {
               label="Last Name"
               name="lastName"
               rules={[
-                { required: true, whitespace: true, message: 'Please enter your last name.' },
+                { required: true, whitespace: true, message: 'Please enter a last name.' },
                 {
-                  pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Name may contain alphabet, space and dash (length 1-25).',
+                  pattern: new RegExp(ValidationPattern.LastName),
+                  message: ValidationMessage.LastName,
                 },
               ]}
               hasFeedback
@@ -126,11 +127,9 @@ const Registration: FC = (): JSX.Element => {
                     if (value) {
                       return age >= MIN_AGE && age <= MAX_AGE
                         ? Promise.resolve()
-                        : Promise.reject(
-                            `Your age should be from ${MIN_AGE} to ${MAX_AGE}.`,
-                          );
+                        : Promise.reject(`Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
                     } else {
-                      return Promise.reject('Please enter your date of birth');
+                      return Promise.reject('Please enter a date of birth');
                     }
                   },
                 },
@@ -152,7 +151,7 @@ const Registration: FC = (): JSX.Element => {
                     if (value) {
                       return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter valid email.');
                     } else {
-                      return Promise.reject('Please input your email.');
+                      return Promise.reject('Please input an email.');
                     }
                   },
                 },
@@ -167,11 +166,10 @@ const Registration: FC = (): JSX.Element => {
               label="Password"
               name="password"
               rules={[
-                { required: true, message: 'Please input your password.' },
+                { required: true, message: 'Please input a password.' },
                 {
-                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
-                  message:
-                    'Password must include at least one uppercase and lowercase letter and number (length 8-25).',
+                  pattern: new RegExp(ValidationPattern.Password),
+                  message: ValidationMessage.Password,
                 },
               ]}
               hasFeedback
