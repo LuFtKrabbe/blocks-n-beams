@@ -1,7 +1,6 @@
-import { MyCustomerDraft } from '@commercetools/platform-sdk';
-import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message, ConfigProvider, Divider } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
-import classNames from 'classnames';
+import { MyCustomerDraft } from '@commercetools/platform-sdk';
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message, Divider } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +24,6 @@ const Registration: FC = (): JSX.Element => {
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false); // FIXME: Try to change naming
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
-
 
   const onFinish = (values: RegistrationFormType) => {
     const { email, password } = values;
@@ -62,13 +60,13 @@ const Registration: FC = (): JSX.Element => {
   };
 
   return (
-    <ConfigProvider>
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
         name="basic"
         colon={true}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 15 }}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        layout="vertical"
         labelWrap
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -76,15 +74,12 @@ const Registration: FC = (): JSX.Element => {
         ref={formRef}
         className={styles.form}
       >
-        <Row
-          justify={'center'}
-          className={styles.registrationMain}
-        >
+        <Row justify={'center'} className={styles.registrationMain}>
           <Col span={24}>
-            <p className={styles.registrationTitle}>
-              Registration
-            </p>
-            <Divider className={styles.devider}/>
+            <p className={styles.registrationTitle}>Registration</p>
+
+            <Divider className={styles.devider} />
+
             <Form.Item<RegistrationFormType>
               className={styles.regInput}
               label="First Name"
@@ -93,7 +88,7 @@ const Registration: FC = (): JSX.Element => {
                 { required: true, whitespace: true, message: 'Please enter your first name.' },
                 {
                   pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.',
+                  message: 'Name may contain alphabet, space and dash (length 1-25).',
                 },
               ]}
               hasFeedback
@@ -109,7 +104,7 @@ const Registration: FC = (): JSX.Element => {
                 { required: true, whitespace: true, message: 'Please enter your last name.' },
                 {
                   pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
+                  message: 'Name may contain alphabet, space and dash (length 1-25).',
                 },
               ]}
               hasFeedback
@@ -132,7 +127,7 @@ const Registration: FC = (): JSX.Element => {
                       return age >= MIN_AGE && age <= MAX_AGE
                         ? Promise.resolve()
                         : Promise.reject(
-                            `Please enter a valid date. Your age should be from ${MIN_AGE} to ${MAX_AGE}.`,
+                            `Your age should be from ${MIN_AGE} to ${MAX_AGE}.`,
                           );
                     } else {
                       return Promise.reject('Please enter your date of birth');
@@ -142,7 +137,7 @@ const Registration: FC = (): JSX.Element => {
               ]}
               hasFeedback
             >
-              <DatePicker className={styles.datePicker}/>
+              <DatePicker className={styles.datePicker} />
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
@@ -164,7 +159,7 @@ const Registration: FC = (): JSX.Element => {
               ]}
               hasFeedback
             >
-              <Input suffix={<MailOutlined style={{ color: 'grey' }}/>}/>
+              <Input suffix={<MailOutlined style={{ color: 'grey' }} />} />
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
@@ -176,7 +171,7 @@ const Registration: FC = (): JSX.Element => {
                 {
                   pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
                   message:
-                    'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
+                    'Password must include at least one uppercase and lowercase letter and number (length 8-25).',
                 },
               ]}
               hasFeedback
@@ -205,43 +200,25 @@ const Registration: FC = (): JSX.Element => {
                 }),
               ]}
             >
-              <Input.Password visibilityToggle={false}/>
+              <Input.Password visibilityToggle={false} />
             </Form.Item>
             <p className="toSignIn">
               Already have an account? <a href="/login">Sign In</a>.
             </p>
           </Col>
         </Row>
-      </Form> 
-
-      <Form
-        name="basic26"
-        layout='vertical'
-        colon={true}
-        labelCol={{ span: 24 }}
-        wrapperCol={{ span: 24 }}
-        labelWrap
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        autoComplete="off"
-        ref={formRef}
-        className={styles.formAddresses}
-      >
-          <Row 
-            justify={'center'}
-            className={styles.registrationBilling}
-          >
-            <Col span={24}>
-              <BillingAddressSubForm
-                isDefaultBillingAddress={isDefaultBillingAddress}
-                setIsDefaultBillingAddress={setIsDefaultBillingAddress}
-              />
-            </Col>
-          </Row>
-
 
         <Row justify={'center'}>
-          <Col span={18}>
+          <Col>
+            <BillingAddressSubForm
+              isDefaultBillingAddress={isDefaultBillingAddress}
+              setIsDefaultBillingAddress={setIsDefaultBillingAddress}
+            />
+          </Col>
+        </Row>
+
+        <Row justify={'center'}>
+          <Col>
             <ShippingAddressSubForm
               isDefaultShippingAddress={isDefaultShippingAddress}
               setIsDefaultShippingAddress={setIsDefaultShippingAddress}
@@ -251,30 +228,28 @@ const Registration: FC = (): JSX.Element => {
           </Col>
         </Row>
 
-        <Row gutter={32} justify={'center'}>
+        <Row justify={'center'} gutter={12}>
           <Col>
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item>
               {!confirmLoading ? (
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" style={{ width: '100px' }}>
                   Submit
                 </Button>
               ) : (
-                <Button type="primary" loading>
+                <Button type="primary" style={{ width: '100px' }} loading>
                   Submit
                 </Button>
               )}
             </Form.Item>
           </Col>
           <Col>
-            <Button className={styles.button} htmlType="button" onClick={onReset}>
+            <Button className={styles.button} htmlType="button" style={{ width: '100px' }} onClick={onReset}>
               Reset
             </Button>
           </Col>
         </Row>
       </Form>
-
     </Space>
-    </ConfigProvider>
   );
 };
 
