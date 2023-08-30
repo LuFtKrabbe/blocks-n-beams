@@ -1,12 +1,36 @@
-.form {
-  margin: 0;
-}
-
-.button {
-  margin-left: 1rem;
-}
-
 .spaceWrapper {
   margin: 10% auto;
   width: 100%;
+}
+
+.login {
+  padding: 15px 20px;
+  margin: 0 auto;
+  background-color: rgb(226, 234, 240);
+  border-radius: 15px;
+}
+
+@media (min-width: 576px) {
+  .login {
+    width: 350px;
+  }
+}
+
+.dividerTop {
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.loginTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.input {
+  margin: 0 0 12px 0;
+}
+
+.dividerBottom {
+  margin-top: 0px;
+  margin-bottom: 14px;
 }
