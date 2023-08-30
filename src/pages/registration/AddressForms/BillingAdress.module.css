@@ -1,13 +1,17 @@
 .registrationBilling {
-  padding: 20px;
-  margin: 0% auto 5% auto;
+  margin: 0 auto 20px auto;
+  padding: 15px 20px;
   background-color: rgb(226, 234, 240);
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .registrationBillingHeader {
   margin: 0 5px 0 5px;
   width: calc(100%-10px);
+}
+
+.registrationBillingHeader h2 {
+  font-size: 1.2rem;
 }
 
 .billingDefaultText {
@@ -27,11 +31,6 @@
   margin: 0 5px 0 5px;
 }
 
-.formAddresses {
-  margin: 0 auto;
-  width: 100%;
-}
-
 @media (min-width: 576px) {
   .registrationBilling {
     width: 480px;
@@ -39,9 +38,5 @@
 
   .registrationBillingInputHalf {
     width: 230px;
-  }
-
-  .formAddresses {
-    width: 520px;
   }
 }

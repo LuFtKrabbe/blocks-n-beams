@@ -1,11 +1,12 @@
-import { Form, Input, Select, Space, Switch, Row, Col, Divider, Checkbox } from 'antd';
+import { Form, Input, Select, Space, Row, Col, Divider, Checkbox } from 'antd';
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { Rule } from 'antd/es/form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
-import styles from './BillingAdress.module.css';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 import { RegistrationFormType } from '../../../types';
+
+import styles from './BillingAdress.module.css';
 
 type Props = {
   isDefaultBillingAddress?: boolean;
@@ -13,6 +14,8 @@ type Props = {
 };
 
 const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
+  const spaceBetween = 'space-between';
+  
   const { setIsDefaultBillingAddress } = props;
 
   const defaultAddressCheckboxOnChange = (e: CheckboxChangeEvent) => {
@@ -34,67 +37,63 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   };
 
   return (
-    <Space 
-      direction='vertical'
-      className={styles.registrationBilling}
-    >
-      
-      <Row align={'middle'} justify={'space-between'} wrap={false} className={styles.registrationBillingHeader}>
+    <Space direction="vertical" className={styles.registrationBilling}>
+      <Row align={'middle'} justify={spaceBetween} wrap={false} className={styles.registrationBillingHeader}>
         <Col>
           <h2>Billing Address</h2>
         </Col>
         <Col>
-          <Row align={'middle'} justify={'space-between'} wrap={false}>
+          <Row align={'middle'} justify={spaceBetween} wrap={false}>
             <Col>
-              <span className={styles.billingDefaultText}>Set as default billing address</span>
+              <span className={styles.billingDefaultText}>Set as default</span>
             </Col>
             <Col>
-              <Checkbox onChange={defaultAddressCheckboxOnChange} className={styles.billingDefaultCheckbox}/>
+              <Checkbox onChange={defaultAddressCheckboxOnChange} className={styles.billingDefaultCheckbox} />
             </Col>
           </Row>
         </Col>
       </Row>
 
-      <Divider className={styles.devider}/>
+      <Divider className={styles.devider} />
 
-      <Row align={'top'} justify={'space-between'} wrap={false}>
+      <Row align={'top'} justify={spaceBetween} wrap={false}>
         <Col>
           <Form.Item<RegistrationFormType>
-              className={styles.registrationBillingInputHalf}
-              label="First Name"
-              name={['billingAddress', 'firstName']}
-              rules={[
-                { required: true, whitespace: true, message: 'Please enter your first name.' },
-                {
-                  pattern: /^[ A-Za-z-]{1,25}$/, // TODO: if possible move regexes to constant value or enum.
-                  message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.', // TODO: if possible move strings to enum.
-                },
-              ]}
-              hasFeedback
+            className={styles.registrationBillingInputHalf}
+            label="First Name"
+            name={['billingAddress', 'firstName']}
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter your first name.' },
+              {
+                pattern: /^[ A-Za-z-]{1,25}$/, // TODO: if possible move regexes to constant value or enum.
+                message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.', // TODO: if possible move strings to enum.
+              },
+            ]}
+            hasFeedback
           >
             <Input />
           </Form.Item>
-          </Col>
-          <Col>
-            <Form.Item<RegistrationFormType>
-              className={styles.registrationBillingInputHalf}
-              label="Last Name"
-              name={['billingAddress', 'lastName']}
-              rules={[
-                { required: true, whitespace: true, message: 'Please enter your last name.' },
-                {
-                  pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
-                },
-              ]}
-              hasFeedback
-            >
-              <Input />
-            </Form.Item>
+        </Col>
+        <Col>
+          <Form.Item<RegistrationFormType>
+            className={styles.registrationBillingInputHalf}
+            label="Last Name"
+            name={['billingAddress', 'lastName']}
+            rules={[
+              { required: true, whitespace: true, message: 'Please enter your last name.' },
+              {
+                pattern: /^[ A-Za-z-]{1,25}$/,
+                message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
+              },
+            ]}
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
         </Col>
       </Row>
 
-      <Row align={'top'} justify={'space-between'} wrap={false}>
+      <Row align={'top'} justify={spaceBetween} wrap={false}>
         <Col>
           <Form.Item<RegistrationFormType>
             className={styles.registrationBillingInputHalf}
@@ -114,17 +113,17 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         </Col>
         <Col>
           <Form.Item<RegistrationFormType>
-          className={styles.registrationBillingInputHalf}
-          label="Address line 2"
-          name={['billingAddress', 'additionalStreetInfo']}
-          rules={[
-            { whitespace: true },
-            {
-              pattern: /^[\d A-Za-z-]{1,32}$/,
-              message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
-            },
-          ]}
-          hasFeedback
+            className={styles.registrationBillingInputHalf}
+            label="Address line 2"
+            name={['billingAddress', 'additionalStreetInfo']}
+            rules={[
+              { whitespace: true },
+              {
+                pattern: /^[\d A-Za-z-]{1,32}$/,
+                message: 'Please enter a valid address. Allowed alphabet, digits, space and hyphen. Length: 1-32.',
+              },
+            ]}
+            hasFeedback
           >
             <Input />
           </Form.Item>
@@ -147,7 +146,7 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
         <Input />
       </Form.Item>
 
-      <Row align={'top'} justify={'space-between'} wrap={false}>
+      <Row align={'top'} justify={spaceBetween} wrap={false}>
         <Col>
           <Form.Item<RegistrationFormType>
             className={styles.registrationBillingInputHalf}
@@ -183,8 +182,8 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           </Form.Item>
         </Col>
       </Row>
-        
-      <Row align={'top'} justify={'space-between'} wrap={false}>
+
+      <Row align={'top'} justify={spaceBetween} wrap={false}>
         <Col>
           <Form.Item<RegistrationFormType>
             className={styles.registrationBillingInputHalf}
@@ -216,7 +215,6 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
           </Form.Item>
         </Col>
       </Row>
-      
     </Space>
   );
 };
