@@ -2,3 +2,30 @@
   justify-content: center;
   align-items: center;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.auth {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+  line-height: normal;
+}
+
+.userName {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 22px;
+}
