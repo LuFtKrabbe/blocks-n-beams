@@ -84,4 +84,8 @@ export default class CustomerApi {
   static customerIsLoggedIn = () => {
     return localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
   };
+
+  static getCustomer = (customerId: string) => {
+    return getApiRoot().customers().withId({ ID: customerId }).get().execute();
+  };
 }
