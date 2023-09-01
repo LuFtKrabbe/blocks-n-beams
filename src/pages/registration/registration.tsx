@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
+import { useAppDispatch } from '../../app/hooks';
+import { userSlice } from '../../app/reducers';
 import { RegistrationFormType } from '../../types';
 
 import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
@@ -25,6 +27,7 @@ const Registration: FC = (): JSX.Element => {
   const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
+  const dispatch = useAppDispatch();
 
   const onFinish = (values: RegistrationFormType) => {
     const { email, password } = values;
@@ -37,13 +40,15 @@ const Registration: FC = (): JSX.Element => {
 
         const { firstName, lastName, id: customerId } = res.body.customer;
         await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
+        localStorage.setItem('customerId', customerId);
+        dispatch(userSlice.actions.setLogIn(true));
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Registration failed. ${error.message}`);
         }
       } finally {
-        setConfirmLoading(false); // don't delete this line
+        setConfirmLoading(false);
       }
     };
 
@@ -61,6 +66,7 @@ const Registration: FC = (): JSX.Element => {
   };
 
   return (
+
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
         name="basic"
@@ -201,7 +207,7 @@ const Registration: FC = (): JSX.Element => {
               <Input.Password visibilityToggle={false} />
             </Form.Item>
             <p className="toSignIn">
-              Already have an account? <a href="/login">Sign In</a>.
+              Already have an account? <a onClick={() => navigate('/login')}>Sign In</a>.
             </p>
           </Col>
         </Row>

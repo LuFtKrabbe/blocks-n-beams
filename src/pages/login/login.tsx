@@ -7,6 +7,9 @@ import isEmail from 'validator/lib/isEmail';
 import CustomerApi from '../../api/customerApi';
 import { ValidationMessage, ValidationPattern } from '../registration/validationRules';
 
+import { useAppDispatch } from '../../app/hooks';
+import { userSlice } from '../../app/reducers';
+
 import styles from './login.module.css';
 
 type FieldType = {
@@ -18,6 +21,7 @@ const Login: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
+  const dispatch = useAppDispatch();
 
   const onFinish = ({ email, password }: FieldType) => {
     setConfirmLoading(true);
@@ -35,6 +39,8 @@ const Login: FC = (): JSX.Element => {
             <p style={{ fontSize: '0.8rem' }}>{`Your id: ${customerId}`}</p>
           </>,
         );
+        localStorage.setItem('customerId', customerId);
+        dispatch(userSlice.actions.setLogIn(true));
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
@@ -127,7 +133,7 @@ const Login: FC = (): JSX.Element => {
         <Row justify={'center'}>
           <Col>
             <p>
-              Don't have an account? <a href="/registration">Sign Up</a>.
+              Don't have an account? <a onClick={() => navigate('/registration')}>Sign Up</a>.
             </p>
           </Col>
         </Row>
