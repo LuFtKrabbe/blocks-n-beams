@@ -1,6 +1,6 @@
+import { MailOutlined } from '@ant-design/icons';
 import { MyCustomerDraft } from '@commercetools/platform-sdk';
-import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message } from 'antd';
-import classNames from 'classnames';
+import { Button, Col, DatePicker, Form, FormInstance, Input, Row, Space, message, Divider } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { FC, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
 
 import styles from './registration.module.css';
+import { ValidationMessage, ValidationPattern } from './validationRules';
 
 const MIN_AGE = 13;
 const MAX_AGE = 99;
@@ -22,8 +23,8 @@ const MAX_AGE = 99;
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [shippingAsBilling, setShippingAsBilling] = useState<boolean>(false);
-  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false); // FIXME: Try to change naming
-  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false); // FIXME: Try to change naming
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false);
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
@@ -65,14 +66,14 @@ const Registration: FC = (): JSX.Element => {
   };
 
   return (
-    <Space className={classNames(styles.spaceWrapper)} direction="vertical" align="center">
-      <p>
-        Already have an account? <a onClick={() => navigate('/login')}>Sign In</a>.
-      </p>
+
+    <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
         name="basic"
-        labelCol={{ span: 10 }}
-        wrapperCol={{ span: 14 }}
+        colon={true}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        layout="vertical"
         labelWrap
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -80,16 +81,21 @@ const Registration: FC = (): JSX.Element => {
         ref={formRef}
         className={styles.form}
       >
-        <Row justify={'center'}>
-          <Col>
+        <Row justify={'center'} className={styles.registrationMain}>
+          <Col span={24}>
+            <p className={styles.registrationTitle}>Registration</p>
+
+            <Divider className={styles.devider} />
+
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="First Name"
               name="firstName"
               rules={[
-                { required: true, whitespace: true, message: 'Please enter your first name.' },
+                { required: true, whitespace: true, message: 'Please enter a first name.' },
                 {
-                  pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid first name. Allowed alphabet, space and hyphen. Length: 1-25.',
+                  pattern: new RegExp(ValidationPattern.FirstName),
+                  message: ValidationMessage.FirstName,
                 },
               ]}
               hasFeedback
@@ -98,13 +104,14 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Last Name"
               name="lastName"
               rules={[
-                { required: true, whitespace: true, message: 'Please enter your last name.' },
+                { required: true, whitespace: true, message: 'Please enter a last name.' },
                 {
-                  pattern: /^[ A-Za-z-]{1,25}$/,
-                  message: 'Please enter a valid last name. Allowed alphabet, space and hyphen. Length: 1-25.',
+                  pattern: new RegExp(ValidationPattern.LastName),
+                  message: ValidationMessage.LastName,
                 },
               ]}
               hasFeedback
@@ -113,6 +120,7 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Birthday"
               name="birthday"
               rules={[
@@ -125,21 +133,20 @@ const Registration: FC = (): JSX.Element => {
                     if (value) {
                       return age >= MIN_AGE && age <= MAX_AGE
                         ? Promise.resolve()
-                        : Promise.reject(
-                            `Please enter a valid date. Your age should be from ${MIN_AGE} to ${MAX_AGE}.`,
-                          );
+                        : Promise.reject(`Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
                     } else {
-                      return Promise.reject('Please enter your date of birth');
+                      return Promise.reject('Please enter a date of birth');
                     }
                   },
                 },
               ]}
               hasFeedback
             >
-              <DatePicker />
+              <DatePicker className={styles.datePicker} />
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Email"
               name="email"
               rules={[
@@ -150,25 +157,25 @@ const Registration: FC = (): JSX.Element => {
                     if (value) {
                       return isEmail(value) ? Promise.resolve() : Promise.reject('Please enter valid email.');
                     } else {
-                      return Promise.reject('Please input your email.');
+                      return Promise.reject('Please input an email.');
                     }
                   },
                 },
               ]}
               hasFeedback
             >
-              <Input />
+              <Input suffix={<MailOutlined style={{ color: 'grey' }} />} />
             </Form.Item>
 
             <Form.Item<RegistrationFormType>
+              className={styles.regInput}
               label="Password"
               name="password"
               rules={[
-                { required: true, message: 'Please input your password.' },
+                { required: true, message: 'Please input a password.' },
                 {
-                  pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
-                  message:
-                    'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
+                  pattern: new RegExp(ValidationPattern.Password),
+                  message: ValidationMessage.Password,
                 },
               ]}
               hasFeedback
@@ -177,6 +184,7 @@ const Registration: FC = (): JSX.Element => {
             </Form.Item>
 
             <Form.Item
+              className={styles.regInput}
               name="confirm"
               label="Confirm Password"
               dependencies={['password']}
@@ -191,23 +199,29 @@ const Registration: FC = (): JSX.Element => {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The new password that you entered does not match.'));
+                    return Promise.reject(new Error('Passwords do not match.'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password visibilityToggle={false} />
             </Form.Item>
+            <p className="toSignIn">
+              Already have an account? <a onClick={() => navigate('/login')}>Sign In</a>.
+            </p>
           </Col>
         </Row>
 
-        <Row gutter={32} justify={'center'}>
+        <Row justify={'center'}>
           <Col>
             <BillingAddressSubForm
               isDefaultBillingAddress={isDefaultBillingAddress}
               setIsDefaultBillingAddress={setIsDefaultBillingAddress}
             />
           </Col>
+        </Row>
+
+        <Row justify={'center'}>
           <Col>
             <ShippingAddressSubForm
               isDefaultShippingAddress={isDefaultShippingAddress}
@@ -218,22 +232,22 @@ const Registration: FC = (): JSX.Element => {
           </Col>
         </Row>
 
-        <Row gutter={32} justify={'center'}>
+        <Row justify={'center'} gutter={12}>
           <Col>
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item>
               {!confirmLoading ? (
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" style={{ width: '100px' }}>
                   Submit
                 </Button>
               ) : (
-                <Button type="primary" loading>
+                <Button type="primary" style={{ width: '100px' }} loading>
                   Submit
                 </Button>
               )}
             </Form.Item>
           </Col>
           <Col>
-            <Button className={classNames(styles.button)} htmlType="button" onClick={onReset}>
+            <Button className={styles.button} htmlType="button" style={{ width: '100px' }} onClick={onReset}>
               Reset
             </Button>
           </Col>
