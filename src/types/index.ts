@@ -47,3 +47,15 @@ export interface ChangePasswordForm {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface ChangeAddressForm {
+  firstName: string;
+  lastName: string;
+  streetName: string;
+  additionalStreetInfo: string;
+  city: string;
+  region: string;
+  country: string;
+  postalCode: string;
+  phone: string;
+}
