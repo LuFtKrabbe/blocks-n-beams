@@ -12,10 +12,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
     return <div></div>;
   }
 
-  const { addresses, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId } =
-    customerInfo;
-
-  console.log(addresses, billingAddressIds, shippingAddressIds, defaultBillingAddressId, defaultShippingAddressId);
+  const { addresses } = customerInfo;
 
   const getCardTitle = (customerInfo: Customer, addressInfo: Address): string => {
     if (customerInfo.defaultBillingAddressId === addressInfo.id) {
