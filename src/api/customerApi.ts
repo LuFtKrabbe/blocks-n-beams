@@ -89,21 +89,39 @@ export default class CustomerApi {
     return getApiRoot().customers().withId({ ID: customerId }).get().execute();
   };
 
-  static updateCustomer = async (customerId: string, updateActions: CustomerUpdateAction[]) => {
-    const getCustomerVersion = async () => {
-      try {
-        return (await this.getCustomer(customerId)).body.version;
-      } catch (error) {
-        console.log('Failed to get customer version');
-      }
-    };
+  static getCustomerVersion = async (customerId: string) => {
+    try {
+      return (await CustomerApi.getCustomer(customerId)).body.version;
+    } catch (error) {
+      console.log('Failed to get customer version');
+    }
+  };
 
-    const version = await getCustomerVersion();
+  static updateCustomer = async (customerId: string, updateActions: CustomerUpdateAction[]) => {
+    const version = await this.getCustomerVersion(customerId);
     if (version) {
       await getApiRoot()
         .customers()
         .withId({ ID: customerId })
         .post({ body: { version, actions: updateActions } })
+        .execute();
+    }
+  };
+
+  static changePassword = async (customerId: string, currentPassword: string, newPassword: string) => {
+    const version = await this.getCustomerVersion(customerId);
+    if (version) {
+      return getApiRoot()
+        .customers()
+        .password()
+        .post({
+          body: {
+            id: customerId,
+            version,
+            currentPassword,
+            newPassword,
+          },
+        })
         .execute();
     }
   };

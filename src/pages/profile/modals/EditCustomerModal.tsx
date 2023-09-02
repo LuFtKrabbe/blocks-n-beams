@@ -5,13 +5,13 @@ import { FC, useState } from 'react';
 import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../../api/customerApi';
-import { RegistrationFormType } from '../../../types';
+import { EditCustomerForm } from '../../../types';
 
 import { ValidationMessage, ValidationPattern, ValidationAge } from '../../../validationRules';
 
 export interface EditCustomerModalProps {
   isModalOpen: boolean;
-  form: FormInstance<RegistrationFormType>;
+  form: FormInstance<EditCustomerForm>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   customerInfo: Customer | undefined;
 }
@@ -78,7 +78,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
         style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
       >
-        <Form.Item<RegistrationFormType>
+        <Form.Item<EditCustomerForm>
           label="First Name"
           name="firstName"
           rules={[
@@ -93,7 +93,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
           <Input />
         </Form.Item>
 
-        <Form.Item<RegistrationFormType>
+        <Form.Item<EditCustomerForm>
           label="Last Name"
           name="lastName"
           rules={[
@@ -108,7 +108,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
           <Input />
         </Form.Item>
 
-        <Form.Item<RegistrationFormType>
+        <Form.Item<EditCustomerForm>
           label="Birthday"
           name="birthday"
           rules={[
@@ -135,7 +135,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
           <DatePicker name="birthday-item" />
         </Form.Item>
 
-        <Form.Item<RegistrationFormType>
+        <Form.Item<EditCustomerForm>
           label="Email"
           name="email"
           rules={[

@@ -1,34 +1,51 @@
-import { Button, Form, Input, Modal } from 'antd';
+import { Customer } from '@commercetools/platform-sdk';
+import { Button, Form, FormInstance, Input, Modal, message } from 'antd';
 import { FC, useState } from 'react';
 
-type FieldType = {
-  currentPassword: string;
-  newPassword: string;
-};
+import CustomerApi from '../../../api/customerApi';
+import { ChangePasswordForm } from '../../../types';
+import { ValidationMessage, ValidationPattern } from '../../../validationRules';
 
 export interface ChangePasswordModalProps {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  form: FormInstance<ChangePasswordForm>;
+  customerInfo: Customer | undefined;
 }
 
-const ChangePasswordModal: FC<ChangePasswordModalProps> = ({ isModalOpen, setIsModalOpen }): JSX.Element => {
+const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
+  isModalOpen,
+  setIsModalOpen,
+  form,
+  customerInfo,
+}): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const timeout = 1000; // TODO: API CALL
   const handleOk = () => {
+    const values = form.getFieldsValue();
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setIsModalOpen(false);
-    }, timeout);
+
+    const fetchUpdate = async () => {
+      try {
+        if (customerInfo?.id) {
+          await CustomerApi.changePassword(customerInfo.id, values.currentPassword, values.newPassword);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          await message.error(`Failed to change password. ${error.message}`);
+        }
+      } finally {
+        setLoading(false);
+        setIsModalOpen(false);
+      }
+    };
+
+    void fetchUpdate();
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-
-  const onFinish = (value: FieldType) => {
-    console.log(value);
   };
 
   return (
@@ -51,32 +68,30 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({ isModalOpen, setIsM
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
-        onFinish={onFinish}
+        form={form}
       >
-        <Form.Item<FieldType>
+        <Form.Item<ChangePasswordForm>
           label="Current Password"
           name="currentPassword"
           rules={[
             { required: true, message: 'Please input your current password.' },
             {
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
-              message:
-                'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
+              pattern: new RegExp(ValidationPattern.Password),
+              message: ValidationMessage.Password,
             },
           ]}
           hasFeedback
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item<FieldType>
+        <Form.Item<ChangePasswordForm>
           label="New Password"
           name="newPassword"
           rules={[
             { required: true, message: 'Please input your new password.' },
             {
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d!#$%&*@A-Z^a-z]{8,25}$/,
-              message:
-                'Please enter a valid password. 8 characters minimum. Must include uppercase/lowercase letters and numbers.',
+              pattern: new RegExp(ValidationPattern.Password),
+              message: ValidationMessage.Password,
             },
           ]}
           hasFeedback
@@ -95,7 +110,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({ isModalOpen, setIsM
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
+                if (!value || getFieldValue('newPassword') === value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(new Error('The new password that you entered does not match.'));

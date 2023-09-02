@@ -35,3 +35,15 @@ export interface RegistrationFormType {
   isDefaultShippingAddress?: boolean;
   shippingAsBilling?: boolean;
 }
+
+export interface EditCustomerForm {
+  firstName: string;
+  lastName: string;
+  birthday?: dayjs.Dayjs;
+  email: string;
+}
+
+export interface ChangePasswordForm {
+  currentPassword: string;
+  newPassword: string;
+}

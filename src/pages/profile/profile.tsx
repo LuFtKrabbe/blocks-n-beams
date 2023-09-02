@@ -10,7 +10,7 @@ import CustomerApi from '../../api/customerApi';
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 
-import { RegistrationFormType } from '../../types';
+import { ChangePasswordForm, EditCustomerForm } from '../../types';
 
 import AddressCards from './AddressCards/AddressCards';
 import ChangePasswordModal from './modals/ChangePasswordModal';
@@ -20,7 +20,8 @@ import styles from './profile.module.css';
 const Profile: FC = (): JSX.Element => {
   const [isEditCustomerModalOpen, setIsEditCustomerModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
-  const [form] = Form.useForm<RegistrationFormType>();
+  const [editCustomerForm] = Form.useForm<EditCustomerForm>();
+  const [changePasswordForm] = Form.useForm<ChangePasswordForm>();
 
   const [customerInfo, setCustomerInfo] = useState<Customer>();
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Profile: FC = (): JSX.Element => {
   }, [isEditCustomerModalOpen]);
 
   const showEditCustomerModal = () => {
-    form.setFieldsValue({
+    editCustomerForm.setFieldsValue({
       firstName: customerInfo?.firstName,
       lastName: customerInfo?.lastName,
       birthday: dayjs(customerInfo?.dateOfBirth),
@@ -95,10 +96,15 @@ const Profile: FC = (): JSX.Element => {
       <EditCustomerModal
         isModalOpen={isEditCustomerModalOpen}
         setIsModalOpen={setIsEditCustomerModalOpen}
-        form={form}
+        form={editCustomerForm}
         customerInfo={customerInfo}
       />
-      <ChangePasswordModal isModalOpen={isChangePasswordModalOpen} setIsModalOpen={setIsChangePasswordModalOpen} />
+      <ChangePasswordModal
+        isModalOpen={isChangePasswordModalOpen}
+        setIsModalOpen={setIsChangePasswordModalOpen}
+        form={changePasswordForm}
+        customerInfo={customerInfo}
+      />
       <Space>
         <AddressCards customerInfo={customerInfo} />
       </Space>
