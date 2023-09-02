@@ -10,9 +10,10 @@ import CustomerApi from '../../api/customerApi';
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 
-import { ChangePasswordForm, EditCustomerForm } from '../../types';
+import { ChangeAddressForm, ChangePasswordForm, EditCustomerForm } from '../../types';
 
 import AddressCards from './AddressCards/AddressCards';
+import AddAddressModal from './modals/AddAddressModal';
 import ChangePasswordModal from './modals/ChangePasswordModal';
 import EditCustomerModal from './modals/EditCustomerModal';
 import styles from './profile.module.css';
@@ -20,8 +21,10 @@ import styles from './profile.module.css';
 const Profile: FC = (): JSX.Element => {
   const [isEditCustomerModalOpen, setIsEditCustomerModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [editCustomerForm] = Form.useForm<EditCustomerForm>();
   const [changePasswordForm] = Form.useForm<ChangePasswordForm>();
+  const [addAddressForm] = Form.useForm<ChangeAddressForm>();
 
   const [customerInfo, setCustomerInfo] = useState<Customer>();
   const navigate = useNavigate();
@@ -43,7 +46,7 @@ const Profile: FC = (): JSX.Element => {
       };
       void fetchData();
     }
-  }, [isEditCustomerModalOpen]);
+  }, [isEditCustomerModalOpen, isAddAddressModalOpen]);
 
   const showEditCustomerModal = () => {
     editCustomerForm.setFieldsValue({
@@ -53,6 +56,10 @@ const Profile: FC = (): JSX.Element => {
       email: customerInfo?.email,
     });
     setIsEditCustomerModalOpen(true);
+  };
+
+  const showAddAddressModal = () => {
+    setIsAddAddressModalOpen(true);
   };
 
   const showChangePasswordModal = () => {
@@ -93,6 +100,12 @@ const Profile: FC = (): JSX.Element => {
           Log Out
         </Button>
       </Space>
+      <Space>
+        <Button className={styles.btn} type="primary" onClick={showAddAddressModal}>
+          + Add Address
+        </Button>
+        <AddressCards customerInfo={customerInfo} />
+      </Space>
       <EditCustomerModal
         isModalOpen={isEditCustomerModalOpen}
         setIsModalOpen={setIsEditCustomerModalOpen}
@@ -105,9 +118,12 @@ const Profile: FC = (): JSX.Element => {
         form={changePasswordForm}
         customerInfo={customerInfo}
       />
-      <Space>
-        <AddressCards customerInfo={customerInfo} />
-      </Space>
+      <AddAddressModal
+        isAddAddressModalOpen={isAddAddressModalOpen}
+        setIsAddAddressModalOpen={setIsAddAddressModalOpen}
+        form={addAddressForm}
+        customerInfo={customerInfo}
+      />
     </>
   );
 };
