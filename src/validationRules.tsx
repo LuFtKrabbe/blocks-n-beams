@@ -17,3 +17,8 @@ export enum ValidationMessage {
   City = 'May contain alphabet, space and dash (length 1-32).',
   Phone = 'Enter correct phone number (e.g. +79681112233)',
 }
+
+export enum ValidationAge {
+  MIN = 13,
+  MAX = 99,
+}

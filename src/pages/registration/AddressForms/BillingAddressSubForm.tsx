@@ -5,7 +5,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
 
 import { RegistrationFormType } from '../../../types';
-import { ValidationMessage, ValidationPattern } from '../validationRules';
+import { ValidationMessage, ValidationPattern } from '../../../validationRules';
 
 import styles from './BillingAdress.module.css';
 
