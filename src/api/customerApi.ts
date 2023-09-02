@@ -1,4 +1,4 @@
-import { BaseAddress, MyCustomerDraft } from '@commercetools/platform-sdk';
+import { BaseAddress, CustomerUpdateAction, MyCustomerDraft } from '@commercetools/platform-sdk';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
 import dayjs from 'dayjs';
 
@@ -87,5 +87,24 @@ export default class CustomerApi {
 
   static getCustomer = (customerId: string) => {
     return getApiRoot().customers().withId({ ID: customerId }).get().execute();
+  };
+
+  static updateCustomer = async (customerId: string, updateActions: CustomerUpdateAction[]) => {
+    const getCustomerVersion = async () => {
+      try {
+        return (await this.getCustomer(customerId)).body.version;
+      } catch (error) {
+        console.log('Failed to get customer version');
+      }
+    };
+
+    const version = await getCustomerVersion();
+    if (version) {
+      await getApiRoot()
+        .customers()
+        .withId({ ID: customerId })
+        .post({ body: { version, actions: updateActions } })
+        .execute();
+    }
   };
 }
