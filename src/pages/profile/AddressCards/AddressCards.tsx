@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, StarOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, StarTwoTone } from '@ant-design/icons';
 import { Address, Customer, CustomerUpdateAction } from '@commercetools/platform-sdk';
 import { Button, Card, Form, Popconfirm, message } from 'antd';
 import { FC, useState } from 'react';
@@ -55,6 +55,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
     const updateActions: CustomerUpdateAction[] = [{ action: 'removeAddress', addressId: addr.id }];
 
     const fetchUpdate = async () => {
+      // TODO: Refactor. A lot of almost duplicated code.
       try {
         if (customerInfo?.id) {
           await CustomerApi.updateCustomer(customerInfo?.id, updateActions);
@@ -67,6 +68,44 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
     };
 
     void fetchUpdate();
+  };
+
+  const setDefaultBillingAddress = (addr: Address) => {
+    const updateActions: CustomerUpdateAction[] = [{ action: 'setDefaultBillingAddress', addressId: addr.id }];
+
+    const fetchSetDefaultBillingAddress = async () => {
+      // TODO: Refactor. A lot of almost duplicated code.
+      try {
+        if (customerInfo?.id) {
+          await CustomerApi.updateCustomer(customerInfo?.id, updateActions);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          await message.error(`Failed to set default billing address. ${error.message}`);
+        }
+      }
+    };
+
+    void fetchSetDefaultBillingAddress();
+  };
+
+  const setDefaultShippingAddress = (addr: Address) => {
+    const updateActions: CustomerUpdateAction[] = [{ action: 'setDefaultShippingAddress', addressId: addr.id }];
+
+    const fetchSetDefaultShippingAddress = async () => {
+      // TODO: Refactor. A lot of almost duplicated code.
+      try {
+        if (customerInfo?.id) {
+          await CustomerApi.updateCustomer(customerInfo?.id, updateActions);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          await message.error(`Failed to set default shipping address. ${error.message}`);
+        }
+      }
+    };
+
+    void fetchSetDefaultShippingAddress();
   };
 
   return (
@@ -86,11 +125,21 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
                 >
                   <EditOutlined />
                 </Button>,
-                <Button type="text" key={addr.id?.concat('defBilling')} title="Set As Default Billing Address">
-                  <StarOutlined />
+                <Button
+                  type="text"
+                  key={addr.id?.concat('defBilling')}
+                  title="Set As Default Billing Address"
+                  onClick={() => setDefaultBillingAddress(addr)}
+                >
+                  <StarTwoTone twoToneColor="#c48c1a" />
                 </Button>,
-                <Button type="text" key={addr.id?.concat('defShipping')} title="Set As Default Shipping Address">
-                  <StarOutlined />
+                <Button
+                  type="text"
+                  key={addr.id?.concat('defShipping')}
+                  title="Set As Default Shipping Address"
+                  onClick={() => setDefaultShippingAddress(addr)}
+                >
+                  <StarTwoTone twoToneColor="#52c41a" />
                 </Button>,
                 <Popconfirm
                   key={addr.id?.concat('popConfirm')}
