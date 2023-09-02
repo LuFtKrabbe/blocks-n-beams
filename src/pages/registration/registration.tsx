@@ -21,8 +21,8 @@ import styles from './registration.module.css';
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [shippingAsBilling, setShippingAsBilling] = useState<boolean>(false);
-  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false);
-  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false);
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(true);
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(true);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
