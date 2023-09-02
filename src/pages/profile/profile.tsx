@@ -99,6 +99,9 @@ const Profile: FC = (): JSX.Element => {
         customerInfo={customerInfo}
       />
       <ChangePasswordModal isModalOpen={isChangePasswordModalOpen} setIsModalOpen={setIsChangePasswordModalOpen} />
+      <Space>
+        <AddressCards customerInfo={customerInfo} />
+      </Space>
     </>
   );
 };
