@@ -3,10 +3,10 @@ import { ClientResponse, Product, ProductProjectionPagedSearchResponse } from '@
 import getApiRoot from './Client';
 
 export default class ProductApi {
-  static MAIN_LINK_ID = 'bfae9525-1232-488d-9621-4187156152c0';
-  static SQUARE_LINK_ID = 'a19fba54-8d8e-4070-84d8-8ed5603ebe42';
-  static CIRCLE_LINK_ID = 'b67e607c-771b-4365-b5d5-69dc0ab62e79';
-  static DELTA_LINK_ID = '98845ce7-0149-4716-ad46-edd9a9bb764f';
+  static MAIN_LINK_ID = '48df60e0-fafd-42b9-a970-2e5bb9915016';
+  static SQUARE_LINK_ID = '19fbc664-7671-4d1f-9f9d-a4d40e02fbf8';
+  static CIRCLE_LINK_ID = '48df60e0-fafd-42b9-a970-2e5bb9915016';
+  static DELTA_LINK_ID = 'c8e9a09c-2a45-465a-8825-381b76187c85';
 
   static getCategoriesById = (categoriesId: string): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> => {
     return getApiRoot()
