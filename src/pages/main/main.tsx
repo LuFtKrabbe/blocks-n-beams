@@ -1,11 +1,11 @@
-import { ProductProjection } from '@commercetools/platform-sdk';
 import { Layout, Menu, Spin, message, theme } from 'antd';
-// import classNames from 'classnames';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { updateProductsList } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import items from '../categories/shared';
@@ -15,7 +15,8 @@ import styles from './main.module.css';
 const { Content, Footer, Sider } = Layout;
 
 const Main: FC = (): JSX.Element => {
-  const [productList, setProductList] = useState<ProductProjection[]>();
+  const dispatch = useAppDispatch();
+  const productList = useAppSelector((state) => state.productsList);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Main: FC = (): JSX.Element => {
       try {
         const res = await ProductApi.getCategoriesById(ProductApi.MAIN_LINK_ID);
 
-        setProductList(res.body.results);
+        dispatch(updateProductsList(res.body.results));
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);

@@ -7,18 +7,23 @@ import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+
+import { updateProductsList } from '../../../app/productsListSlice';
 
 import styles from './navbar.module.css';
 
 const Navbar: FC = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState<string>();
-  const isLogIn = useAppSelector((state) => state.isLogIn);
-  const isLogInStorage = useAppSelector((state) => state.isLogInStorage);
+  const isLogIn = useAppSelector((state) => state.user.isLogIn);
+  const isLogInStorage = useAppSelector((state) => state.user.isLogInStorage);
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (customerId) {
       const fetchData = async () => {
@@ -61,7 +66,16 @@ const Navbar: FC = (): JSX.Element => {
   const handleOpenChange = (flag: boolean) => {
     setOpen(flag);
   };
-  const onSearch = (value: string) => console.log(value);
+  const onSearch = async (text: string) => {
+    try {
+      const res = await ProductApi.searchByText(text);
+      dispatch(updateProductsList(res.body.results));
+    } catch (error) {
+      if (error instanceof Error) {
+        await message.error(`Failed. ${error.message}`);
+      }
+    }
+  };
 
   return (
     <Header className={styles.header}>
@@ -70,7 +84,7 @@ const Navbar: FC = (): JSX.Element => {
       </NavLink>
 
       <div className={styles.auth}>
-        <Search placeholder="input search text" style={{ width: '80%' }} onSearch={onSearch} enterButton />
+        <Search placeholder="Search" style={{ width: '80%' }} onSearch={(value) => void onSearch(value)} enterButton />
         <NavLink to="/cart">
           <ShoppingCartOutlined style={{ fontSize: '28px' }} />
         </NavLink>

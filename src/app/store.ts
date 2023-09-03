@@ -1,10 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 
+import productsListReducer from './productsListSlice';
 import { userSlice } from './reducers';
 
 export const store = configureStore({
-  reducer: userSlice.reducer,
+  reducer: {
+    user: userSlice.reducer,
+    productsList: productsListReducer,
+  },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   devTools: process.env.NODE_ENV !== 'production',
 });
