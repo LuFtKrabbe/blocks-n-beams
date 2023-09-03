@@ -1,7 +1,7 @@
 import { DeleteOutlined, EditOutlined, StarTwoTone } from '@ant-design/icons';
 import { Address, Customer, CustomerUpdateAction } from '@commercetools/platform-sdk';
 import { Button, Card, Col, Form, Popconfirm, Row, message } from 'antd';
-import { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import CustomerApi from '../../../api/customerApi';
 import { ChangeAddressForm } from '../../../types';
@@ -10,12 +10,37 @@ import EditAddressModal from './modals/EditAddressModal';
 
 interface AddressCardsProps {
   customerInfo: Customer | undefined;
+  setCustomerInfo: React.Dispatch<React.SetStateAction<Customer | undefined>>;
+  addressUpdateCounter: number;
+  setAddressUpdateCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
+const AddressCards: FC<AddressCardsProps> = ({
+  customerInfo,
+  setCustomerInfo,
+  addressUpdateCounter,
+  setAddressUpdateCounter,
+}): JSX.Element => {
   const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState<string>('');
   const [editAddressForm] = Form.useForm<ChangeAddressForm>();
+
+  useEffect(() => {
+    const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
+    if (customerId) {
+      const fetchData = async () => {
+        try {
+          const res = await CustomerApi.getMyCustomerInfo();
+          setCustomerInfo(res.body);
+        } catch (error) {
+          if (error instanceof Error) {
+            await message.error(`Failed. ${error.message}`);
+          }
+        }
+      };
+      void fetchData();
+    }
+  }, [addressUpdateCounter, isEditAddressModalOpen]);
 
   if (customerInfo === undefined) {
     return <div></div>;
@@ -51,7 +76,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
     }
   };
 
-  const removeAddress = (addr: Address) => {
+  const removeAddress = async (addr: Address) => {
     const updateActions: CustomerUpdateAction[] = [{ action: 'removeAddress', addressId: addr.id }];
 
     const fetchUpdate = async () => {
@@ -67,10 +92,11 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
       }
     };
 
-    void fetchUpdate();
+    await fetchUpdate();
+    setAddressUpdateCounter(addressUpdateCounter + 1);
   };
 
-  const setDefaultBillingAddress = (addr: Address) => {
+  const setDefaultBillingAddress = async (addr: Address) => {
     const updateActions: CustomerUpdateAction[] = [{ action: 'setDefaultBillingAddress', addressId: addr.id }];
 
     const fetchSetDefaultBillingAddress = async () => {
@@ -86,10 +112,11 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
       }
     };
 
-    void fetchSetDefaultBillingAddress();
+    await fetchSetDefaultBillingAddress();
+    setAddressUpdateCounter(addressUpdateCounter + 1);
   };
 
-  const setDefaultShippingAddress = (addr: Address) => {
+  const setDefaultShippingAddress = async (addr: Address) => {
     const updateActions: CustomerUpdateAction[] = [{ action: 'setDefaultShippingAddress', addressId: addr.id }];
 
     const fetchSetDefaultShippingAddress = async () => {
@@ -105,7 +132,8 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
       }
     };
 
-    void fetchSetDefaultShippingAddress();
+    await fetchSetDefaultShippingAddress();
+    setAddressUpdateCounter(addressUpdateCounter + 1);
   };
 
   return (
@@ -130,7 +158,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
                     type="text"
                     key={addr.id?.concat('defBilling')}
                     title="Set As Default Billing Address"
-                    onClick={() => setDefaultBillingAddress(addr)}
+                    onClick={() => void setDefaultBillingAddress(addr)}
                   >
                     <StarTwoTone twoToneColor="#c48c1a" />
                   </Button>,
@@ -138,7 +166,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
                     type="text"
                     key={addr.id?.concat('defShipping')}
                     title="Set As Default Shipping Address"
-                    onClick={() => setDefaultShippingAddress(addr)}
+                    onClick={() => void setDefaultShippingAddress(addr)}
                   >
                     <StarTwoTone twoToneColor="#52c41a" />
                   </Button>,
@@ -147,7 +175,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
                     title="Are you sure that you want to delete this address?"
                     okText="Yes"
                     cancelText="No"
-                    onConfirm={() => removeAddress(addr)}
+                    onConfirm={() => void removeAddress(addr)}
                   >
                     <Button type="text" key={addr.id?.concat('delete')} title="Remove Address">
                       <DeleteOutlined />

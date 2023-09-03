@@ -23,6 +23,7 @@ const Profile: FC = (): JSX.Element => {
   const [isEditCustomerModalOpen, setIsEditCustomerModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+  const [addressUpdateCounter, setAddressUpdateCounter] = useState(0);
   const [editCustomerForm] = Form.useForm<EditCustomerForm>();
   const [changePasswordForm] = Form.useForm<ChangePasswordForm>();
   const [addAddressForm] = Form.useForm<ChangeAddressForm>();
@@ -72,7 +73,7 @@ const Profile: FC = (): JSX.Element => {
     dispatch(userSlice.actions.setLogInStorage(true));
     navigate('/main');
   };
-  //className={classNames(styles.customerInfoLabel)}
+
   return (
     <>
       <div className={classNames(styles.customerInfoContainer)}>
@@ -116,7 +117,12 @@ const Profile: FC = (): JSX.Element => {
             + Add Address
           </Button>
         </Space>
-        <AddressCards customerInfo={customerInfo} />
+        <AddressCards
+          customerInfo={customerInfo}
+          setCustomerInfo={setCustomerInfo}
+          addressUpdateCounter={addressUpdateCounter}
+          setAddressUpdateCounter={setAddressUpdateCounter}
+        />
       </Space>
 
       <EditCustomerModal

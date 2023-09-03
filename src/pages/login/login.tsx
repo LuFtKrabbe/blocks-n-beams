@@ -57,7 +57,7 @@ const Login: FC = (): JSX.Element => {
   return (
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
-        name="basic"
+        name="loginForm"
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
         className={styles.login}

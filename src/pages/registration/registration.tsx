@@ -66,7 +66,7 @@ const Registration: FC = (): JSX.Element => {
   return (
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
-        name="basic"
+        name="registrationForm"
         colon={true}
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
