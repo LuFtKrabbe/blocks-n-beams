@@ -1,20 +1,17 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Layout, Menu, Spin, message, theme } from 'antd';
-// import classNames from 'classnames';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
-
 import ProductCard from '../../components/UI/productCard/productCard';
 
-import items from '../categories/shared';
-
 import styles from './main.module.css';
+import items from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
-const Main: FC = (): JSX.Element => {
+const Circle: FC = (): JSX.Element => {
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
@@ -23,7 +20,7 @@ const Main: FC = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ProductApi.getCategoriesById(ProductApi.MAIN_LINK_ID);
+        const res = await ProductApi.getCategoriesById(ProductApi.CIRCLE_LINK_ID);
 
         setProductList(res.body.results);
       } catch (error) {
@@ -47,7 +44,8 @@ const Main: FC = (): JSX.Element => {
     <Layout>
       <Content style={{ padding: '0 50px' }}>
         <Content style={{ margin: '16px 0' }}>
-          <a onClick={() => navigate('/main')}> Main</a>
+          <a onClick={() => navigate('/main')}> Main /</a>
+          <a onClick={() => navigate('/main/circle')}> Circle</a>
         </Content>
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
@@ -71,4 +69,4 @@ const Main: FC = (): JSX.Element => {
   );
 };
 
-export default Main;
+export default Circle;

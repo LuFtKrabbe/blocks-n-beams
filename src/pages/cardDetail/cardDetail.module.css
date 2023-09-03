@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
