@@ -24,4 +24,12 @@ export default class ProductApi {
   static getCardById = (cardId: string): Promise<ClientResponse<Product>> => {
     return getApiRoot().products().withId({ ID: cardId }).get().execute();
   };
+
+  static searchByText = (text: string): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> => {
+    return getApiRoot()
+      .productProjections()
+      .search()
+      .get({ queryArgs: { fuzzy: true, ['text.en-US']: text } })
+      .execute();
+  };
 }
