@@ -8,16 +8,13 @@ import getApiRoot, { FlowTypes, changeApiClient, projectKey } from './Client';
 
 export default class CustomerApi {
   static customerSignIn = async ({ username, password }: UserAuthOptions) => {
+    changeApiClient(FlowTypes.PASSWORD, { username, password });
+
     const res = await getApiRoot()
       .me()
       .login()
       .post({ body: { email: username, password } })
       .execute();
-
-    changeApiClient(FlowTypes.PASSWORD, { username, password });
-
-    await this.getMyCustomerInfo(); // New user tokens stored in localStorage only after first request. So force it.
-
     return res;
   };
 
@@ -73,12 +70,8 @@ export default class CustomerApi {
     changeApiClient(FlowTypes.DEFAULT);
   };
 
-  static getMyCustomerInfo = async () => {
-    try {
-      return await getApiRoot().me().get().execute();
-    } catch (error) {
-      console.error(error);
-    }
+  static getMyCustomerInfo = () => {
+    return getApiRoot().me().get().execute();
   };
 
   static customerIsLoggedIn = () => {

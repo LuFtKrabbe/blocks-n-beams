@@ -36,8 +36,7 @@ const Profile: FC = (): JSX.Element => {
     if (customerId) {
       const fetchData = async () => {
         try {
-          // const res = await CustomerApi.getMyCustomerInfo(); // TODO: fix access token usage
-          const res = await CustomerApi.getCustomer(customerId);
+          const res = await CustomerApi.getMyCustomerInfo();
           setCustomerInfo(res.body);
         } catch (error) {
           if (error instanceof Error) {
