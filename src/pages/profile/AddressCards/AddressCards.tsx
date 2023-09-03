@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined, StarTwoTone } from '@ant-design/icons';
 import { Address, Customer, CustomerUpdateAction } from '@commercetools/platform-sdk';
-import { Button, Card, Form, Popconfirm, message } from 'antd';
+import { Button, Card, Col, Form, Popconfirm, Row, message } from 'antd';
 import { FC, useState } from 'react';
 
 import CustomerApi from '../../../api/customerApi';
@@ -30,7 +30,7 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
     if (customerInfo.defaultShippingAddressId === addressInfo.id) {
       return 'Default Shipping Address';
     }
-    return '';
+    return ' ';
   };
 
   const showEditAddressModal = (addr: Address) => {
@@ -110,63 +110,65 @@ const AddressCards: FC<AddressCardsProps> = ({ customerInfo }): JSX.Element => {
 
   return (
     <>
-      <div>
+      <Row gutter={16}>
         {addresses.map((addr) => {
           return (
-            <Card
-              key={addr.id}
-              title={getCardTitle(customerInfo, addr)}
-              actions={[
-                <Button
-                  type="text"
-                  key={addr.id?.concat('edit')}
-                  title="Edit"
-                  onClick={() => showEditAddressModal(addr)}
-                >
-                  <EditOutlined />
-                </Button>,
-                <Button
-                  type="text"
-                  key={addr.id?.concat('defBilling')}
-                  title="Set As Default Billing Address"
-                  onClick={() => setDefaultBillingAddress(addr)}
-                >
-                  <StarTwoTone twoToneColor="#c48c1a" />
-                </Button>,
-                <Button
-                  type="text"
-                  key={addr.id?.concat('defShipping')}
-                  title="Set As Default Shipping Address"
-                  onClick={() => setDefaultShippingAddress(addr)}
-                >
-                  <StarTwoTone twoToneColor="#52c41a" />
-                </Button>,
-                <Popconfirm
-                  key={addr.id?.concat('popConfirm')}
-                  title="Are you sure that you want to delete this address?"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() => removeAddress(addr)}
-                >
-                  <Button type="text" key={addr.id?.concat('delete')} title="Remove Address">
-                    <DeleteOutlined />
-                  </Button>
-                </Popconfirm>,
-              ]}
-            >
-              <p>First Name: {addr.firstName}</p>
-              <p>Last Name: {addr.lastName}</p>
-              <p>Address Line 1: {addr.streetName}</p>
-              <p>Address Line 2: {addr.additionalStreetInfo}</p>
-              <p>City: {addr.city}</p>
-              <p>Region: {addr.region}</p>
-              <p>Country: {addr.country}</p>
-              <p>Postal Code: {addr.postalCode}</p>
-              <p>Phone: {addr.phone}</p>
-            </Card>
+            <Col key={addr.id}>
+              <Card
+                key={addr.id?.concat('card')}
+                title={getCardTitle(customerInfo, addr)}
+                actions={[
+                  <Button
+                    type="text"
+                    key={addr.id?.concat('edit')}
+                    title="Edit"
+                    onClick={() => showEditAddressModal(addr)}
+                  >
+                    <EditOutlined />
+                  </Button>,
+                  <Button
+                    type="text"
+                    key={addr.id?.concat('defBilling')}
+                    title="Set As Default Billing Address"
+                    onClick={() => setDefaultBillingAddress(addr)}
+                  >
+                    <StarTwoTone twoToneColor="#c48c1a" />
+                  </Button>,
+                  <Button
+                    type="text"
+                    key={addr.id?.concat('defShipping')}
+                    title="Set As Default Shipping Address"
+                    onClick={() => setDefaultShippingAddress(addr)}
+                  >
+                    <StarTwoTone twoToneColor="#52c41a" />
+                  </Button>,
+                  <Popconfirm
+                    key={addr.id?.concat('popConfirm')}
+                    title="Are you sure that you want to delete this address?"
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => removeAddress(addr)}
+                  >
+                    <Button type="text" key={addr.id?.concat('delete')} title="Remove Address">
+                      <DeleteOutlined />
+                    </Button>
+                  </Popconfirm>,
+                ]}
+              >
+                <p>First Name: {addr.firstName}</p>
+                <p>Last Name: {addr.lastName}</p>
+                <p>Address Line 1: {addr.streetName}</p>
+                <p>Address Line 2: {addr.additionalStreetInfo}</p>
+                <p>City: {addr.city}</p>
+                <p>Region: {addr.region}</p>
+                <p>Country: {addr.country}</p>
+                <p>Postal Code: {addr.postalCode}</p>
+                <p>Phone: {addr.phone}</p>
+              </Card>
+            </Col>
           );
         })}
-      </div>
+      </Row>
       <EditAddressModal
         isEditAddressModalOpen={isEditAddressModalOpen}
         setIsEditAddressModalOpen={setIsEditAddressModalOpen}

@@ -1,5 +1,6 @@
 import { Customer } from '@commercetools/platform-sdk';
-import { Button, Form, Space, message } from 'antd';
+import { Button, Col, Divider, Form, Row, Space, message } from 'antd';
+import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { FC, useEffect, useState } from 'react';
 
@@ -72,40 +73,53 @@ const Profile: FC = (): JSX.Element => {
     dispatch(userSlice.actions.setLogInStorage(true));
     navigate('/main');
   };
-
+  //className={classNames(styles.customerInfoLabel)}
   return (
     <>
-      <Space direction="vertical">
+      <div className={classNames(styles.customerInfoContainer)}>
         <h3>Your Profile:</h3>
-        <p>
-          First Name: <span>{customerInfo?.firstName}</span>
-        </p>
-        <p>
-          Last Name: <span>{customerInfo?.lastName}</span>
-        </p>
-        <p>
-          Date of birth: <span>{customerInfo?.dateOfBirth}</span>
-        </p>
-      </Space>
-      <Space>
-        <Button type="primary" onClick={showEditCustomerModal}>
-          Edit Profile
-        </Button>
-        <Button danger onClick={showChangePasswordModal}>
-          Change Password
-        </Button>
-      </Space>
-      <Space className={styles.logoutButtonContainer}>
-        <Button className={styles.btn} type="primary" htmlType="submit" onClick={logOut}>
-          Log Out
-        </Button>
-      </Space>
-      <Space>
-        <Button className={styles.btn} type="primary" onClick={showAddAddressModal}>
-          + Add Address
-        </Button>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>First Name:</Col>
+          <Col>{customerInfo?.firstName}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>Last Name:</Col>
+          <Col>{customerInfo?.lastName}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>Date of birth:</Col>
+          <Col>{customerInfo?.dateOfBirth}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col>
+            <Button type="primary" onClick={showEditCustomerModal}>
+              Edit Profile
+            </Button>
+          </Col>
+          <Col>
+            <Button danger onClick={showChangePasswordModal}>
+              Change Password
+            </Button>
+          </Col>
+          <Col>
+            <Button type="primary" danger onClick={logOut}>
+              Log Out
+            </Button>
+          </Col>
+        </Row>
+      </div>
+
+      <Divider />
+
+      <Space direction="vertical" className={classNames(styles.addressSectionContainer)}>
+        <Space className={classNames(styles.addressSectionControls)}>
+          <Button type="primary" onClick={showAddAddressModal}>
+            + Add Address
+          </Button>
+        </Space>
         <AddressCards customerInfo={customerInfo} />
       </Space>
+
       <EditCustomerModal
         isModalOpen={isEditCustomerModalOpen}
         setIsModalOpen={setIsEditCustomerModalOpen}
