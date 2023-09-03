@@ -28,9 +28,9 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   };
   return (
     <Card
-      title={productCardList.name.en}
+      title={productCardList.name['en-US']}
       hoverable
-      style={{ width: 400, marginTop: 10 }}
+      style={{ width: 300, marginTop: 10 }}
       extra={<a onClick={onClick}>View details</a>}
       cover={<Image src={productCardList.masterVariant?.images ? productCardList.masterVariant?.images[0].url : ''} />}
     >
