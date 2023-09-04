@@ -1,4 +1,4 @@
-import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
@@ -10,6 +10,8 @@ import { Link, NavLink } from 'react-router-dom';
 import CustomerApi from '../../../api/customerApi';
 
 import { useAppSelector } from '../../../app/hooks';
+
+import logo from './../../../assets/logo.png';
 
 import styles from './navbar.module.css';
 
@@ -65,8 +67,8 @@ const Navbar: FC = (): JSX.Element => {
 
   return (
     <Header className={styles.header}>
-      <NavLink to="/main">
-        <HomeOutlined style={{ fontSize: '24px' }} />
+      <NavLink to="/main" style={{ height: 50 }}>
+        <img src={logo} style={{ height: 50, marginLeft: 10 }} />
       </NavLink>
 
       <div className={styles.auth}>
