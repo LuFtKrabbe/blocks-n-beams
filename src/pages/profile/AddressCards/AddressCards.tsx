@@ -49,6 +49,13 @@ const AddressCards: FC<AddressCardsProps> = ({
   const { addresses } = customerInfo;
 
   const getCardTitle = (customerInfo: Customer, addressInfo: Address): string => {
+    if (
+      customerInfo.defaultBillingAddressId === addressInfo.id &&
+      customerInfo.defaultShippingAddressId === addressInfo.id
+    ) {
+      // if's order matter
+      return 'Default Billing and Shipping Address';
+    }
     if (customerInfo.defaultBillingAddressId === addressInfo.id) {
       return 'Default Billing Address';
     }
