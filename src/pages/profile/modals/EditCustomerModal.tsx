@@ -61,7 +61,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
       title="Edit Profile"
       open={isModalOpen}
       onCancel={handleCancel}
-      bodyStyle={{textAlign: 'center'}}
+      bodyStyle={{ textAlign: 'center' }}
       footer={false}
     >
       <Form
@@ -127,7 +127,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
           ]}
           hasFeedback
         >
-          <DatePicker name="birthday-item" style={{ width: '100%'}}/>
+          <DatePicker name="birthday-item" style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item<EditCustomerForm>
@@ -153,7 +153,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
         <Button key="submit" type="primary" htmlType="submit" loading={loading} style={{ margin: '5px 10px' }}>
           Submit
         </Button>
-        <Button key="cancel" onClick={handleCancel} style={{ margin: '5px 10px'}}>
+        <Button key="cancel" onClick={handleCancel} style={{ margin: '5px 10px' }}>
           Cancel
         </Button>
       </Form>

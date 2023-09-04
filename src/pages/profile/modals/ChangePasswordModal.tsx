@@ -53,7 +53,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
       title="Change Password"
       open={isModalOpen}
       onCancel={handleCancel}
-      bodyStyle={{textAlign: 'center'}}
+      bodyStyle={{ textAlign: 'center' }}
       footer={false}
     >
       <Form
