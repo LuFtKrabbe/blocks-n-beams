@@ -63,7 +63,7 @@ const Navbar: FC = (): JSX.Element => {
 
   const loggedInItems: MenuProps['items'] = [
     {
-      label: <Link to={'/profile'}>Profile</Link>,
+      label: <Link to={customerId ? `/profile/${customerId}` : `/login`}>Profile</Link>,
       key: 'login',
       icon: <UserOutlined />,
     },
@@ -121,7 +121,7 @@ const Navbar: FC = (): JSX.Element => {
             onOpenChange={handleOpenChange}
             open={open}
           >
-            <NavLink to="/profile">
+            <NavLink to={`/profile/${customerId}`}>
               <div className={styles.userName}>{userName}</div>
             </NavLink>
           </Dropdown>
