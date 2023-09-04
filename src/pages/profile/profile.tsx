@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { FC, useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import CustomerApi from '../../api/customerApi';
 
@@ -27,6 +27,9 @@ const Profile: FC = (): JSX.Element => {
   const [editCustomerForm] = Form.useForm<EditCustomerForm>();
   const [changePasswordForm] = Form.useForm<ChangePasswordForm>();
   const [addAddressForm] = Form.useForm<ChangeAddressForm>();
+
+  const location = useLocation();
+  const currentLocationUserId = location.pathname.split('/').pop() as string;
 
   const [customerInfo, setCustomerInfo] = useState<Customer>();
   const navigate = useNavigate();
@@ -73,6 +76,10 @@ const Profile: FC = (): JSX.Element => {
     dispatch(userSlice.actions.setLogInStorage(true));
     navigate('/main');
   };
+
+  if (!localStorage.getItem('customerId') || currentLocationUserId !== localStorage.getItem('customerId')) {
+    return <Navigate to="/error" replace={true} />;
+  }
 
   return (
     <>

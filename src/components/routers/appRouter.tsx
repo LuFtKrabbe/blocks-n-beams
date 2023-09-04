@@ -20,6 +20,7 @@ const AppRouter: FC = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/main" />} />
+      <Route path="/profile" element={<Navigate to="/main" />} />
       <Route path="/main" element={<Main />} />
       <Route path="/main/:id" element={<CardDetail />} />
       <Route path="/main/bricks" element={<Bricks />} />
@@ -34,7 +35,7 @@ const AppRouter: FC = (): JSX.Element => {
       <Route path="/main/aggregates/:id" element={<CardDetail />} />
       <Route path="/login" element={<PrivateRoute page={<Login />} />} />
       <Route path="/registration" element={<PrivateRoute page={<Registration />} />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:id" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/error" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/error" />} />
