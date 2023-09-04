@@ -57,9 +57,9 @@
 }
 
 .prices {
-  display: flex;
+  display: start;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   font-size: 1rem;
   margin-bottom: 20px;
 }
