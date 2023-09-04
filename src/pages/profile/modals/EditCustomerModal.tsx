@@ -24,7 +24,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
 }): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleOk = () => {
+  const onFinish = () => {
     const values = form.getFieldsValue();
     setLoading(true);
 
@@ -71,6 +71,7 @@ const EditCustomerModal: FC<EditCustomerModalProps> = ({
         wrapperCol={{ span: 18 }}
         style={{ maxWidth: 400, margin: '20px auto 10px auto' }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
+        onFinish={onFinish}
       >
         <Form.Item<EditCustomerForm>
           label="First Name"
