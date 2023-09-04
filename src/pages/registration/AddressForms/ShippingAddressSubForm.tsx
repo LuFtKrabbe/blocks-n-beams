@@ -5,7 +5,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
 
 import { RegistrationFormType } from '../../../types';
-import { ValidationMessage, ValidationPattern } from '../validationRules';
+import { ValidationMessage, ValidationPattern } from '../../../validationRules';
 
 import styles from './ShippingAddress.module.css';
 
@@ -19,7 +19,7 @@ type Props = {
 const ShippingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const spaceBetween = 'space-between';
 
-  const { shippingAsBilling, setShippingAsBilling, setIsDefaultShippingAddress } = props;
+  const { isDefaultShippingAddress, shippingAsBilling, setShippingAsBilling, setIsDefaultShippingAddress } = props;
 
   const [selectedCountry, setSelectedCountry] = useState<PostalCodeLocale | 'any'>('any');
   const [openedShippingForm, setOpenedShippingForm] = useState<boolean>(false);
@@ -76,7 +76,11 @@ const ShippingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
               <span className={styles.shippingDefaultText}>Set as default</span>
             </Col>
             <Col>
-              <Checkbox onChange={defaultAddressCheckboxOnChange} className={styles.shippingDefaultCheckbox} />
+              <Checkbox
+                checked={isDefaultShippingAddress}
+                onChange={defaultAddressCheckboxOnChange}
+                className={styles.shippingDefaultCheckbox}
+              />
             </Col>
           </Row>
           <Row align={'middle'} justify={spaceBetween} wrap={false}>

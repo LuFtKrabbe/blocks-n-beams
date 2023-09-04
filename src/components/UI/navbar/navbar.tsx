@@ -1,15 +1,17 @@
-import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import CustomerApi from '../../../api/customerApi';
 
-import { useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+
+import { userSlice } from '../../../app/reducers';
 
 import styles from './navbar.module.css';
 
@@ -19,6 +21,9 @@ const Navbar: FC = (): JSX.Element => {
   const isLogIn = useAppSelector((state) => state.isLogIn);
   const isLogInStorage = useAppSelector((state) => state.isLogInStorage);
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (customerId) {
       const fetchData = async () => {
@@ -52,10 +57,28 @@ const Navbar: FC = (): JSX.Element => {
     },
   ];
 
+  const loggedInItems: MenuProps['items'] = [
+    {
+      label: <Link to={'/profile'}>Profile</Link>,
+      key: 'login',
+      icon: <UserOutlined />,
+    },
+    {
+      label: 'Logout',
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      danger: true,
+    },
+  ];
+
   const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === '3') {
-      setOpen(false);
+    if (e.key === 'logout') {
+      CustomerApi.customerLogOut(); // TODO: move all that code to one function that will properly logout
+      localStorage.removeItem('customerId');
+      dispatch(userSlice.actions.setLogInStorage(true));
+      navigate('/main');
     }
+    setOpen(false);
   };
 
   const handleOpenChange = (flag: boolean) => {
@@ -75,9 +98,18 @@ const Navbar: FC = (): JSX.Element => {
           <ShoppingCartOutlined style={{ fontSize: '28px' }} />
         </NavLink>
         {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
-          <NavLink to="/profile">
-            <div className={styles.userName}>{userName}</div>
-          </NavLink>
+          <Dropdown
+            menu={{
+              items: loggedInItems,
+              onClick: handleMenuClick,
+            }}
+            onOpenChange={handleOpenChange}
+            open={open}
+          >
+            <NavLink to="/profile">
+              <div className={styles.userName}>{userName}</div>
+            </NavLink>
+          </Dropdown>
         ) : (
           <Dropdown
             menu={{

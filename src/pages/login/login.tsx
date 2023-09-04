@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
-import { ValidationMessage, ValidationPattern } from '../registration/validationRules';
 
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
+import { ValidationMessage, ValidationPattern } from '../../validationRules';
 
 import styles from './login.module.css';
 
@@ -57,7 +57,7 @@ const Login: FC = (): JSX.Element => {
   return (
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
-        name="basic"
+        name="loginForm"
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
         className={styles.login}
