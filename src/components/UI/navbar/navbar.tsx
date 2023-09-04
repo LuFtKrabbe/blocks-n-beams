@@ -61,7 +61,7 @@ const Navbar: FC = (): JSX.Element => {
 
   const loggedInItems: MenuProps['items'] = [
     {
-      label: <Link to={customerId ? `/profile/${customerId}` : `/error`}>Profile</Link>,
+      label: <Link to={customerId ? `/profile/${customerId}` : `/login`}>Profile</Link>,
       key: 'login',
       icon: <UserOutlined />,
     },
