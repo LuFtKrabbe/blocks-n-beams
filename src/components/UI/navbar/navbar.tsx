@@ -1,4 +1,4 @@
-import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
@@ -7,10 +7,12 @@ import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
+import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
+import { setIsSearching, setProductsSearchList } from '../../../app/productsListSlice';
 import { userSlice } from '../../../app/reducers';
 
 import logo from './../../../assets/logo.png';
@@ -20,8 +22,8 @@ import styles from './navbar.module.css';
 const Navbar: FC = (): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState<string>();
-  const isLogIn = useAppSelector((state) => state.isLogIn);
-  const isLogInStorage = useAppSelector((state) => state.isLogInStorage);
+  const isLogIn = useAppSelector((state) => state.user.isLogIn);
+  const isLogInStorage = useAppSelector((state) => state.user.isLogInStorage);
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -86,7 +88,18 @@ const Navbar: FC = (): JSX.Element => {
   const handleOpenChange = (flag: boolean) => {
     setOpen(flag);
   };
-  const onSearch = (value: string) => console.log(value);
+  const onSearch = async (text: string) => {
+    try {
+      const res = await ProductApi.searchByText(text);
+      dispatch(setProductsSearchList(res.body.results));
+      dispatch(setIsSearching(true));
+      navigate('/main');
+    } catch (error) {
+      if (error instanceof Error) {
+        await message.error(`Failed. ${error.message}`);
+      }
+    }
+  };
 
   return (
     <Header className={styles.header}>
@@ -95,7 +108,7 @@ const Navbar: FC = (): JSX.Element => {
       </NavLink>
 
       <div className={styles.auth}>
-        <Search placeholder="input search text" style={{ width: '80%' }} onSearch={onSearch} enterButton />
+        <Search placeholder="Search" style={{ width: '80%' }} onSearch={(value) => void onSearch(value)} enterButton />
         <NavLink to="/cart">
           <ShoppingCartOutlined style={{ fontSize: '28px' }} />
         </NavLink>

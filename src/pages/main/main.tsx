@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setIsSearching } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import { NUMBER_LIMIT, items, rootSubmenuKeys } from '../categories/shared';
@@ -14,6 +16,8 @@ import styles from './main.module.css';
 const { Content, Footer, Sider } = Layout;
 
 const Main: FC = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const [viewCardsList, setViewCardsList] = useState<JSX.Element[]>([]);
   const [openKeys, setOpenKeys] = useState(['']);
 
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
@@ -27,6 +31,7 @@ const Main: FC = (): JSX.Element => {
 
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
+  const { isSearching, productsSearchList } = useAppSelector((state) => state.productsSearch);
 
   const navigate = useNavigate();
 
@@ -36,6 +41,11 @@ const Main: FC = (): JSX.Element => {
         const res = await ProductApi.getCards();
 
         setProductList(res.body.results);
+
+        isSearching
+          ? setViewCardsList(productsSearchList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />))
+          : setViewCardsList(res.body.results?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />));
+        dispatch(setIsSearching(false));
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -45,9 +55,7 @@ const Main: FC = (): JSX.Element => {
       }
     };
     void fetchData();
-  }, []);
-
-  const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
+  }, [productsSearchList]);
 
   const {
     token: { colorBgContainer },

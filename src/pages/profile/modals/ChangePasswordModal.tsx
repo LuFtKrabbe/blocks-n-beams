@@ -21,7 +21,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
 }): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleOk = () => {
+  const onFinish = () => {
     const values = form.getFieldsValue();
 
     setLoading(true);
@@ -53,7 +53,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
       title="Change Password"
       open={isModalOpen}
       onCancel={handleCancel}
-      bodyStyle={{textAlign: 'center'}}
+      bodyStyle={{ textAlign: 'center' }}
       footer={false}
     >
       <Form
@@ -63,7 +63,7 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
         style={{ maxWidth: 400, margin: '20px auto 10px auto' }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
         form={form}
-        onFinish={handleOk}
+        onFinish={onFinish}
       >
         <Form.Item<ChangePasswordForm>
           label="Current Password"

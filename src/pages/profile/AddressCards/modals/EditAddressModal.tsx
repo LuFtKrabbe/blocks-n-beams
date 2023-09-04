@@ -1,7 +1,6 @@
 import { Customer, CustomerUpdateAction } from '@commercetools/platform-sdk';
-import { Button, Form, FormInstance, Input, Modal, Select, Space, message } from 'antd';
+import { Button, Form, FormInstance, Input, Modal, Select, message } from 'antd';
 import { Rule } from 'antd/es/form';
-import FormItem from 'antd/es/form/FormItem';
 import { FC, useState } from 'react';
 
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
@@ -74,12 +73,12 @@ const EditAddressModal: FC<EditAddressModalProps> = ({
   };
 
   return (
-    <Modal 
-      title="Edit Address" 
-      open={isEditAddressModalOpen} 
-      onCancel={handleCancel} 
-      footer={false} 
-      bodyStyle={{textAlign: 'center'}}
+    <Modal
+      title="Edit Address"
+      open={isEditAddressModalOpen}
+      onCancel={handleCancel}
+      footer={false}
+      bodyStyle={{ textAlign: 'center' }}
     >
       <Form
         form={form}

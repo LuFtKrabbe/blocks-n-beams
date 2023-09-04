@@ -18,7 +18,7 @@ const CardDetail: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentLocationCardId = location.pathname.split('/').pop() as string;
-  const card = useAppSelector((state) => state.currentProductCard) as ProductProjection;
+  const card = useAppSelector((state) => state.user.currentProductCard) as ProductProjection;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
   const carouselRef = useRef() as RefObject<CarouselRef>;
