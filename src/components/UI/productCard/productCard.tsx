@@ -1,4 +1,4 @@
-import { DollarTwoTone } from '@ant-design/icons/lib/icons';
+import { EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Image, Card } from 'antd';
 // import classNames from 'classnames';
@@ -17,6 +17,17 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   const location = useLocation();
   const currentLocationCardId = location.pathname.split('/').pop() as string;
 
+  const productImage = productCardList.masterVariant.images?.[0].url;
+  const productDescription = productCardList.metaDescription?.['en-US'];
+  const productPrice = () => {
+    const price = productCardList.masterVariant.prices?.[0].value;
+    return price ? (price.centAmount / 100).toFixed(2) : 'No price';
+  }
+  const productPriceDiscount = () => {
+    const priceDiscount = productCardList.masterVariant.prices?.[0].discounted?.value;
+    return priceDiscount ? (priceDiscount.centAmount / 100).toFixed(2) : 'No discount';
+  }
+
   const onClick = () => {
     dispatch(userSlice.actions.setCurrentProductCard(productCardList));
     navigate(
@@ -32,14 +43,17 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
       hoverable
       style={{ width: 300, marginTop: 10 }}
       extra={<a onClick={onClick}>View details</a>}
-      cover={<Image src={productCardList.masterVariant?.images ? productCardList.masterVariant?.images[0].url : ''} />}
+      cover={<Image src={productImage ? productImage : 'No image'} />}
     >
-      <Meta title="Europe Street beat" description="bla-bla-bla" />
+      <Meta description={productDescription ? productDescription : 'No description for this product'} />
       <Meta
         style={{ marginTop: 10 }}
-        avatar={<DollarTwoTone style={{ fontSize: 20 }} />}
+        avatar={<EuroOutlined style={{ fontSize: 20 }} />}
         description={
-          productCardList.masterVariant.prices ? productCardList.masterVariant.prices[0].value.centAmount : ''
+          <>
+            <span> {productPrice()} </span>
+            <span> {productPriceDiscount()} </span>
+          </>
         }
       />
     </Card>
