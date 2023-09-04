@@ -1,3 +1,4 @@
+import { ProductProjection } from '@commercetools/platform-sdk';
 import { Layout, Menu, Spin, message, theme } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -5,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductApi from '../../api/Product';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { updateProductsList } from '../../app/productsListSlice';
+import { setIsSearching } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import items from '../categories/shared';
@@ -16,8 +17,10 @@ const { Content, Footer, Sider } = Layout;
 
 const Main: FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const productList = useAppSelector((state) => state.productsList);
+  const [productList, setProductList] = useState<ProductProjection[]>([]);
+  const [viewCardsList, setViewCardsList] = useState<JSX.Element[]>([]);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
+  const { isSearching, productsSearchList } = useAppSelector((state) => state.productsSearch);
 
   const navigate = useNavigate();
 
@@ -25,8 +28,12 @@ const Main: FC = (): JSX.Element => {
     const fetchData = async () => {
       try {
         const res = await ProductApi.getCategoriesById(ProductApi.MAIN_LINK_ID);
+        setProductList(res.body.results);
 
-        dispatch(updateProductsList(res.body.results));
+        isSearching
+          ? setViewCardsList(productsSearchList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />))
+          : setViewCardsList(res.body.results?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />));
+        dispatch(setIsSearching(false));
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -36,9 +43,7 @@ const Main: FC = (): JSX.Element => {
       }
     };
     void fetchData();
-  }, []);
-
-  const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
+  }, [productsSearchList]);
 
   const {
     token: { colorBgContainer },

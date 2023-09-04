@@ -5,14 +5,14 @@ import { Dropdown, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
-import { updateProductsList } from '../../../app/productsListSlice';
+import { setIsSearching, setProductsSearchList } from '../../../app/productsListSlice';
 
 import logo from './../../../assets/logo.png';
 
@@ -25,6 +25,7 @@ const Navbar: FC = (): JSX.Element => {
   const isLogInStorage = useAppSelector((state) => state.user.isLogInStorage);
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (customerId) {
@@ -71,7 +72,9 @@ const Navbar: FC = (): JSX.Element => {
   const onSearch = async (text: string) => {
     try {
       const res = await ProductApi.searchByText(text);
-      dispatch(updateProductsList(res.body.results));
+      dispatch(setProductsSearchList(res.body.results));
+      dispatch(setIsSearching(true));
+      navigate('/main');
     } catch (error) {
       if (error instanceof Error) {
         await message.error(`Failed. ${error.message}`);

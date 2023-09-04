@@ -1,17 +1,28 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-const initialState: ProductProjection[] = [];
+interface IProductsSearchList {
+  isSearching: boolean;
+  productsSearchList: ProductProjection[];
+}
 
-const productsListSlice = createSlice({
-  name: 'productsList',
+const initialState: IProductsSearchList = {
+  isSearching: false,
+  productsSearchList: [],
+};
+
+const productsSearchListSlice = createSlice({
+  name: 'productsListSearch',
   initialState,
   reducers: {
-    updateProductsList(state: ProductProjection[], action: PayloadAction<ProductProjection[]>) {
-      return action.payload;
+    setProductsSearchList(state: IProductsSearchList, action: PayloadAction<ProductProjection[]>) {
+      state.productsSearchList = action.payload;
+    },
+    setIsSearching(state: IProductsSearchList, action: PayloadAction<boolean>) {
+      state.isSearching = action.payload;
     },
   },
 });
 
-export const { updateProductsList } = productsListSlice.actions;
-export default productsListSlice.reducer;
+export const { setProductsSearchList, setIsSearching } = productsSearchListSlice.actions;
+export default productsSearchListSlice.reducer;
