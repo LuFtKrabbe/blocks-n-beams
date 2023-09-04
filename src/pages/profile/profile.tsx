@@ -1,4 +1,7 @@
-import { Button, Checkbox, Form, Input, Space, message } from 'antd';
+import { Customer } from '@commercetools/platform-sdk';
+import { Button, Col, Divider, Form, Row, Space, message } from 'antd';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
 import { FC, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -8,30 +11,34 @@ import CustomerApi from '../../api/customerApi';
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 
+import { ChangeAddressForm, ChangePasswordForm, EditCustomerForm } from '../../types';
+
+import AddressCards from './AddressCards/AddressCards';
+import AddAddressModal from './modals/AddAddressModal';
+import ChangePasswordModal from './modals/ChangePasswordModal';
+import EditCustomerModal from './modals/EditCustomerModal';
 import styles from './profile.module.css';
 
-type FieldType = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
-
 const Profile: FC = (): JSX.Element => {
-  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-  const [componentDisabled, setComponentDisabled] = useState<boolean>(true);
+  const [isEditCustomerModalOpen, setIsEditCustomerModalOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+  const [addressUpdateCounter, setAddressUpdateCounter] = useState(0);
+  const [editCustomerForm] = Form.useForm<EditCustomerForm>();
+  const [changePasswordForm] = Form.useForm<ChangePasswordForm>();
+  const [addAddressForm] = Form.useForm<ChangeAddressForm>();
+
+  const [customerInfo, setCustomerInfo] = useState<Customer>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
+
   useEffect(() => {
     const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
     if (customerId) {
       const fetchData = async () => {
         try {
-          const res = await CustomerApi.getCustomer(customerId);
-          const { email, password, firstName, lastName } = res.body;
-          console.log('customer info', res.body);
-          form.setFieldsValue({ email, password, firstName, lastName });
+          const res = await CustomerApi.getMyCustomerInfo();
+          setCustomerInfo(res.body);
         } catch (error) {
           if (error instanceof Error) {
             await message.error(`Failed. ${error.message}`);
@@ -40,10 +47,24 @@ const Profile: FC = (): JSX.Element => {
       };
       void fetchData();
     }
-  });
+  }, [isEditCustomerModalOpen, isAddAddressModalOpen]);
 
-  const onFinish = (value: FieldType) => {
-    console.log(value);
+  const showEditCustomerModal = () => {
+    editCustomerForm.setFieldsValue({
+      firstName: customerInfo?.firstName,
+      lastName: customerInfo?.lastName,
+      birthday: dayjs(customerInfo?.dateOfBirth),
+      email: customerInfo?.email,
+    });
+    setIsEditCustomerModalOpen(true);
+  };
+
+  const showAddAddressModal = () => {
+    setIsAddAddressModalOpen(true);
+  };
+
+  const showChangePasswordModal = () => {
+    setIsChangePasswordModalOpen(true);
   };
 
   const logOut = () => {
@@ -55,51 +76,73 @@ const Profile: FC = (): JSX.Element => {
 
   return (
     <>
-      <div className={styles.checkboxWrapper}>
-        <Checkbox checked={componentDisabled} onChange={(e) => setComponentDisabled(e.target.checked)}>
-          Edit Fields
-        </Checkbox>
+      <div className={classNames(styles.customerInfoContainer)}>
+        <h3>Your Profile:</h3>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>First Name:</Col>
+          <Col>{customerInfo?.firstName}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>Last Name:</Col>
+          <Col>{customerInfo?.lastName}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col className={classNames(styles.customerInfoLabel)}>Date of birth:</Col>
+          <Col>{customerInfo?.dateOfBirth}</Col>
+        </Row>
+        <Row justify="space-between" gutter={12}>
+          <Col>
+            <Button type="primary" onClick={showEditCustomerModal}>
+              Edit Profile
+            </Button>
+          </Col>
+          <Col>
+            <Button danger onClick={showChangePasswordModal}>
+              Change Password
+            </Button>
+          </Col>
+          <Col>
+            <Button type="primary" danger onClick={logOut}>
+              Log Out
+            </Button>
+          </Col>
+        </Row>
       </div>
-      <Form
-        className={styles.spaceWrapper}
-        form={form}
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
-        autoComplete="off"
-        onFinish={onFinish}
-        disabled={componentDisabled}
-      >
-        <Form.Item<FieldType> label="Email" name="email">
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType> label="Password" name="password">
-          <Input.Password />
-        </Form.Item>
-        <Form.Item<FieldType> label="First Name" name="firstName">
-          <Input />
-        </Form.Item>
-        <Form.Item<FieldType> label="Last Name" name="lastName">
-          <Input />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          {!confirmLoading ? (
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          ) : (
-            <Button type="primary" loading>
-              Submit
-            </Button>
-          )}
-        </Form.Item>
-      </Form>
-      <Space className={styles.logoutButtonContainer}>
-        <Button className={styles.btn} type="primary" htmlType="submit" onClick={logOut}>
-          Log Out
-        </Button>
+
+      <Divider />
+
+      <Space direction="vertical" className={classNames(styles.addressSectionContainer)}>
+        <Space className={classNames(styles.addressSectionControls)}>
+          <Button type="primary" onClick={showAddAddressModal}>
+            + Add Address
+          </Button>
+        </Space>
+        <AddressCards
+          customerInfo={customerInfo}
+          setCustomerInfo={setCustomerInfo}
+          addressUpdateCounter={addressUpdateCounter}
+          setAddressUpdateCounter={setAddressUpdateCounter}
+        />
       </Space>
+
+      <EditCustomerModal
+        isModalOpen={isEditCustomerModalOpen}
+        setIsModalOpen={setIsEditCustomerModalOpen}
+        form={editCustomerForm}
+        customerInfo={customerInfo}
+      />
+      <ChangePasswordModal
+        isModalOpen={isChangePasswordModalOpen}
+        setIsModalOpen={setIsChangePasswordModalOpen}
+        form={changePasswordForm}
+        customerInfo={customerInfo}
+      />
+      <AddAddressModal
+        isAddAddressModalOpen={isAddAddressModalOpen}
+        setIsAddAddressModalOpen={setIsAddAddressModalOpen}
+        form={addAddressForm}
+        customerInfo={customerInfo}
+      />
     </>
   );
 };

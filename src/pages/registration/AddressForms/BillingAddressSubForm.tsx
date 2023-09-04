@@ -5,7 +5,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
 
 import { RegistrationFormType } from '../../../types';
-import { ValidationMessage, ValidationPattern } from '../validationRules';
+import { ValidationMessage, ValidationPattern } from '../../../validationRules';
 
 import styles from './BillingAdress.module.css';
 
@@ -17,7 +17,7 @@ type Props = {
 const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
   const spaceBetween = 'space-between';
 
-  const { setIsDefaultBillingAddress } = props;
+  const { isDefaultBillingAddress, setIsDefaultBillingAddress } = props;
 
   const defaultAddressCheckboxOnChange = (e: CheckboxChangeEvent) => {
     setIsDefaultBillingAddress(e.target.checked);
@@ -49,7 +49,11 @@ const BillingAddressSubForm: FC<Props> = (props: Props): JSX.Element => {
               <span className={styles.billingDefaultText}>Set as default</span>
             </Col>
             <Col>
-              <Checkbox onChange={defaultAddressCheckboxOnChange} className={styles.billingDefaultCheckbox} />
+              <Checkbox
+                checked={isDefaultBillingAddress}
+                onChange={defaultAddressCheckboxOnChange}
+                className={styles.billingDefaultCheckbox}
+              />
             </Col>
           </Row>
         </Col>
