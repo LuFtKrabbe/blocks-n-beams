@@ -20,7 +20,7 @@ const AppRouter: FC = (): JSX.Element => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/main" />} />
-      <Route path="/profile" element={<Navigate to="/main" />} />
+      <Route path="/profile" element={<Navigate to="/login" />} />
       <Route path="/main" element={<Main />} />
       <Route path="/main/:id" element={<CardDetail />} />
       <Route path="/main/bricks" element={<Bricks />} />
