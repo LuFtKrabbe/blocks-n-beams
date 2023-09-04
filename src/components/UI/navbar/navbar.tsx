@@ -1,4 +1,4 @@
-import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
