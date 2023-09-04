@@ -11,20 +11,18 @@ import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 import { RegistrationFormType } from '../../types';
 
+import { ValidationMessage, ValidationPattern, ValidationAge } from '../../validationRules';
+
 import BillingAddressSubForm from './AddressForms/BillingAddressSubForm';
 import ShippingAddressSubForm from './AddressForms/ShippingAddressSubForm';
 
 import styles from './registration.module.css';
-import { ValidationMessage, ValidationPattern } from './validationRules';
-
-const MIN_AGE = 13;
-const MAX_AGE = 99;
 
 const Registration: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [shippingAsBilling, setShippingAsBilling] = useState<boolean>(false);
-  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(false);
-  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(false);
+  const [isDefaultBillingAddress, setIsDefaultBillingAddress] = useState<boolean>(true);
+  const [isDefaultShippingAddress, setIsDefaultShippingAddress] = useState<boolean>(true);
   const navigate = useNavigate();
   const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
@@ -68,7 +66,7 @@ const Registration: FC = (): JSX.Element => {
   return (
     <Space className={styles.spaceWrapper} direction="vertical" align="center">
       <Form
-        name="basic"
+        name="registrationForm"
         colon={true}
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
@@ -130,9 +128,9 @@ const Registration: FC = (): JSX.Element => {
                     const now = dayjs(Date.now());
                     const age = now.diff(value, 'year');
                     if (value) {
-                      return age >= MIN_AGE && age <= MAX_AGE
+                      return age >= ValidationAge.MIN && age <= ValidationAge.MAX
                         ? Promise.resolve()
-                        : Promise.reject(`Your age should be from ${MIN_AGE} to ${MAX_AGE}.`);
+                        : Promise.reject(`Your age should be from ${ValidationAge.MIN} to ${ValidationAge.MIN}.`);
                     } else {
                       return Promise.reject('Please enter a date of birth');
                     }

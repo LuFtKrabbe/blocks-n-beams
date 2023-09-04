@@ -1,18 +1,28 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, Spin, message, theme } from 'antd';
+import { Layout, Menu, MenuProps, Spin, message, theme } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
-
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from './main.module.css';
-import items from './shared';
+import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
-const Square: FC = (): JSX.Element => {
+const ReinforcedConcrete: FC = (): JSX.Element => {
+  const [openKeys, setOpenKeys] = useState(['']);
+
+  const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
+    if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === NUMBER_LIMIT) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
+
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
@@ -21,7 +31,7 @@ const Square: FC = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ProductApi.getCategoriesById(ProductApi.SQUARE_LINK_ID);
+        const res = await ProductApi.getCategoriesById(ProductApi.REINFORCED_CONCRETE_LINK_ID);
 
         setProductList(res.body.results);
       } catch (error) {
@@ -46,11 +56,11 @@ const Square: FC = (): JSX.Element => {
       <Content style={{ padding: '0 50px' }}>
         <Content style={{ margin: '16px 0' }}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <a onClick={() => navigate('/main/square')}> Square</a>
+          <span> Reinforced concrete</span>
         </Content>
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu mode="inline" style={{ height: '100%' }} items={items} />
+            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 280 }} items={items} />
           </Sider>
           <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div className={styles.container}>
@@ -70,4 +80,4 @@ const Square: FC = (): JSX.Element => {
   );
 };
 
-export default Square;
+export default ReinforcedConcrete;

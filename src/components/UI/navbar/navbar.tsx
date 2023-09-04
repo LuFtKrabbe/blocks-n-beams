@@ -1,4 +1,4 @@
-import { UserAddOutlined, UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, HomeOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
@@ -13,6 +13,7 @@ import CustomerApi from '../../../api/customerApi';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setIsSearching, setProductsSearchList } from '../../../app/productsListSlice';
+import { userSlice } from '../../../app/reducers';
 
 import logo from './../../../assets/logo.png';
 
@@ -24,8 +25,8 @@ const Navbar: FC = (): JSX.Element => {
   const isLogIn = useAppSelector((state) => state.user.isLogIn);
   const isLogInStorage = useAppSelector((state) => state.user.isLogInStorage);
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (customerId) {
@@ -60,10 +61,28 @@ const Navbar: FC = (): JSX.Element => {
     },
   ];
 
+  const loggedInItems: MenuProps['items'] = [
+    {
+      label: <Link to={'/profile'}>Profile</Link>,
+      key: 'login',
+      icon: <UserOutlined />,
+    },
+    {
+      label: 'Logout',
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      danger: true,
+    },
+  ];
+
   const handleMenuClick: MenuProps['onClick'] = (e) => {
-    if (e.key === '3') {
-      setOpen(false);
+    if (e.key === 'logout') {
+      CustomerApi.customerLogOut(); // TODO: move all that code to one function that will properly logout
+      localStorage.removeItem('customerId');
+      dispatch(userSlice.actions.setLogInStorage(true));
+      navigate('/main');
     }
+    setOpen(false);
   };
 
   const handleOpenChange = (flag: boolean) => {
@@ -94,9 +113,18 @@ const Navbar: FC = (): JSX.Element => {
           <ShoppingCartOutlined style={{ fontSize: '28px' }} />
         </NavLink>
         {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
-          <NavLink to="/profile">
-            <div className={styles.userName}>{userName}</div>
-          </NavLink>
+          <Dropdown
+            menu={{
+              items: loggedInItems,
+              onClick: handleMenuClick,
+            }}
+            onOpenChange={handleOpenChange}
+            open={open}
+          >
+            <NavLink to="/profile">
+              <div className={styles.userName}>{userName}</div>
+            </NavLink>
+          </Dropdown>
         ) : (
           <Dropdown
             menu={{

@@ -3,9 +3,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import CardDetail from '../../pages/cardDetail/cardDetail';
 import Cart from '../../pages/cart/cart';
-import Circle from '../../pages/categories/circle';
-import Delta from '../../pages/categories/delta';
-import Square from '../../pages/categories/square';
+import Aerocrete from '../../pages/categories/aerocrete';
+import Aggregates from '../../pages/categories/aggregates';
+import Bricks from '../../pages/categories/bricks';
+import ReinforcedConcrete from '../../pages/categories/reinforcedConcrete';
+import Timber from '../../pages/categories/timber';
 import Login from '../../pages/login/login';
 import Main from '../../pages/main/main';
 import NotFound from '../../pages/notFound/notFound';
@@ -20,12 +22,16 @@ const AppRouter: FC = (): JSX.Element => {
       <Route path="/" element={<Navigate to="/main" />} />
       <Route path="/main" element={<Main />} />
       <Route path="/main/:id" element={<CardDetail />} />
-      <Route path="/main/square" element={<Square />} />
-      <Route path="/main/circle" element={<Circle />} />
-      <Route path="/main/delta" element={<Delta />} />
-      <Route path="/main/square/:id" element={<CardDetail />} />
-      <Route path="/main/circle/:id" element={<CardDetail />} />
-      <Route path="/main/delta/:id" element={<CardDetail />} />
+      <Route path="/main/bricks" element={<Bricks />} />
+      <Route path="/main/aerocrete" element={<Aerocrete />} />
+      <Route path="/main/reinforced-concrete" element={<ReinforcedConcrete />} />
+      <Route path="/main/timber" element={<Timber />} />
+      <Route path="/main/aggregates" element={<Aggregates />} />
+      <Route path="/main/bricks/:id" element={<CardDetail />} />
+      <Route path="/main/aerocrete/:id" element={<CardDetail />} />
+      <Route path="/main/reinforced-concrete/:id" element={<CardDetail />} />
+      <Route path="/main/timber/:id" element={<CardDetail />} />
+      <Route path="/main/aggregates/:id" element={<CardDetail />} />
       <Route path="/login" element={<PrivateRoute page={<Login />} />} />
       <Route path="/registration" element={<PrivateRoute page={<Registration />} />} />
       <Route path="/profile" element={<Profile />} />

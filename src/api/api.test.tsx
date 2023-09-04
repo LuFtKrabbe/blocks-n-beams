@@ -3,7 +3,7 @@ import {
   FlowTypes,
   getDefaultApiClient,
   getAnonApiClient,
-  getUserApiClient,
+  getUserApiClientByPassword,
   changeApiClient,
   currentApiClient,
 } from './Client';
@@ -23,7 +23,7 @@ test('Flow types switcher works correctly', () => {
   expect(JSON.stringify(currentApiClient)).toBe(JSON.stringify(getAnonApiClient()));
 
   changeApiClient(FlowTypes.PASSWORD);
-  expect(JSON.stringify(currentApiClient)).toBe(JSON.stringify(getUserApiClient(trialUserCreds)));
+  expect(JSON.stringify(currentApiClient)).toBe(JSON.stringify(getUserApiClientByPassword(trialUserCreds)));
 });
 
 test('Get ans set methods for tokenCache', () => {
