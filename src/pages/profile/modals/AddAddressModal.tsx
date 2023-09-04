@@ -67,13 +67,19 @@ const AddAddressModal: FC<EditAddressModalProps> = ({
   };
 
   return (
-    <Modal title="Edit Address" open={isAddAddressModalOpen} onCancel={handleCancel} footer={[]}>
+    <Modal 
+      title="Edit Address" 
+      open={isAddAddressModalOpen} 
+      onCancel={handleCancel} 
+      footer={false} 
+      bodyStyle={{textAlign: 'center'}}
+    >
       <Form
         form={form}
         name="addAddressForm"
-        labelCol={{ span: 8 }}
+        labelCol={{ span: 7 }}
         wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
+        style={{ maxWidth: 400, margin: '20px auto 10px auto' }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
         onFinish={onFinish}
       >
@@ -207,16 +213,12 @@ const AddAddressModal: FC<EditAddressModalProps> = ({
         >
           <Input />
         </Form.Item>
-        <FormItem>
-          <Space>
-            <Button key="submit" htmlType="submit" type="primary" loading={loading}>
-              Submit
-            </Button>
-            <Button key="cancel" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </Space>
-        </FormItem>
+        <Button key="submit" htmlType="submit" type="primary" loading={loading} style={{ margin: '5px 10px' }}>
+          Submit
+        </Button>
+        <Button key="cancel" onClick={handleCancel} style={{ margin: '5px 10px' }}>
+          Cancel
+        </Button>
       </Form>
     </Modal>
   );
