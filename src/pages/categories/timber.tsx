@@ -7,13 +7,12 @@ import ProductApi from '../../api/Product';
 
 import ProductCard from '../../components/UI/productCard/productCard';
 
-import { NUMBER_LIMIT, items, rootSubmenuKeys } from '../categories/shared';
-
 import styles from './main.module.css';
+import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
-const Main: FC = (): JSX.Element => {
+const Timber: FC = (): JSX.Element => {
   const [openKeys, setOpenKeys] = useState(['']);
 
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
@@ -33,7 +32,7 @@ const Main: FC = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ProductApi.getCards();
+        const res = await ProductApi.getCategoriesById(ProductApi.TIMBER_LINK_ID);
 
         setProductList(res.body.results);
       } catch (error) {
@@ -57,7 +56,8 @@ const Main: FC = (): JSX.Element => {
     <Layout>
       <Content style={{ padding: '0 50px' }}>
         <Content style={{ margin: '16px 0' }}>
-          <a onClick={() => navigate('/main')}> Main</a>
+          <a onClick={() => navigate('/main')}> Main /</a>
+          <span> Timber</span>
         </Content>
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
@@ -81,4 +81,4 @@ const Main: FC = (): JSX.Element => {
   );
 };
 
-export default Main;
+export default Timber;

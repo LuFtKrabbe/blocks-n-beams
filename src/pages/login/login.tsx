@@ -8,7 +8,8 @@ import CustomerApi from '../../api/customerApi';
 
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
-import { ValidationMessage, ValidationPattern } from '../../validationRules';
+
+import { ValidationMessage, ValidationPattern } from '../registration/validationRules';
 
 import styles from './login.module.css';
 
