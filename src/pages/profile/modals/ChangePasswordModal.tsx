@@ -53,22 +53,17 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
       title="Change Password"
       open={isModalOpen}
       onCancel={handleCancel}
-      footer={[
-        <Button key="cancel" onClick={handleCancel}>
-          Cancel
-        </Button>,
-        <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-          Submit
-        </Button>,
-      ]}
+      bodyStyle={{textAlign: 'center'}}
+      footer={false}
     >
       <Form
         name="changePasswordForm"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 400 }} // TODO: Maybe we should move all styles to CSS
+        style={{ maxWidth: 400, margin: '20px auto 10px auto' }} // TODO: Maybe we should move all styles to CSS
         autoComplete="off"
         form={form}
+        onFinish={handleOk}
       >
         <Form.Item<ChangePasswordForm>
           label="Current Password"
@@ -113,13 +108,19 @@ const ChangePasswordModal: FC<ChangePasswordModalProps> = ({
                 if (!value || getFieldValue('newPassword') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('The new password that you entered does not match.'));
+                return Promise.reject(new Error('Passwords do not match.'));
               },
             }),
           ]}
         >
           <Input.Password />
         </Form.Item>
+        <Button key="submit" type="primary" htmlType="submit" loading={loading} style={{ margin: '5px 10px' }}>
+          Submit
+        </Button>
+        <Button key="cancel" onClick={handleCancel} style={{ margin: '5px 10px' }}>
+          Cancel
+        </Button>
       </Form>
     </Modal>
   );
