@@ -78,7 +78,7 @@ const Profile: FC = (): JSX.Element => {
   };
 
   if (!localStorage.getItem('customerId') || currentLocationUserId !== localStorage.getItem('customerId')) {
-    return <Navigate to="/error" replace={true} />;
+    return <Navigate to="/login" replace={true} />;
   }
 
   return (
