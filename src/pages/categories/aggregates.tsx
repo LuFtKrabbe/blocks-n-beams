@@ -57,11 +57,18 @@ const Aggregates: FC = (): JSX.Element => {
       <Content style={{ padding: '0 50px' }}>
         <Content style={{ margin: '16px 0' }}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <span> Aggregates</span>
+          <a onClick={() => navigate('/main/aggregates')}> Aggregates</a>
         </Content>
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 280 }} items={items} />
+            <Menu
+              mode="inline"
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              selectedKeys={['5']}
+              style={{ width: 280 }}
+              items={items}
+            />
           </Sider>
           <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div className={styles.container}>

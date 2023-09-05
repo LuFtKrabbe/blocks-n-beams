@@ -13,7 +13,7 @@ import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 const { Content, Footer, Sider } = Layout;
 
 const Timber: FC = (): JSX.Element => {
-  const [openKeys, setOpenKeys] = useState(['']);
+  const [openKeys, setOpenKeys] = useState(['sub2']);
 
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
@@ -57,11 +57,18 @@ const Timber: FC = (): JSX.Element => {
       <Content style={{ padding: '0 50px' }}>
         <Content style={{ margin: '16px 0' }}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <span> Timber</span>
+          <a onClick={() => navigate('/main/timber')}> Beams: Timber</a>
         </Content>
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 280 }} items={items} />
+            <Menu
+              mode="inline"
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              selectedKeys={['4']}
+              style={{ width: 280 }}
+              items={items}
+            />
           </Sider>
           <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div className={styles.container}>

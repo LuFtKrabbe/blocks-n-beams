@@ -3,7 +3,7 @@ import { ClientResponse, Product, ProductProjectionPagedSearchResponse } from '@
 import getApiRoot from './Client';
 
 export default class ProductApi {
-  static BRICS_LINK_ID = '48df60e0-fafd-42b9-a970-2e5bb9915016';
+  static BRICKS_LINK_ID = '48df60e0-fafd-42b9-a970-2e5bb9915016';
   static AEROCRETE_LINK_ID = '19fbc664-7671-4d1f-9f9d-a4d40e02fbf8';
   static REINFORCED_CONCRETE_LINK_ID = '7a39fa28-6605-4935-8f96-36529add45c1';
   static TIMBER_LINK_ID = 'b168b7a8-5d33-4f5f-9a25-1532bef0b9fd';
