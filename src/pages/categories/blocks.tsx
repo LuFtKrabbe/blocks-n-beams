@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
+
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from '../main/main.module.css';
@@ -12,8 +13,8 @@ import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
-const ReinforcedConcrete: FC = (): JSX.Element => {
-  const [openKeys, setOpenKeys] = useState(['sub2']);
+const Blocks: FC = (): JSX.Element => {
+  const [openKeys, setOpenKeys] = useState(['']);
 
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
@@ -32,9 +33,10 @@ const ReinforcedConcrete: FC = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ProductApi.getCategoriesById(ProductApi.REINFORCED_CONCRETE_LINK_ID);
-
-        setProductList(res.body.results);
+        const resBricks = await ProductApi.getCategoriesById(ProductApi.BRICKS_LINK_ID);
+        const resAerocrete = await ProductApi.getCategoriesById(ProductApi.AEROCRETE_LINK_ID);
+        const resBlocks = [...resBricks.body.results, ...resAerocrete.body.results];
+        setProductList(resBlocks);
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -53,16 +55,15 @@ const ReinforcedConcrete: FC = (): JSX.Element => {
       <Content className={styles.layoutContent}>
         <Content className={styles.breadcrumb}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <a onClick={() => navigate('/main/beams')}> Beams /</a>
-          <a onClick={() => navigate('/main/reinforced-concrete')}> Reinforced concrete</a>
+          <a onClick={() => navigate('/main/blocks')}> Blocks </a>
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
-          <Sider className={styles.menuWrapper}>
+          <Sider className={styles.menuWrapper} width={200}>
             <Menu
               mode="inline"
               openKeys={openKeys}
               onOpenChange={onOpenChange}
-              selectedKeys={['3']}
+              selectedKeys={['blocks']}
               className={styles.menu}
               items={items}
             />
@@ -85,4 +86,4 @@ const ReinforcedConcrete: FC = (): JSX.Element => {
   );
 };
 
-export default ReinforcedConcrete;
+export default Blocks;

@@ -5,6 +5,8 @@ import CardDetail from '../../pages/cardDetail/cardDetail';
 import Cart from '../../pages/cart/cart';
 import Aerocrete from '../../pages/categories/aerocrete';
 import Aggregates from '../../pages/categories/aggregates';
+import Beams from '../../pages/categories/beams';
+import Blocks from '../../pages/categories/blocks';
 import Bricks from '../../pages/categories/bricks';
 import ReinforcedConcrete from '../../pages/categories/reinforcedConcrete';
 import Timber from '../../pages/categories/timber';
@@ -23,11 +25,15 @@ const AppRouter: FC = (): JSX.Element => {
       <Route path="/profile" element={<Navigate to="/login" />} />
       <Route path="/main" element={<Main />} />
       <Route path="/main/:id" element={<CardDetail />} />
+      <Route path="/main/beams" element={<Beams />} />
+      <Route path="/main/blocks" element={<Blocks />} />
       <Route path="/main/bricks" element={<Bricks />} />
       <Route path="/main/aerocrete" element={<Aerocrete />} />
       <Route path="/main/reinforced-concrete" element={<ReinforcedConcrete />} />
       <Route path="/main/timber" element={<Timber />} />
       <Route path="/main/aggregates" element={<Aggregates />} />
+      <Route path="/main/beams/:id" element={<Beams />} />
+      <Route path="/main/blocks/:id" element={<Blocks />} />
       <Route path="/main/bricks/:id" element={<CardDetail />} />
       <Route path="/main/aerocrete/:id" element={<CardDetail />} />
       <Route path="/main/reinforced-concrete/:id" element={<CardDetail />} />

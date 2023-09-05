@@ -53,7 +53,8 @@ const Aerocrete: FC = (): JSX.Element => {
       <Content className={styles.layoutContent}>
         <Content className={styles.breadcrumb}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <a onClick={() => navigate('/main/aerocrete')}> Blocks: Aerocretee</a>
+          <a onClick={() => navigate('/main/blocks')}> Blocks /</a>
+          <a onClick={() => navigate('/main/aerocrete')}> Aerocrete</a>
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
           <Sider className={styles.menuWrapper}>

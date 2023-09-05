@@ -54,7 +54,8 @@ const Timber: FC = (): JSX.Element => {
       <Content className={styles.layoutContent}>
         <Content className={styles.breadcrumb}>
           <a onClick={() => navigate('/main')}> Main /</a>
-          <a onClick={() => navigate('/main/timber')}> Beams: Timber</a>
+          <a onClick={() => navigate('/main/beams')}> Beams /</a>
+          <a onClick={() => navigate('/main/timber')}> Timber</a>
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
           <Sider className={styles.menuWrapper}>

@@ -21,7 +21,7 @@
 // ];
 
 // export default items;
-import { AppstoreOutlined } from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 // import classNames from 'classnames';
 import { Link } from 'react-router-dom';
@@ -47,15 +47,17 @@ function getItem(
 }
 
 export const items: MenuItem[] = [
-  getItem('Blocks', 'sub1', <AppstoreOutlined />, [
+  getItem(<Link to={'/main/blocks'}>Blocks</Link>, 'blocks'),
+  getItem('Blocks', 'sub1', <MenuOutlined />, [
     getItem(null, '1', <Link to={'/main/bricks'}>Bricks</Link>),
     getItem(null, '2', <Link to={'/main/aerocrete'}>Aerocrete</Link>),
   ]),
-  getItem('Beams', 'sub2', <AppstoreOutlined />, [
+  getItem(<Link to={'/main/beams'}>Beams</Link>, 'beams'),
+  getItem('Beams', 'sub2', <MenuOutlined />, [
     getItem(null, '3', <Link to={'/main/reinforced-concrete'}>Reinforced concrete</Link>),
     getItem(null, '4', <Link to={'/main/timber'}>Timber</Link>),
   ]),
-  getItem(<Link to={'/main/aggregates'}>Aggregates</Link>, '5', <AppstoreOutlined />),
+  getItem(<Link to={'/main/aggregates'}>Aggregates</Link>, '5'),
 ];
 
 export const rootSubmenuKeys = ['sub1', 'sub2'];
