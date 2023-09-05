@@ -1,5 +1,5 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, MenuProps, Spin, message, theme } from 'antd';
+import { Layout, Menu, MenuProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,8 @@ import ProductApi from '../../api/Product';
 
 import ProductCard from '../../components/UI/productCard/productCard';
 
-import styles from './main.module.css';
+import styles from '../main/main.module.css';
+
 import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
@@ -48,29 +49,25 @@ const Bricks: FC = (): JSX.Element => {
 
   const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   return (
-    <Layout>
-      <Content style={{ padding: '0 50px' }}>
-        <Content style={{ margin: '16px 0' }}>
+    <Layout className={styles.layoutWrapper}>
+      <Content className={styles.layoutContent}>
+        <Content className={styles.breadcrumb}>
           <a onClick={() => navigate('/main')}> Main /</a>
           <a onClick={() => navigate('/main/aerocrete')}> Blocks: Bricks</a>
         </Content>
-        <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
-          <Sider style={{ background: colorBgContainer }} width={200}>
+        <Layout className={styles.menuProductContainerWrapper}>
+          <Sider className={styles.menuWrapper} width={200}>
             <Menu
               mode="inline"
               openKeys={openKeys}
               onOpenChange={onOpenChange}
               selectedKeys={['1']}
-              style={{ width: 280 }}
+              className={styles.menu}
               items={items}
             />
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+          <Content className={styles.productContainerWrapper}>
             <div className={styles.container}>
               {confirmLoading ? (
                 <div className={styles.center}>

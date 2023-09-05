@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, StarTwoTone } from '@ant-design/icons';
 import { Address, Customer, CustomerUpdateAction } from '@commercetools/platform-sdk';
 import { Button, Card, Col, Form, Popconfirm, Row, message } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
+import style from '../profile.module.css'
 
 import CustomerApi from '../../../api/customerApi';
 import { ChangeAddressForm } from '../../../types';
@@ -152,6 +153,8 @@ const AddressCards: FC<AddressCardsProps> = ({
               <Card
                 key={addr.id?.concat('card')}
                 title={getCardTitle(customerInfo, addr)}
+                size={'small'}
+                className={style.addressCard}
                 actions={[
                   <Button
                     type="text"

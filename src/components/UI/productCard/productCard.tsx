@@ -47,17 +47,17 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
         title={productCardList.name['en-US']}
         bordered
         hoverable
-        style={{ width: 250, height: 480 }}
-        extra={<a onClick={onClick}>View details</a>}
-        cover={<Image style={{ padding: 2 }} src={productImage ? productImage : 'No image'} height={240} />}
+        className={styles.productCard}
+        extra={<a onClick={onClick}>Details</a>}
+        cover={<Image className={styles.productImage} src={productImage ? productImage : 'No image'} />}
       >
         <Meta
-          style={{ marginBottom: 10, height: 100 }}
+          className={styles.description}
           description={productDescription ? productDescription : 'No description for this product'}
         />
         <Meta
-          style={{ marginTop: 10 }}
-          avatar={<EuroOutlined style={{ fontSize: 23 }} />}
+          className={styles.pricesWrapper}
+          avatar={<EuroOutlined className={styles.pricesIcon} />}
           description={
             <div className={styles.prices}>
               <span className={productPriceDiscount() === 'No discount' ? styles.price : styles.priceOff}>

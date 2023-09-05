@@ -3,19 +3,45 @@
   align-items: center;
 }
 
+.headerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: clamp(0px, 100%, 1200px);
+  padding: 0 40px;
+}
+
+.logoWrapper {
+  overflow: hidden;
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .logoWrapper {
+    width: 48px;
+  }
 }
 
 .auth {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  width: 40%;
+  width: 50%;
   line-height: normal;
+}
+
+.searchString {
+  width: clamp(0, 100%, 400px);
+  min-width: 150px;
+  margin: 0px 4px;
 }
 
 .userName {

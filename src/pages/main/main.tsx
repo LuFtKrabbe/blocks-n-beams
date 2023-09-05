@@ -1,5 +1,4 @@
-import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, MenuProps, Spin, message, theme } from 'antd';
+import { Layout, Menu, MenuProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +28,7 @@ const Main: FC = (): JSX.Element => {
     }
   };
 
-  const [productList, setProductList] = useState<ProductProjection[]>();
+  //const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
   const { isSearching, productsSearchList } = useAppSelector((state) => state.productsSearch);
 
@@ -40,7 +39,7 @@ const Main: FC = (): JSX.Element => {
       try {
         const res = await ProductApi.getCards();
 
-        setProductList(res.body.results);
+        //setProductList(res.body.results);
 
         isSearching
           ? setViewCardsList(productsSearchList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />))
@@ -57,21 +56,17 @@ const Main: FC = (): JSX.Element => {
     void fetchData();
   }, [productsSearchList]);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   return (
-    <Layout>
-      <Content style={{ padding: '0 50px' }}>
-        <Content style={{ margin: '16px 0' }}>
+    <Layout className={styles.layoutWrapper}>
+      <Content className={styles.layoutContent}>
+        <Content className={styles.breadcrumb}>
           <a onClick={() => navigate('/main')}> Main</a>
         </Content>
-        <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
-          <Sider style={{ background: colorBgContainer }} width={200}>
-            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} style={{ width: 280 }} items={items} />
+        <Layout className={styles.menuProductContainerWrapper}>
+          <Sider className={styles.menuWrapper}>
+            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} className={styles.menu} items={items} />
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+          <Content className={styles.productContainerWrapper}>
             <div className={styles.container}>
               {confirmLoading ? (
                 <div className={styles.center}>

@@ -15,12 +15,17 @@
   font-weight: bold;
 }
 
+.divider {
+  margin: 16px 0;
+}
+
 .addressSectionContainer {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   margin: 20px auto;
-  max-width: 1280px;
+  padding: 0px 40px;
+  max-width: 1200px;
 }
 
 .addressSectionControls {
@@ -29,4 +34,18 @@
   justify-content: flex-end;
   margin: 0 12px;
   max-width: 100%;
+}
+
+.addressCard p {
+  font-size: 1.0rem !important;
+}
+
+@media (max-width: 900px) {
+  .addressCard div {
+    font-size: 0.7rem;
+  }
+
+  .addressCard p {
+    font-size: 0.7rem !important;
+  }
 }

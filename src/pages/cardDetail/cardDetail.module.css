@@ -11,8 +11,9 @@
   justify-content: space-evenly;
   padding: 20px;
   width: clamp(500px, 50%, 700px);
-  border-radius: 15px;
-  background-color: rgb(226, 234, 240);
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  border: solid 1px grey;
 }
 
 .cardImageContent {
@@ -28,8 +29,8 @@
 
 .carousel {
   text-align: center;
-  background-color: rgb(193, 202, 207);
-  border-radius: 15px;
+  background-color: rgb(209, 209, 209);
+  border-radius: 10px;
   height: 300px;
   padding: 5px;
 }
@@ -57,7 +58,7 @@
 }
 
 .prices {
-  display: start;
+  display: flex;
   align-items: center;
   justify-content: flex-end;
   font-size: 1rem;

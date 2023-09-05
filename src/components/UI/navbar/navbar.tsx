@@ -102,53 +102,55 @@ const Navbar: FC = (): JSX.Element => {
   };
 
   return (
-    <Header className={styles.header}>
-      <NavLink to="/main" style={{ height: 44 }}>
-        <img src={logo} style={{ height: 44, marginLeft: 10 }} />
-      </NavLink>
+    <Header className={styles.headerWrapper}>
+      <div className={styles.header}>
+        <NavLink to="/main" className={styles.logoWrapper} style={{ height: 44 }}>
+          <img src={logo} className={styles.logo} style={{ height: 44 }} />
+        </NavLink>
 
-      <div className={styles.auth}>
-        <Search
-          placeholder="Search"
-          style={{ width: '80%', margin: '0px 4px' }}
-          onSearch={(value) => void onSearch(value)}
-          enterButton
-        />
-        <NavLink to="/main">
-          <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
-        </NavLink>
-        <NavLink to="/cart">
-          <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
-        </NavLink>
-        {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
-          <Dropdown
-            menu={{
-              items: loggedInItems,
-              onClick: handleMenuClick,
-            }}
-            onOpenChange={handleOpenChange}
-            open={open}
-          >
-            <NavLink to={`/profile/${customerId}`}>
-              <div className={styles.userName}>{userName}</div>
-            </NavLink>
-          </Dropdown>
-        ) : (
-          <Dropdown
-            menu={{
-              items,
-              onClick: handleMenuClick,
-            }}
-            onOpenChange={handleOpenChange}
-            open={open}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <UserOutlined style={{ fontSize: '24px', margin: '0px 4px' }} />
-              </Space>
-            </a>
-          </Dropdown>
-        )}
+        <div className={styles.auth}>
+          <Search
+            placeholder="Search"
+            className={styles.searchString}
+            onSearch={(value) => void onSearch(value)}
+            enterButton
+          />
+          <NavLink to="/main">
+            <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
+          </NavLink>
+          <NavLink to="/cart">
+            <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
+          </NavLink>
+          {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
+            <Dropdown
+              menu={{
+                items: loggedInItems,
+                onClick: handleMenuClick,
+              }}
+              onOpenChange={handleOpenChange}
+              open={open}
+            >
+              <NavLink to={`/profile/${customerId}`}>
+                <div className={styles.userName}>{userName}</div>
+              </NavLink>
+            </Dropdown>
+          ) : (
+            <Dropdown
+              menu={{
+                items,
+                onClick: handleMenuClick,
+              }}
+              onOpenChange={handleOpenChange}
+              open={open}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <UserOutlined style={{ fontSize: '24px', margin: '0px 4px' }} />
+                </Space>
+              </a>
+            </Dropdown>
+          )}
+        </div>
       </div>
     </Header>
   );
