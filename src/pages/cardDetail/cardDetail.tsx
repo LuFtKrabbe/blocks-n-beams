@@ -124,7 +124,7 @@ const CardDetail: FC = (): JSX.Element => {
                 }}
               >
                 <EuroOutlined />
-                Add to busket
+                Add to basket
               </Button>
               <Button
                 className={styles.buttonCatalog}

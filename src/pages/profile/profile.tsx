@@ -116,7 +116,7 @@ const Profile: FC = (): JSX.Element => {
         </Row>
       </div>
 
-      <Divider className={styles.divider}/>
+      <Divider className={styles.divider} />
 
       <Space direction="vertical" className={classNames(styles.addressSectionContainer)}>
         <Space className={classNames(styles.addressSectionControls)}>
