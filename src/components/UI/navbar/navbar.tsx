@@ -1,18 +1,27 @@
-import { UserAddOutlined, UserOutlined, ShopOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+/* eslint-disable @typescript-eslint/naming-convention */
+import {
+  UserAddOutlined,
+  UserOutlined,
+  ShopOutlined,
+  ShoppingCartOutlined,
+  LogoutOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
-import { Dropdown, Space, message } from 'antd';
+import { Button, Dropdown, Select, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
-import ProductApi from '../../../api/Product';
+// import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
-import { setIsSearching, setProductsSearchList } from '../../../app/productsListSlice';
+import { setQueryArgs } from '../../../app/productsListSlice';
 import { userSlice } from '../../../app/reducers';
 
 import logo from './../../../assets/logo.png';
@@ -27,6 +36,8 @@ const Navbar: FC = (): JSX.Element => {
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { queryArgs } = useAppSelector((state) => state.productsSearch);
+  const { Option } = Select;
 
   useEffect(() => {
     if (customerId) {
@@ -88,17 +99,30 @@ const Navbar: FC = (): JSX.Element => {
   const handleOpenChange = (flag: boolean) => {
     setOpen(flag);
   };
-  const onSearch = async (text: string) => {
-    try {
-      const res = await ProductApi.searchByText(text);
-      dispatch(setProductsSearchList(res.body.results));
-      dispatch(setIsSearching(true));
-      navigate('/main');
-    } catch (error) {
-      if (error instanceof Error) {
-        await message.error(`Failed. ${error.message}`);
-      }
+  const onSearch = (text: string) => {
+    // try {
+    dispatch(setQueryArgs({ ...queryArgs, 'text.en-US': text })); // my
+    // const res = await ProductApi.searchByText(text);
+    // dispatch(setProductsSearchList(res.body.results));
+    // dispatch(setIsSearching(true));
+    // navigate('/main');
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     await message.error(`Failed. ${error.message}`);
+    //   }
+    // }
+  };
+
+  const handleChange = (value: string) => {
+    if (value === 'asc') {
+      dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US asc' }));
+    } else {
+      dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
     }
+  };
+
+  const handleReset = () => {
+    dispatch(setQueryArgs({ limit: 20, fuzzy: true }));
   };
 
   return (
@@ -108,13 +132,29 @@ const Navbar: FC = (): JSX.Element => {
           <img src={logo} className={styles.logo} style={{ height: 44 }} />
         </NavLink>
 
+        <div>
+          <Select defaultValue="Sort" style={{ width: 100 }} onChange={handleChange}>
+            <Option value="asc">
+              Sort <SortAscendingOutlined />
+            </Option>
+            <Option value="desc">
+              Sort <SortDescendingOutlined />
+            </Option>
+          </Select>
+        </div>
+
         <div className={styles.auth}>
           <Search
             placeholder="Search"
             className={styles.searchString}
             onSearch={(value) => void onSearch(value)}
+            // onChange={onChange}
             enterButton
           />
+
+          <Button type="primary" onClick={handleReset}>
+            Reset Filter
+          </Button>
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>

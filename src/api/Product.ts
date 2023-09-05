@@ -34,14 +34,14 @@ export default class ProductApi {
       .execute();
   };
 
-  static getCards = (): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> => {
+  static getCards = (queryArgs: {
+    [key: string]: string | number | boolean;
+  }): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> => {
     return getApiRoot()
       .productProjections()
       .search()
       .get({
-        queryArgs: {
-          limit: 20,
-        },
+        queryArgs,
       })
       .execute();
   };

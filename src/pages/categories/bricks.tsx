@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
+import { useAppSelector } from '../../app/hooks';
+// import { setQueryArgs } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from '../main/main.module.css';
@@ -30,10 +32,23 @@ const Bricks: FC = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  // const dispatch = useAppDispatch();
+  const { queryArgs } = useAppSelector((state) => state.productsSearch);
+
+  // useEffect(() => {
+  //   dispatch(setQueryArgs({ limit: 20, fuzzy: true, filter: `categories.id:"${ProductApi.BRICKS_LINK_ID}"` }));
+  // }, []);
+
+  console.log(queryArgs, 'Bricks');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await ProductApi.getCategoriesById(ProductApi.BRICKS_LINK_ID);
+        // const res = await ProductApi.getCategoriesById(ProductApi.BRICKS_LINK_ID);
+        const res = await ProductApi.getCards({
+          ...queryArgs,
+          filter: `categories.id:"${ProductApi.BRICKS_LINK_ID}"`,
+        });
 
         setProductList(res.body.results);
       } catch (error) {
@@ -45,7 +60,7 @@ const Bricks: FC = (): JSX.Element => {
       }
     };
     void fetchData();
-  }, []);
+  }, [queryArgs]);
 
   const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
 
