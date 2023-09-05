@@ -1,4 +1,4 @@
-import { UserAddOutlined, UserOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserAddOutlined, UserOutlined, ShopOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { Dropdown, Space, message } from 'antd';
@@ -103,14 +103,22 @@ const Navbar: FC = (): JSX.Element => {
 
   return (
     <Header className={styles.header}>
-      <NavLink to="/main" style={{ height: 50 }}>
-        <img src={logo} style={{ height: 50, marginLeft: 10 }} />
+      <NavLink to="/main" style={{ height: 44 }}>
+        <img src={logo} style={{ height: 44, marginLeft: 10 }} />
       </NavLink>
 
       <div className={styles.auth}>
-        <Search placeholder="Search" style={{ width: '80%' }} onSearch={(value) => void onSearch(value)} enterButton />
+        <Search
+          placeholder="Search"
+          style={{ width: '80%', margin: '0px 4px' }}
+          onSearch={(value) => void onSearch(value)}
+          enterButton
+        />
+        <NavLink to="/main">
+          <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
+        </NavLink>
         <NavLink to="/cart">
-          <ShoppingCartOutlined style={{ fontSize: '28px' }} />
+          <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
         </NavLink>
         {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
           <Dropdown
@@ -136,7 +144,7 @@ const Navbar: FC = (): JSX.Element => {
           >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
-                <UserOutlined style={{ fontSize: '24px' }} />
+                <UserOutlined style={{ fontSize: '24px', margin: '0px 4px' }} />
               </Space>
             </a>
           </Dropdown>

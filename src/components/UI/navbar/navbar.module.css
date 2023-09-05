@@ -19,13 +19,15 @@
 }
 
 .userName {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: white;
+  font-family: Georgia, Times, 'Times New Roman', serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 40px;
+  height: 36px;
+  margin: 0 4px;
+  border-radius: 30%;
+  background-color: white;
   font-weight: 900;
   font-size: 22px;
 }
