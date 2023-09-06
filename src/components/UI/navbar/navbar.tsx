@@ -7,6 +7,9 @@ import {
   LogoutOutlined,
   SortAscendingOutlined,
   SortDescendingOutlined,
+  EuroCircleOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
@@ -100,24 +103,26 @@ const Navbar: FC = (): JSX.Element => {
     setOpen(flag);
   };
   const onSearch = (text: string) => {
-    // try {
     dispatch(setQueryArgs({ ...queryArgs, 'text.en-US': text })); // my
-    // const res = await ProductApi.searchByText(text);
-    // dispatch(setProductsSearchList(res.body.results));
-    // dispatch(setIsSearching(true));
-    // navigate('/main');
-    // } catch (error) {
-    //   if (error instanceof Error) {
-    //     await message.error(`Failed. ${error.message}`);
-    //   }
-    // }
   };
 
   const handleChange = (value: string) => {
-    if (value === 'asc') {
-      dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US asc' }));
-    } else {
-      dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
+    switch (value) {
+      case 'name-asc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US asc' }));
+        break;
+      case 'name-desc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
+        break;
+      case 'price-asc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'price asc' }));
+        break;
+      case 'price-desc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'price desc' }));
+        break;
+      default:
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
+        break;
     }
   };
 
@@ -134,11 +139,17 @@ const Navbar: FC = (): JSX.Element => {
 
         <div>
           <Select defaultValue="Sort" style={{ width: 100 }} onChange={handleChange}>
-            <Option value="asc">
-              Sort <SortAscendingOutlined />
+            <Option value="name-asc">
+              Name <SortAscendingOutlined />
             </Option>
-            <Option value="desc">
-              Sort <SortDescendingOutlined />
+            <Option value="name-desc">
+              Name <SortDescendingOutlined />
+            </Option>
+            <Option value="price-asc">
+              Price <EuroCircleOutlined /> <ArrowUpOutlined />
+            </Option>
+            <Option value="price-desc">
+              Price <EuroCircleOutlined /> <ArrowDownOutlined />
             </Option>
           </Select>
         </div>
