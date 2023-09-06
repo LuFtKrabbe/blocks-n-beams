@@ -9,7 +9,7 @@ import {
   SortDescendingOutlined,
   EuroCircleOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined
+  ArrowDownOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
@@ -137,29 +137,28 @@ const Navbar: FC = (): JSX.Element => {
           <img src={logo} className={styles.logo} style={{ height: 44 }} />
         </NavLink>
 
-        <div>
-          <Select defaultValue="Sort" style={{ width: 100 }} onChange={handleChange}>
-            <Option value="name-asc">
-              Name <SortAscendingOutlined />
-            </Option>
-            <Option value="name-desc">
-              Name <SortDescendingOutlined />
-            </Option>
-            <Option value="price-asc">
-              Price <EuroCircleOutlined /> <ArrowUpOutlined />
-            </Option>
-            <Option value="price-desc">
-              Price <EuroCircleOutlined /> <ArrowDownOutlined />
-            </Option>
-          </Select>
-        </div>
-
         <div className={styles.auth}>
+          <div>
+            <Select defaultValue="Sorting" style={{ width: 100 }} onChange={handleChange}>
+              <Option value="name-asc">
+                Name <SortAscendingOutlined />
+              </Option>
+              <Option value="name-desc">
+                Name <SortDescendingOutlined />
+              </Option>
+              <Option value="price-asc">
+                Price <EuroCircleOutlined /> <ArrowUpOutlined />
+              </Option>
+              <Option value="price-desc">
+                Price <EuroCircleOutlined /> <ArrowDownOutlined />
+              </Option>
+            </Select>
+          </div>
+
           <Search
             placeholder="Search"
             className={styles.searchString}
             onSearch={(value) => void onSearch(value)}
-            // onChange={onChange}
             enterButton
           />
 
