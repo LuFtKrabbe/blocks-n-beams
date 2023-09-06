@@ -36,19 +36,11 @@ const Beams: FC = (): JSX.Element => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const resReinforcedConcrete = await ProductApi.getCategoriesById(ProductApi.REINFORCED_CONCRETE_LINK_ID);
-        // const resTimber = await ProductApi.getCategoriesById(ProductApi.TIMBER_LINK_ID);
-        const resReinforcedConcrete = await ProductApi.getCards({
+        const res = await ProductApi.getCards({
           ...queryArgs,
-          filter: `categories.id:"${ProductApi.REINFORCED_CONCRETE_LINK_ID}"`,
+          filter: `categories.id:"${ProductApi.BEAMS_LINK_ID}"`,
         });
-        const resTimber = await ProductApi.getCards({
-          ...queryArgs,
-          filter: `categories.id:"${ProductApi.TIMBER_LINK_ID}"`,
-        });
-
-        const resBlocks = [...resReinforcedConcrete.body.results, ...resTimber.body.results];
-        setProductList(resBlocks);
+        setProductList(res.body.results);
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
