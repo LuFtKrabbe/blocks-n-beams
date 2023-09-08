@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
+import { useAppSelector } from '../../app/hooks';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from '../main/main.module.css';
@@ -30,13 +31,16 @@ const Blocks: FC = (): JSX.Element => {
 
   const navigate = useNavigate();
 
+  const { queryArgs } = useAppSelector((state) => state.productsSearch);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resBricks = await ProductApi.getCategoriesById(ProductApi.BRICKS_LINK_ID);
-        const resAerocrete = await ProductApi.getCategoriesById(ProductApi.AEROCRETE_LINK_ID);
-        const resBlocks = [...resBricks.body.results, ...resAerocrete.body.results];
-        setProductList(resBlocks);
+        const res = await ProductApi.getCards({
+          ...queryArgs,
+          filter: `categories.id:"${ProductApi.BLOCKS_LINK_ID}"`,
+        });
+        setProductList(res.body.results);
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -46,7 +50,7 @@ const Blocks: FC = (): JSX.Element => {
       }
     };
     void fetchData();
-  }, []);
+  }, [queryArgs]);
 
   const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
 

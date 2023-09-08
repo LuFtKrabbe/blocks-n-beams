@@ -1,18 +1,30 @@
-import { UserAddOutlined, UserOutlined, ShopOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+/* eslint-disable @typescript-eslint/naming-convention */
+import {
+  UserAddOutlined,
+  UserOutlined,
+  ShopOutlined,
+  ShoppingCartOutlined,
+  LogoutOutlined,
+  SortAscendingOutlined,
+  SortDescendingOutlined,
+  EuroCircleOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
-import { Dropdown, Space, message } from 'antd';
+import { Button, Dropdown, Select, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
-import ProductApi from '../../../api/Product';
+// import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
-import { setIsSearching, setProductsSearchList } from '../../../app/productsListSlice';
+import { setQueryArgs } from '../../../app/productsListSlice';
 import { userSlice } from '../../../app/reducers';
 
 import logo from './../../../assets/logo.png';
@@ -27,6 +39,8 @@ const Navbar: FC = (): JSX.Element => {
   const customerId = localStorage.getItem('customerId') ? localStorage.getItem('customerId') : '';
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { queryArgs } = useAppSelector((state) => state.productsSearch);
+  const { Option } = Select;
 
   useEffect(() => {
     if (customerId) {
@@ -88,17 +102,32 @@ const Navbar: FC = (): JSX.Element => {
   const handleOpenChange = (flag: boolean) => {
     setOpen(flag);
   };
-  const onSearch = async (text: string) => {
-    try {
-      const res = await ProductApi.searchByText(text);
-      dispatch(setProductsSearchList(res.body.results));
-      dispatch(setIsSearching(true));
-      navigate('/main');
-    } catch (error) {
-      if (error instanceof Error) {
-        await message.error(`Failed. ${error.message}`);
-      }
+  const onSearch = (text: string) => {
+    dispatch(setQueryArgs({ ...queryArgs, 'text.en-US': text })); // my
+  };
+
+  const handleChange = (value: string) => {
+    switch (value) {
+      case 'name-asc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US asc' }));
+        break;
+      case 'name-desc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
+        break;
+      case 'price-asc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'price asc' }));
+        break;
+      case 'price-desc':
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'price desc' }));
+        break;
+      default:
+        dispatch(setQueryArgs({ ...queryArgs, sort: 'name.en-US desc' }));
+        break;
     }
+  };
+
+  const handleReset = () => {
+    dispatch(setQueryArgs({ limit: 20, fuzzy: true }));
   };
 
   return (
@@ -109,12 +138,33 @@ const Navbar: FC = (): JSX.Element => {
         </NavLink>
 
         <div className={styles.auth}>
+          <div>
+            <Select defaultValue="Sorting" style={{ width: 100 }} onChange={handleChange}>
+              <Option value="name-asc">
+                Name <SortAscendingOutlined />
+              </Option>
+              <Option value="name-desc">
+                Name <SortDescendingOutlined />
+              </Option>
+              <Option value="price-asc">
+                Price <EuroCircleOutlined /> <ArrowUpOutlined />
+              </Option>
+              <Option value="price-desc">
+                Price <EuroCircleOutlined /> <ArrowDownOutlined />
+              </Option>
+            </Select>
+          </div>
+
           <Search
             placeholder="Search"
             className={styles.searchString}
             onSearch={(value) => void onSearch(value)}
             enterButton
           />
+
+          <Button type="primary" onClick={handleReset}>
+            Reset Filter
+          </Button>
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>
