@@ -17,10 +17,14 @@
   padding: 10px 0;
   border-radius: 10px;
   background-color: white;
+  min-height: 582px;
+  display: flex;
+  flex-direction: row;
 }
 
 .productContainerWrapper {
   padding: 0 30px;
+  width: 100%;
 }
 
 .menuWrapper {
@@ -40,4 +44,13 @@
   max-width: 1230px;
   margin: 0 auto;
   padding: 0;
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }

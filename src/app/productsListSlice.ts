@@ -1,6 +1,8 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { PAGE_SIZE } from '../pages/categories/shared';
+
 interface IProductsSearchList {
   isSearching: boolean;
   productsSearchList: ProductProjection[];
@@ -12,7 +14,7 @@ interface IProductsSearchList {
 const initialState: IProductsSearchList = {
   isSearching: false,
   productsSearchList: [],
-  queryArgs: { limit: 20, fuzzy: true },
+  queryArgs: { limit: PAGE_SIZE as number, fuzzy: true },
 };
 
 const productsSearchListSlice = createSlice({

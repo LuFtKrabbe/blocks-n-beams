@@ -1,32 +1,11 @@
-// import { CaretRightFilled } from '@ant-design/icons';
-// import { MenuProps } from 'antd';
-// import { Link } from 'react-router-dom';
-
-// const items: MenuProps['items'] = [
-//   {
-//     label: <Link to={'/main/bricks'}>Bricks</Link>,
-//     key: 'bricks',
-//     icon: <CaretRightFilled />,
-//   },
-//   {
-//     label: <Link to={'/main/aerocrete'}>Aerocrete</Link>,
-//     key: 'aerocrete',
-//     icon: <CaretRightFilled />,
-//   },
-//   {
-//     label: <Link to={'/main/reinforced-concrete'}>Reinforced concrete</Link>,
-//     key: 'reinforced-concrete',
-//     icon: <CaretRightFilled />,
-//   },
-// ];
-
-// export default items;
 import { GroupOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
-// import classNames from 'classnames';
+
 import { Link } from 'react-router-dom';
 
 export const NUMBER_LIMIT = -1;
+
+export const PAGE_SIZE = 3;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
