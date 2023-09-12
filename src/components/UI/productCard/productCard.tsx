@@ -44,13 +44,12 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   };
 
   const addToCart = async (product: ProductProjection) => {
-    // TODO: fix check that cart exist
+    //TODO: implement anonymous cart
     try {
       await MyCartApi.getActiveCart();
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === 'No active cart exists.') {
-          console.log('HERE');
+        if (error.name === 'NotFound') {
           await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
         } else {
           await message.error(error.message);
@@ -61,7 +60,6 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     try {
       const cart = await MyCartApi.getActiveCart();
       void MyCartApi.addItemToCart(cart.body.id, product);
-      console.log('CART', await MyCartApi.getActiveCart());
     } catch (error) {
       if (error instanceof Error) {
         await message.error(error.message);
