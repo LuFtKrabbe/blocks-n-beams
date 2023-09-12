@@ -1,0 +1,140 @@
+.cardWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5%;
+}
+
+.cardContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px;
+  width: clamp(500px, 50%, 700px);
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  border: solid 1px grey;
+}
+
+.cardImageContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carouselWrapper {
+  text-align: center;
+  width: 200px;
+}
+
+.carousel {
+  text-align: center;
+  background-color: rgb(209, 209, 209);
+  border-radius: 10px;
+  height: 300px;
+  padding: 5px;
+}
+
+.cardTextButtonContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 0 10px;
+  width: 50%;
+  height: 300px;
+}
+
+.cardTextContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.prices {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.price {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: rgb(184, 214, 184);
+}
+
+.priceOff {
+  color: rgb(90, 90, 90);
+  text-decoration: line-through;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: rgb(194, 190, 190);
+}
+
+.priceDiscount {
+  margin-left: 6px;
+  border-radius: 5px;
+  padding: 2px 5px;
+  background-color: rgb(184, 214, 184);
+}
+
+.priceDiscountOff {
+  display: none;
+}
+
+.description {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+  font-size: 1rem;
+}
+
+.cardButtonContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.buttonBusket {
+  justify-content: center;
+  color: black;
+  font-weight: 700;
+  background-color: rgb(144, 199, 144);
+  margin-bottom: 5px;
+  max-width: 250px;
+  width: 100%;
+}
+
+.buttonBusket:hover {
+  background-color: rgb(67, 177, 67) !important;
+}
+
+.buttonCatalog {
+  justify-content: center;
+  font-weight: 700;
+  color: black;
+  background-color: rgb(209, 209, 209);
+  max-width: 250px;
+  width: 100%;
+}
+
+.buttonCatalog:hover {
+  color: black !important;
+  background-color: rgb(169, 173, 168) !important;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}

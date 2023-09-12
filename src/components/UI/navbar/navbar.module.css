@@ -2,3 +2,58 @@
   justify-content: center;
   align-items: center;
 }
+
+.headerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: clamp(0px, 100%, 1200px);
+  padding: 0 40px;
+}
+
+.logoWrapper {
+  overflow: hidden;
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .logoWrapper {
+    width: 48px;
+  }
+}
+
+.auth {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+  line-height: normal;
+}
+
+.searchString {
+  width: clamp(0, 100%, 400px);
+  min-width: 150px;
+  margin: 0px 4px;
+}
+
+.userName {
+  font-family: Georgia, Times, 'Times New Roman', serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 36px;
+  margin: 0 4px;
+  border-radius: 30%;
+  background-color: white;
+  font-weight: 900;
+  font-size: 22px;
+}

@@ -3,8 +3,10 @@ import {
   AuthMiddlewareOptions,
   Client,
   ClientBuilder,
+  ExistingTokenMiddlewareOptions,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  TokenStore,
   UserAuthOptions,
 } from '@commercetools/sdk-client-v2';
 
@@ -71,7 +73,7 @@ const getAnonApiClient = (): Client => {
   }
 };
 
-const getUserApiClient = ({ username, password }: UserAuthOptions): Client => {
+const getUserApiClientByPassword = ({ username, password }: UserAuthOptions): Client => {
   const tokenKey = window.btoa(`${projectKey}-userClient`);
 
   const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
@@ -98,15 +100,49 @@ const getUserApiClient = ({ username, password }: UserAuthOptions): Client => {
       .build();
   } else {
     return new ClientBuilder()
+      .withHttpMiddleware(httpMiddlewareOptions)
       .withProjectKey(projectKey)
       .withPasswordFlow(passwordAuthMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
       .withLoggerMiddleware()
       .build();
   }
 };
 
-let currentApiClient = getDefaultApiClient();
+const getUserApiClientByExistingToken = (): Client => {
+  const tokenKey = window.btoa(`${projectKey}-userClient`);
+
+  const existingTokenMiddlewareOptions: ExistingTokenMiddlewareOptions = {
+    force: true,
+  };
+  const storedValue = localStorage.getItem(tokenKey) || '';
+  const parsed = JSON.parse(storedValue) as TokenStore;
+
+  if (process.env.NODE_ENV === 'production') {
+    return new ClientBuilder()
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withProjectKey(projectKey)
+      .withExistingTokenFlow(`Bearer ${parsed.token}`, existingTokenMiddlewareOptions)
+      .build();
+  } else {
+    return new ClientBuilder()
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withProjectKey(projectKey)
+      .withExistingTokenFlow(`Bearer ${parsed.token}`, existingTokenMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+  }
+};
+
+const getInitialApiClient = () => {
+  const customerIsLoggedIn = localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
+  if (customerIsLoggedIn) {
+    return getUserApiClientByExistingToken();
+  } else {
+    return getDefaultApiClient();
+  }
+};
+
+let currentApiClient = getInitialApiClient();
 
 export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions): void => {
   switch (flowType) {
@@ -118,7 +154,7 @@ export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions):
       break;
     case FlowTypes.PASSWORD:
       if (userCreds) {
-        currentApiClient = getUserApiClient(userCreds);
+        currentApiClient = getUserApiClientByPassword(userCreds);
       }
       break;
 
@@ -132,5 +168,5 @@ const getApiRoot = () => {
   return createApiBuilderFromCtpClient(currentApiClient).withProjectKey({ projectKey });
 };
 
-export { getDefaultApiClient, getAnonApiClient, getUserApiClient, currentApiClient };
+export { getDefaultApiClient, getAnonApiClient, getUserApiClientByPassword, currentApiClient };
 export default getApiRoot;

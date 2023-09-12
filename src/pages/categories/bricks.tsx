@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Layout, Menu, MenuProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
@@ -10,15 +9,14 @@ import { useAppSelector } from '../../app/hooks';
 // import { setQueryArgs } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
-import { NUMBER_LIMIT, items, rootSubmenuKeys } from '../categories/shared';
+import styles from '../main/main.module.css';
 
-import styles from './main.module.css';
+import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
-const Main: FC = (): JSX.Element => {
-  // const dispatch = useAppDispatch();
-  const [openKeys, setOpenKeys] = useState(['']);
+const Bricks: FC = (): JSX.Element => {
+  const [openKeys, setOpenKeys] = useState(['sub1']);
 
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
@@ -32,21 +30,24 @@ const Main: FC = (): JSX.Element => {
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
-  const { queryArgs } = useAppSelector((state) => state.productsSearch);
   const navigate = useNavigate();
 
+  // const dispatch = useAppDispatch();
+  const { queryArgs } = useAppSelector((state) => state.productsSearch);
+
   // useEffect(() => {
-  //   dispatch(setQueryArgs({ limit: 20, fuzzy: true }));
+  //   dispatch(setQueryArgs({ limit: 20, fuzzy: true, filter: `categories.id:"${ProductApi.BRICKS_LINK_ID}"` }));
   // }, []);
+
+  console.log(queryArgs, 'Bricks');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const res = await ProductApi.getCategoriesById(ProductApi.BRICKS_LINK_ID);
         const res = await ProductApi.getCards({
-          limit: queryArgs.limit,
-          fuzzy: queryArgs.fuzzy,
-          'text.en-US': queryArgs['text.en-US'],
-          sort: queryArgs.sort,
+          ...queryArgs,
+          filter: `categories.id:"${ProductApi.BRICKS_LINK_ID}"`,
         });
 
         setProductList(res.body.results);
@@ -67,11 +68,20 @@ const Main: FC = (): JSX.Element => {
     <Layout className={styles.layoutWrapper}>
       <Content className={styles.layoutContent}>
         <Content className={styles.breadcrumb}>
-          <a onClick={() => navigate('/main')}> Main</a>
+          <a onClick={() => navigate('/main')}> Main /</a>
+          <a onClick={() => navigate('/main/blocks')}> Blocks /</a>
+          <a onClick={() => navigate('/main/bricks')}> Bricks</a>
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
-          <Sider className={styles.menuWrapper}>
-            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} className={styles.menu} items={items} />
+          <Sider className={styles.menuWrapper} width={200}>
+            <Menu
+              mode="inline"
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              selectedKeys={['1']}
+              className={styles.menu}
+              items={items}
+            />
           </Sider>
           <Content className={styles.productContainerWrapper}>
             <div className={styles.container}>
@@ -91,4 +101,4 @@ const Main: FC = (): JSX.Element => {
   );
 };
 
-export default Main;
+export default Bricks;

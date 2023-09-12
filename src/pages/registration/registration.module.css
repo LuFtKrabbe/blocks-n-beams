@@ -1,14 +1,46 @@
-.form {
-  margin: 0 auto;
-  margin-top: 5%;
-}
-
-.button {
-  margin-left: 1rem;
-}
-
 .spaceWrapper {
-  margin: 5% auto;
+  margin: 20px auto 20px auto;
   display: flex;
-  width: 89%;
+  width: 80%;
+}
+
+.form {
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .form {
+    width: 520px;
+  }
+}
+
+.datePicker {
+  width: 100%;
+}
+
+.registrationMain {
+  padding: 10px 20px 15px 20px;
+  margin: 0 auto 20px auto;
+  background-color: rgb(226, 234, 240);
+  border-radius: 15px;
+}
+
+.regInput {
+  margin-bottom: 6px;
+  flex-direction: row !important;
+}
+
+.registrationTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.devider {
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1rem;
+  text-align: center;
 }

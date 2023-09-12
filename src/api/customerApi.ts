@@ -1,4 +1,4 @@
-import { BaseAddress, MyCustomerDraft } from '@commercetools/platform-sdk';
+import { BaseAddress, CustomerUpdateAction, MyCustomerDraft } from '@commercetools/platform-sdk';
 import { UserAuthOptions } from '@commercetools/sdk-client-v2';
 import dayjs from 'dayjs';
 
@@ -8,16 +8,13 @@ import getApiRoot, { FlowTypes, changeApiClient, projectKey } from './Client';
 
 export default class CustomerApi {
   static customerSignIn = async ({ username, password }: UserAuthOptions) => {
+    changeApiClient(FlowTypes.PASSWORD, { username, password });
+
     const res = await getApiRoot()
       .me()
       .login()
       .post({ body: { email: username, password } })
       .execute();
-
-    changeApiClient(FlowTypes.PASSWORD, { username, password });
-
-    await this.getMyCustomerInfo(); // New user tokens stored in localStorage only after first request. So force it.
-
     return res;
   };
 
@@ -73,15 +70,52 @@ export default class CustomerApi {
     changeApiClient(FlowTypes.DEFAULT);
   };
 
-  static getMyCustomerInfo = async () => {
-    try {
-      return await getApiRoot().me().get().execute();
-    } catch (error) {
-      console.error(error);
-    }
+  static getMyCustomerInfo = () => {
+    return getApiRoot().me().get().execute();
   };
 
   static customerIsLoggedIn = () => {
     return localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
+  };
+
+  static getCustomer = (customerId: string) => {
+    return getApiRoot().customers().withId({ ID: customerId }).get().execute();
+  };
+
+  static getCustomerVersion = async (customerId: string) => {
+    try {
+      return (await CustomerApi.getCustomer(customerId)).body.version;
+    } catch (error) {
+      console.log('Failed to get customer version');
+    }
+  };
+
+  static updateCustomer = async (customerId: string, updateActions: CustomerUpdateAction[]) => {
+    const version = await this.getCustomerVersion(customerId);
+    if (version) {
+      await getApiRoot()
+        .customers()
+        .withId({ ID: customerId })
+        .post({ body: { version, actions: updateActions } })
+        .execute();
+    }
+  };
+
+  static changePassword = async (customerId: string, currentPassword: string, newPassword: string) => {
+    const version = await this.getCustomerVersion(customerId);
+    if (version) {
+      return getApiRoot()
+        .customers()
+        .password()
+        .post({
+          body: {
+            id: customerId,
+            version,
+            currentPassword,
+            newPassword,
+          },
+        })
+        .execute();
+    }
   };
 }
