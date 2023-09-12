@@ -22,12 +22,22 @@ export default class MyCartApi {
     return getApiRoot().me().carts().post({ body: cartDraft }).execute();
   };
 
+  static removeCart = async (cartId: string) => {
+    const version = (await this.getCartVersion(cartId)) || 0;
+
+    return getApiRoot().me().carts().withId({ ID: cartId }).delete({ queryArgs: { version } }).execute();
+  };
+
+  static getCartById = (cartId: string): Promise<ClientResponse<Cart>> => {
+    return getApiRoot().me().carts().withId({ ID: cartId }).get().execute();
+  };
+
   static createCartDraft = (currency: string): CartDraft => {
     return { currency }; // TODO: Check if we need additional fields to be set
   };
 
-  static getCartVersion = async (): Promise<number | undefined> => {
-    return (await this.getActiveCart()).body.version;
+  static getCartVersion = async (cartId: string): Promise<number | undefined> => {
+    return (await this.getCartById(cartId)).body.version;
   };
 
   static addItemToCart = async (cartId: string, product: ProductProjection) => {
@@ -36,7 +46,7 @@ export default class MyCartApi {
       productId: product.id,
     };
 
-    const version = (await this.getCartVersion()) || 0;
+    const version = (await this.getCartVersion(cartId)) || 0;
 
     return getApiRoot()
       .me()
