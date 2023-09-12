@@ -1,11 +1,12 @@
 import { EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Image, Card } from 'antd';
+import { Image, Card, Button, message } from 'antd';
 // import classNames from 'classnames';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import MyCartApi from '../../../api/Cart';
 import { useAppDispatch } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
@@ -41,6 +42,33 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     );
     // navigate(`/main/${currentLocationCardId}/${productCardList.id}`);
   };
+
+  const addToCart = async (product: ProductProjection) => {
+    // TODO: fix check that cart exist
+    try {
+      await MyCartApi.getActiveCart();
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'No active cart exists.') {
+          console.log('HERE');
+          await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
+        } else {
+          await message.error(error.message);
+        }
+      }
+    }
+
+    try {
+      const cart = await MyCartApi.getActiveCart();
+      void MyCartApi.addItemToCart(cart.body.id, product);
+      console.log('CART', await MyCartApi.getActiveCart());
+    } catch (error) {
+      if (error instanceof Error) {
+        await message.error(error.message);
+      }
+    }
+  };
+
   return (
     <div className={styles.cardWrapper}>
       <Card
@@ -70,6 +98,14 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
                 {' '}
                 {productPriceDiscount()}{' '}
               </span>
+              <Button
+                type="primary"
+                onClick={() => {
+                  void addToCart(productCardList);
+                }}
+              >
+                Add to Cart
+              </Button>
             </div>
           }
         />
