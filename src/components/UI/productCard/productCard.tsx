@@ -7,6 +7,8 @@ const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import MyCartApi from '../../../api/Cart';
+import { FlowTypes, changeApiClient } from '../../../api/Client';
+import CustomerApi from '../../../api/customerApi';
 import { useAppDispatch } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
@@ -45,6 +47,11 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
 
   const addToCart = async (product: ProductProjection) => {
     //TODO: implement anonymous cart
+
+    if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
+      changeApiClient(FlowTypes.ANONYMOUS);
+    }
+
     try {
       await MyCartApi.getActiveCart();
     } catch (error) {
@@ -58,8 +65,7 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     }
 
     try {
-      const cart = await MyCartApi.getActiveCart();
-      void MyCartApi.addItemToCart(cart.body.id, product);
+      void MyCartApi.addItemToActiveCart(product);
     } catch (error) {
       if (error instanceof Error) {
         await message.error(error.message);

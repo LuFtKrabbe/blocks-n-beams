@@ -37,21 +37,22 @@ export default class MyCartApi {
   };
 
   static getCartVersion = async (cartId: string): Promise<number | undefined> => {
+    // TODO: fast cart updates can cause racing condition and version missmatch?
     return (await this.getCartById(cartId)).body.version;
   };
 
-  static addItemToCart = async (cartId: string, product: ProductProjection) => {
+  static addItemToActiveCart = async (product: ProductProjection) => {
     const addItemAction: MyCartAddLineItemAction = {
       action: 'addLineItem',
       productId: product.id,
     };
 
-    const version = (await this.getCartVersion(cartId)) || 0;
+    const { version, id } = (await this.getActiveCart()).body;
 
     return getApiRoot()
       .me()
       .carts()
-      .withId({ ID: cartId })
+      .withId({ ID: id })
       .post({ body: { version, actions: [addItemAction] } })
       .execute();
   };
