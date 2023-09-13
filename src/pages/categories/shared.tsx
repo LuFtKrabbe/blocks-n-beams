@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export const NUMBER_LIMIT = -1;
 
-export const PAGE_SIZE = 3;
+export const PAGE_SIZE: number = 6;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
