@@ -56,7 +56,7 @@ const CardDetail: FC = (): JSX.Element => {
 
   function setProductProperties(data: ProductData) {
     const productName = data.name['en-US'];
-    const productDescription = data.metaDescription?.['en-US'];
+    const productDescription = data.description?.['en-US'];
     const productImages = data.masterVariant.images;
     const productPrice = data.masterVariant.prices?.[0].value;
     const productPriceDiscount = data.masterVariant.prices?.[0].discounted?.value;
