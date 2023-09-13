@@ -1,19 +1,25 @@
+.layoutWrapper {
+  margin: 40px auto;
+  padding: 0 40px;
+  width: clamp(0px, 100%, 1280px);
+}
+
 .cardWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5%;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: rgb(255, 255, 255);
 }
 
 .cardContent {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding: 20px;
-  width: clamp(500px, 50%, 700px);
-  border-radius: 10px;
-  background-color: rgb(255, 255, 255);
-  border: solid 1px grey;
+  padding: 15px 20px;
+  width: 80%;
 }
 
 .cardImageContent {
@@ -24,15 +30,15 @@
 
 .carouselWrapper {
   text-align: center;
-  width: 200px;
+  width: 320px;
 }
 
 .carousel {
   text-align: center;
-  background-color: rgb(209, 209, 209);
   border-radius: 10px;
-  height: 300px;
+  height: 350px;
   padding: 5px;
+  background-color: rgb(231, 231, 231);
 }
 
 .cardTextButtonContent {
@@ -42,7 +48,7 @@
   justify-content: space-between;
   padding: 0 0 0 10px;
   width: 50%;
-  height: 300px;
+  height: 350px;
 }
 
 .cardTextContent {
@@ -96,11 +102,26 @@
   justify-content: center;
   max-height: 100%;
   font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.color,
+.mark,
+.dimensions {
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+}
+
+.color span,
+.mark span,
+.dimensions span {
+  font-weight: 400;
 }
 
 .cardButtonContent {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   width: 100%;
 }
@@ -108,9 +129,11 @@
 .buttonBusket {
   justify-content: center;
   color: black;
+  order: 1;
   font-weight: 700;
   background-color: rgb(144, 199, 144);
-  margin-bottom: 5px;
+  margin-bottom: 0px;
+  margin-left: 5px;
   max-width: 250px;
   width: 100%;
 }
@@ -137,4 +160,144 @@
   position: absolute;
   top: 50%;
   left: 50%;
+}
+
+@media (max-width: 1000px) {
+  .cardContent {
+    padding: 15px 0;
+    width: 90%;
+  }
+
+  .carouselWrapper {
+    width: 200px;
+  }
+
+  .carousel,
+  .cardTextButtonContent {
+    height: 330px;
+  }
+
+  .cardTextButtonContent {
+    width: 55%;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .description,
+  .color,
+  .mark,
+  .dimensions,
+  .price,
+  .priceOff,
+  .priceDiscount,
+  .priceDiscountOff {
+    font-size: 0.9rem;
+  }
+
+  .cardButtonContent {
+    flex-direction: column;
+  }
+
+  .buttonBusket {
+    order: 0;
+    margin-bottom: 5px;
+    margin-left: 0px;
+  }
+
+  .buttonBusket,
+  .buttonCatalog {
+    font-size: 0.8rem;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardContent {
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  .carouselWrapper {
+    width: 180px;
+  }
+
+  .carousel,
+  .cardTextButtonContent {
+    height: 330px;
+  }
+
+  .cardTextButtonContent {
+    width: 60%;
+  }
+
+  .title {
+    font-size: 1.0rem;
+  }
+
+  .description,
+  .color,
+  .mark,
+  .dimensions,
+  .price,
+  .priceOff,
+  .priceDiscount,
+  .priceDiscountOff {
+    font-size: 0.8rem;
+  }
+
+  .buttonBusket,
+  .buttonCatalog {
+    font-size: 0.7rem;
+    height: 25px;
+    min-width: 130px;
+  }
+}
+
+@media (max-width: 560px) {
+  .cardContent {
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  .carouselWrapper {
+    width: 130px;
+  }
+
+  .title {
+    font-size: 1.0rem;
+  }
+
+  .buttonBusket,
+  .buttonCatalog {
+    font-size: 0.7rem;
+    height: 25px;
+    min-width: 130px;
+  }
+}
+
+@media (max-width: 470px) {
+  .cardContent {
+    justify-content: center;
+  }
+
+  .carouselWrapper {
+    display: none;
+  }
+
+  .cardTextButtonContent {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.0rem;
+  }
+
+  .buttonBusket,
+  .buttonCatalog {
+    font-size: 0.7rem;
+    height: 25px;
+    min-width: 130px;
+  }
 }
