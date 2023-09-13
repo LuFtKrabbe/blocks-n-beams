@@ -25,6 +25,7 @@ const CardDetail: FC = (): JSX.Element => {
 
   const [currentProductImage, setCurrentProductImage] = useState<number>(0);
   const [productName, setProductName] = useState<string>('loading...');
+  const [productUnit, setProductUnit] = useState<string>('unit');
   const [productColor, setProductColor] = useState<string>('no color');
   const [productMark, setProductMark] = useState<string>('no mark');
   const [productDimensions, setProductDimensions] = useState<string>('no dimensions');
@@ -81,6 +82,9 @@ const CardDetail: FC = (): JSX.Element => {
     if (productAttributes) {
       for (const attr of productAttributes) {
         switch (attr.name.slice(0, attr.name.indexOf('-'))) {
+          case 'unit':
+            setProductUnit(attr.value as string);
+            break;
           case 'color':
             setProductColor(attr.value as string);
             break;
@@ -138,6 +142,7 @@ const CardDetail: FC = (): JSX.Element => {
                     {productPriceDiscount}
                   </p>
                 </div>
+                <p className={styles.unit}> price per 1 {productUnit} </p>
                 <p className={styles.description}>{productDescription}</p>
                 <p className={styles.color}>
                   Color:&nbsp;<span>{productColor}</span>

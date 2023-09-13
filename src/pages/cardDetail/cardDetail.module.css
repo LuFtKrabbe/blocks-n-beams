@@ -68,7 +68,6 @@
   align-items: center;
   justify-content: flex-end;
   font-size: 1rem;
-  margin-bottom: 20px;
 }
 
 .price {
@@ -94,6 +93,15 @@
 
 .priceDiscountOff {
   display: none;
+}
+
+.unit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+  color: gray;
+  margin-bottom: 14px;
 }
 
 .description {
@@ -234,6 +242,10 @@
 
   .title {
     font-size: 1.0rem;
+  }
+
+  .unit {
+    font-size: 0.7rem;
   }
 
   .description,
