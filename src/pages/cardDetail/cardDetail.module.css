@@ -36,7 +36,7 @@
 .carousel {
   text-align: center;
   border-radius: 10px;
-  height: 350px;
+  height: 370px;
   padding: 5px;
   background-color: rgb(231, 231, 231);
 }
@@ -48,7 +48,7 @@
   justify-content: space-between;
   padding: 0 0 0 10px;
   width: 50%;
-  height: 350px;
+  height: 370px;
 }
 
 .cardTextContent {
@@ -107,7 +107,8 @@
 .description {
   display: flex;
   align-items: center;
-  justify-content: center;
+  text-align: justify;
+  text-indent: 20px;
   max-height: 100%;
   font-size: 1rem;
   margin-bottom: 10px;
@@ -164,12 +165,6 @@
   background-color: rgb(169, 173, 168) !important;
 }
 
-.center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
 @media (max-width: 1000px) {
   .cardContent {
     padding: 15px 0;
@@ -182,7 +177,7 @@
 
   .carousel,
   .cardTextButtonContent {
-    height: 330px;
+    height: 370px;
   }
 
   .cardTextButtonContent {
@@ -204,16 +199,6 @@
     font-size: 0.9rem;
   }
 
-  .cardButtonContent {
-    flex-direction: column;
-  }
-
-  .buttonBusket {
-    order: 0;
-    margin-bottom: 5px;
-    margin-left: 0px;
-  }
-
   .buttonBusket,
   .buttonCatalog {
     font-size: 0.8rem;
@@ -233,7 +218,7 @@
 
   .carousel,
   .cardTextButtonContent {
-    height: 330px;
+    height: 370px;
   }
 
   .cardTextButtonContent {
@@ -262,7 +247,7 @@
   .buttonBusket,
   .buttonCatalog {
     font-size: 0.7rem;
-    height: 25px;
+    height: 28px;
     min-width: 130px;
   }
 }
@@ -279,6 +264,16 @@
 
   .title {
     font-size: 1.0rem;
+  }
+
+  .cardButtonContent {
+    flex-direction: column;
+  }
+
+  .buttonBusket {
+    order: 0;
+    margin-bottom: 5px;
+    margin-left: 0px;
   }
 
   .buttonBusket,
