@@ -1,17 +1,16 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, MenuProps, Spin, message } from 'antd';
+import { Layout, Menu, MenuProps, Pagination, PaginationProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
 import { useAppSelector } from '../../app/hooks';
-// import { setQueryArgs } from '../../app/productsListSlice';
 import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from '../main/main.module.css';
 
-import { NUMBER_LIMIT, items, rootSubmenuKeys } from './shared';
+import { NUMBER_LIMIT, PAGE_SIZE, items, rootSubmenuKeys } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -32,23 +31,24 @@ const Timber: FC = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  // const dispatch = useAppDispatch();
   const { queryArgs } = useAppSelector((state) => state.productsSearch);
 
-  // useEffect(() => {
-  //   dispatch(setQueryArgs({ limit: 20, fuzzy: true, filter: `categories.id:"${ProductApi.TIMBER_LINK_ID}"` }));
-  // }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCardsResults, setTotalCardsResults] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const res = await ProductApi.getCategoriesById(ProductApi.TIMBER_LINK_ID);
         const res = await ProductApi.getCards({
           ...queryArgs,
+          offset: (currentPage - 1) * PAGE_SIZE,
           filter: `categories.id:"${ProductApi.TIMBER_LINK_ID}"`,
         });
 
         setProductList(res.body.results);
+        if (res.body.total) {
+          setTotalCardsResults(res.body.total);
+        }
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -58,9 +58,13 @@ const Timber: FC = (): JSX.Element => {
       }
     };
     void fetchData();
-  }, [queryArgs]);
+  }, [queryArgs, currentPage]);
 
   const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
+
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Layout className={styles.layoutWrapper}>
@@ -82,13 +86,26 @@ const Timber: FC = (): JSX.Element => {
             />
           </Sider>
           <Content className={styles.productContainerWrapper}>
-            <div className={styles.container}>
+            <div className={styles.cardContainer}>
               {confirmLoading ? (
                 <div className={styles.center}>
                   <Spin size="large" />
                 </div>
               ) : (
-                viewCardsList
+                <>
+                  <div className={styles.container}>{viewCardsList}</div>
+                  {totalCardsResults > PAGE_SIZE ? (
+                    <Pagination
+                      style={{ marginTop: 20 }}
+                      current={currentPage}
+                      onChange={onChange}
+                      total={totalCardsResults}
+                      pageSize={Number(PAGE_SIZE)}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </>
               )}
             </div>
           </Content>
