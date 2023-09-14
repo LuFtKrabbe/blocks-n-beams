@@ -6,7 +6,7 @@ import MyCartApi from '../api/Cart';
 import { FlowTypes, changeApiClient } from '../api/Client';
 import CustomerApi from '../api/customerApi';
 
-interface ICartState {
+export interface ICartState {
   cart: Cart | undefined;
 }
 

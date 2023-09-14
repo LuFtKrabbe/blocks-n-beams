@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
-import { Button, Dropdown, Select, Space, message } from 'antd';
+import { Badge, Button, Dropdown, Select, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
@@ -22,6 +22,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 // import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
+import { ICartState } from '../../../app/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setQueryArgs } from '../../../app/productsListSlice';
@@ -41,6 +42,7 @@ const Navbar: FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { queryArgs } = useAppSelector((state) => state.productsSearch);
   const { Option } = Select;
+  const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
   useEffect(() => {
     if (customerId) {
@@ -169,7 +171,9 @@ const Navbar: FC = (): JSX.Element => {
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>
           <NavLink to="/cart">
-            <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
+            <Badge count={cart?.totalLineItemQuantity} overflowCount={99}>
+              <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
+            </Badge>
           </NavLink>
           {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
             <Dropdown
