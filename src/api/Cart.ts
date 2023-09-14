@@ -6,6 +6,7 @@ import {
   ProductProjection,
   MyCartAddLineItemAction,
   MyCartRemoveLineItemAction,
+  MyCartChangeLineItemQuantityAction,
 } from '@commercetools/platform-sdk';
 
 import getApiRoot from './Client';
@@ -79,5 +80,22 @@ export default class MyCartApi {
         .post({ body: { version, actions: [removeItemAction] } })
         .execute();
     }
+  };
+
+  static updateItemQuantity = async (lineItemId: string, newQuantity: number) => {
+    const { version, id } = (await this.getActiveCart()).body;
+
+    const changeItemQuantityAction: MyCartChangeLineItemQuantityAction = {
+      action: 'changeLineItemQuantity',
+      lineItemId,
+      quantity: newQuantity,
+    };
+
+    return getApiRoot()
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: { version, actions: [changeItemQuantityAction] } })
+      .execute();
   };
 }
