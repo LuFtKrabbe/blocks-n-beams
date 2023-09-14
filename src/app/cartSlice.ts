@@ -1,4 +1,4 @@
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { Cart, ProductProjection } from '@commercetools/platform-sdk';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 
@@ -7,14 +7,12 @@ import { FlowTypes, changeApiClient } from '../api/Client';
 import CustomerApi from '../api/customerApi';
 
 interface ICartState {
-  itemsCount: number;
-  itemsInCart: ProductProjection[];
+  cart: Cart | undefined;
 }
 
 const getInitialState = (): ICartState => {
   return {
-    itemsCount: 0,
-    itemsInCart: [],
+    cart: undefined,
   };
 };
 
@@ -36,8 +34,8 @@ export const addItem = createAsyncThunk('cart/addItem', async (product: ProductP
   }
 
   try {
-    await MyCartApi.addItemToActiveCart(product);
-    return product;
+    const response = await MyCartApi.addItemToActiveCart(product);
+    return response.body;
   } catch (error) {
     if (error instanceof Error) {
       await message.error(error.message);
@@ -50,8 +48,23 @@ export const removeItem = createAsyncThunk(
   async (payload: { product: ProductProjection; quantity?: number }) => {
     const { product, quantity } = payload;
     try {
-      await MyCartApi.removeItemFromActiveCart(product, quantity);
-      return product;
+      const response = await MyCartApi.removeItemFromActiveCart(product, quantity);
+      return response?.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        await message.error(error.message);
+      }
+    }
+  },
+);
+
+export const updateItemQuantity = createAsyncThunk(
+  'cart/updateItemQuantity',
+  async (payload: { lineItemId: string; quantity: number }) => {
+    const { lineItemId, quantity } = payload;
+    try {
+      const response = await MyCartApi.updateItemQuantityInActiveCart(lineItemId, quantity);
+      return response?.body;
     } catch (error) {
       if (error instanceof Error) {
         await message.error(error.message);
@@ -67,19 +80,17 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(addItem.fulfilled, (state, action) => {
       if (action.payload) {
-        state.itemsInCart.push(action.payload);
-        state.itemsCount += 1;
+        state.cart = action.payload;
       }
     });
     builder.addCase(removeItem.fulfilled, (state, action) => {
       if (action.payload) {
-        const NOT_FOUND_INDEX = -1;
-        const index = state.itemsInCart.indexOf(action.payload);
-
-        if (index > NOT_FOUND_INDEX) {
-          state.itemsInCart.splice(index, 1);
-          state.itemsCount -= 1;
-        }
+        state.cart = action.payload;
+      }
+    });
+    builder.addCase(updateItemQuantity.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.cart = action.payload;
       }
     });
   },

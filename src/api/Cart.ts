@@ -6,6 +6,7 @@ import {
   ProductProjection,
   MyCartAddLineItemAction,
   MyCartRemoveLineItemAction,
+  MyCartChangeLineItemQuantityAction,
 } from '@commercetools/platform-sdk';
 
 import getApiRoot from './Client';
@@ -43,12 +44,12 @@ export default class MyCartApi {
   };
 
   static addItemToActiveCart = async (product: ProductProjection) => {
+    const { version, id } = (await this.getActiveCart()).body;
+
     const addItemAction: MyCartAddLineItemAction = {
       action: 'addLineItem',
       productId: product.id,
     };
-
-    const { version, id } = (await this.getActiveCart()).body;
 
     return getApiRoot()
       .me()
@@ -59,16 +60,11 @@ export default class MyCartApi {
   };
 
   static removeItemFromActiveCart = async (product: ProductProjection, quantity?: number) => {
-    console.log('HERE', product, quantity);
     const { version, id, lineItems } = (await this.getActiveCart()).body;
-    console.log('PROD ITEM ID: ', product.id, lineItems);
 
     const lineItemId = lineItems.find((item) => {
-      console.log(item.productId, product.id);
       return item.productId === product.id;
     })?.id;
-
-    console.log('LINE ITEM ID: ', lineItemId);
 
     if (lineItemId) {
       const removeItemAction: MyCartRemoveLineItemAction = {
@@ -77,8 +73,6 @@ export default class MyCartApi {
         quantity,
       };
 
-      console.log(removeItemAction);
-
       return getApiRoot()
         .me()
         .carts()
@@ -86,5 +80,22 @@ export default class MyCartApi {
         .post({ body: { version, actions: [removeItemAction] } })
         .execute();
     }
+  };
+
+  static updateItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
+    const { version, id } = (await this.getActiveCart()).body;
+
+    const changeLineItemQuantityAction: MyCartChangeLineItemQuantityAction = {
+      action: 'changeLineItemQuantity',
+      lineItemId,
+      quantity,
+    };
+
+    return getApiRoot()
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: { version, actions: [changeLineItemQuantityAction] } })
+      .execute();
   };
 }
