@@ -170,11 +170,11 @@ const Navbar: FC = (): JSX.Element => {
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>
-          <NavLink to="/cart">
-            <Badge count={cart?.totalLineItemQuantity} overflowCount={99}>
+          <Badge count={cart?.totalLineItemQuantity} overflowCount={99}>
+            <NavLink to="/cart">
               <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
-            </Badge>
-          </NavLink>
+            </NavLink>
+          </Badge>
           {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
             <Dropdown
               menu={{
