@@ -44,12 +44,12 @@ export default class MyCartApi {
   };
 
   static addItemToActiveCart = async (product: ProductProjection) => {
+    const { version, id } = (await this.getActiveCart()).body;
+
     const addItemAction: MyCartAddLineItemAction = {
       action: 'addLineItem',
       productId: product.id,
     };
-
-    const { version, id } = (await this.getActiveCart()).body;
 
     return getApiRoot()
       .me()
@@ -82,20 +82,20 @@ export default class MyCartApi {
     }
   };
 
-  static updateItemQuantity = async (lineItemId: string, newQuantity: number) => {
+  static updateItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
     const { version, id } = (await this.getActiveCart()).body;
 
-    const changeItemQuantityAction: MyCartChangeLineItemQuantityAction = {
+    const changeLineItemQuantityAction: MyCartChangeLineItemQuantityAction = {
       action: 'changeLineItemQuantity',
       lineItemId,
-      quantity: newQuantity,
+      quantity,
     };
 
     return getApiRoot()
       .me()
       .carts()
       .withId({ ID: id })
-      .post({ body: { version, actions: [changeItemQuantityAction] } })
+      .post({ body: { version, actions: [changeLineItemQuantityAction] } })
       .execute();
   };
 }
