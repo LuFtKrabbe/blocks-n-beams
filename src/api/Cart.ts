@@ -5,6 +5,7 @@ import {
   CartDraft,
   ProductProjection,
   MyCartAddLineItemAction,
+  MyCartRemoveLineItemAction,
 } from '@commercetools/platform-sdk';
 
 import getApiRoot from './Client';
@@ -55,5 +56,35 @@ export default class MyCartApi {
       .withId({ ID: id })
       .post({ body: { version, actions: [addItemAction] } })
       .execute();
+  };
+
+  static removeItemFromActiveCart = async (product: ProductProjection, quantity?: number) => {
+    console.log('HERE', product, quantity);
+    const { version, id, lineItems } = (await this.getActiveCart()).body;
+    console.log('PROD ITEM ID: ', product.id, lineItems);
+
+    const lineItemId = lineItems.find((item) => {
+      console.log(item.productId, product.id);
+      return item.productId === product.id;
+    })?.id;
+
+    console.log('LINE ITEM ID: ', lineItemId);
+
+    if (lineItemId) {
+      const removeItemAction: MyCartRemoveLineItemAction = {
+        action: 'removeLineItem',
+        lineItemId,
+        quantity,
+      };
+
+      console.log(removeItemAction);
+
+      return getApiRoot()
+        .me()
+        .carts()
+        .withId({ ID: id })
+        .post({ body: { version, actions: [removeItemAction] } })
+        .execute();
+    }
   };
 }

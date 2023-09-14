@@ -1,14 +1,11 @@
 import { EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Image, Card, Button, message } from 'antd';
-// import classNames from 'classnames';
+import { Image, Card, Button } from 'antd';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import MyCartApi from '../../../api/Cart';
-import { FlowTypes, changeApiClient } from '../../../api/Client';
-import CustomerApi from '../../../api/customerApi';
+import { addItem } from '../../../app/cartSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
@@ -46,31 +43,7 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   };
 
   const addToCart = async (product: ProductProjection) => {
-    //TODO: implement anonymous cart
-
-    if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
-      changeApiClient(FlowTypes.ANONYMOUS);
-    }
-
-    try {
-      await MyCartApi.getActiveCart();
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.name === 'NotFound') {
-          await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
-        } else {
-          await message.error(error.message);
-        }
-      }
-    }
-
-    try {
-      void MyCartApi.addItemToActiveCart(product);
-    } catch (error) {
-      if (error instanceof Error) {
-        await message.error(error.message);
-      }
-    }
+    await dispatch(addItem(product));
   };
 
   return (
