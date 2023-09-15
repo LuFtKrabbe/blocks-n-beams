@@ -24,7 +24,7 @@ export default class MyCartApi {
     return getApiRoot().me().carts().post({ body: cartDraft }).execute();
   };
 
-  static removeCart = async (cartId: string) => {
+  static deleteCart = async (cartId: string) => {
     const version = (await this.getCartVersion(cartId)) || 0;
 
     return getApiRoot().me().carts().withId({ ID: cartId }).delete({ queryArgs: { version } }).execute();
@@ -76,7 +76,7 @@ export default class MyCartApi {
       .execute();
   };
 
-  static updateItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
+  static changeItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
     const { version, id } = (await this.getActiveCart()).body;
 
     const changeLineItemQuantityAction: MyCartChangeLineItemQuantityAction = {

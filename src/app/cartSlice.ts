@@ -58,12 +58,12 @@ export const removeItem = createAsyncThunk(
   },
 );
 
-export const updateItemQuantity = createAsyncThunk(
-  'cart/updateItemQuantity',
+export const changeItemQuantity = createAsyncThunk(
+  'cart/changeItemQuantity',
   async (payload: { lineItemId: string; quantity: number }) => {
     const { lineItemId, quantity } = payload;
     try {
-      const response = await MyCartApi.updateItemQuantityInActiveCart(lineItemId, quantity);
+      const response = await MyCartApi.changeItemQuantityInActiveCart(lineItemId, quantity);
       return response?.body;
     } catch (error) {
       if (error instanceof Error) {
@@ -88,7 +88,7 @@ const cartSlice = createSlice({
         state.cart = action.payload;
       }
     });
-    builder.addCase(updateItemQuantity.fulfilled, (state, action) => {
+    builder.addCase(changeItemQuantity.fulfilled, (state, action) => {
       if (action.payload) {
         state.cart = action.payload;
       }
