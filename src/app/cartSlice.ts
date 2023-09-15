@@ -45,10 +45,10 @@ export const addItem = createAsyncThunk('cart/addItem', async (product: ProductP
 
 export const removeItem = createAsyncThunk(
   'cart/removeItem',
-  async (payload: { product: ProductProjection; quantity?: number }) => {
-    const { product, quantity } = payload;
+  async (payload: { lineItemId: string; quantity?: number }) => {
+    const { lineItemId, quantity } = payload;
     try {
-      const response = await MyCartApi.removeItemFromActiveCart(product, quantity);
+      const response = await MyCartApi.removeItemFromActiveCart(lineItemId, quantity);
       return response?.body;
     } catch (error) {
       if (error instanceof Error) {
