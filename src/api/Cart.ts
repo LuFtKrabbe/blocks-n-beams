@@ -24,7 +24,7 @@ export default class MyCartApi {
     return getApiRoot().me().carts().post({ body: cartDraft }).execute();
   };
 
-  static removeCart = async (cartId: string) => {
+  static deleteCart = async (cartId: string) => {
     const version = (await this.getCartVersion(cartId)) || 0;
 
     return getApiRoot().me().carts().withId({ ID: cartId }).delete({ queryArgs: { version } }).execute();
@@ -59,30 +59,24 @@ export default class MyCartApi {
       .execute();
   };
 
-  static removeItemFromActiveCart = async (product: ProductProjection, quantity?: number) => {
-    const { version, id, lineItems } = (await this.getActiveCart()).body;
+  static removeItemFromActiveCart = async (lineItemId: string, quantity?: number) => {
+    const { version, id } = (await this.getActiveCart()).body;
 
-    const lineItemId = lineItems.find((item) => {
-      return item.productId === product.id;
-    })?.id;
+    const removeItemAction: MyCartRemoveLineItemAction = {
+      action: 'removeLineItem',
+      lineItemId,
+      quantity,
+    };
 
-    if (lineItemId) {
-      const removeItemAction: MyCartRemoveLineItemAction = {
-        action: 'removeLineItem',
-        lineItemId,
-        quantity,
-      };
-
-      return getApiRoot()
-        .me()
-        .carts()
-        .withId({ ID: id })
-        .post({ body: { version, actions: [removeItemAction] } })
-        .execute();
-    }
+    return getApiRoot()
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: { version, actions: [removeItemAction] } })
+      .execute();
   };
 
-  static updateItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
+  static changeItemQuantityInActiveCart = async (lineItemId: string, quantity: number) => {
     const { version, id } = (await this.getActiveCart()).body;
 
     const changeLineItemQuantityAction: MyCartChangeLineItemQuantityAction = {

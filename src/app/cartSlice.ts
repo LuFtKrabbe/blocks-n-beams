@@ -45,10 +45,10 @@ export const addItem = createAsyncThunk('cart/addItem', async (product: ProductP
 
 export const removeItem = createAsyncThunk(
   'cart/removeItem',
-  async (payload: { product: ProductProjection; quantity?: number }) => {
-    const { product, quantity } = payload;
+  async (payload: { lineItemId: string; quantity?: number }) => {
+    const { lineItemId, quantity } = payload;
     try {
-      const response = await MyCartApi.removeItemFromActiveCart(product, quantity);
+      const response = await MyCartApi.removeItemFromActiveCart(lineItemId, quantity);
       return response?.body;
     } catch (error) {
       if (error instanceof Error) {
@@ -58,12 +58,12 @@ export const removeItem = createAsyncThunk(
   },
 );
 
-export const updateItemQuantity = createAsyncThunk(
-  'cart/updateItemQuantity',
+export const changeItemQuantity = createAsyncThunk(
+  'cart/changeItemQuantity',
   async (payload: { lineItemId: string; quantity: number }) => {
     const { lineItemId, quantity } = payload;
     try {
-      const response = await MyCartApi.updateItemQuantityInActiveCart(lineItemId, quantity);
+      const response = await MyCartApi.changeItemQuantityInActiveCart(lineItemId, quantity);
       return response?.body;
     } catch (error) {
       if (error instanceof Error) {
@@ -72,6 +72,18 @@ export const updateItemQuantity = createAsyncThunk(
     }
   },
 );
+
+export const deleteActiveCart = createAsyncThunk('cart/deleteCart', async () => {
+  try {
+    const cartId = (await MyCartApi.getActiveCart()).body.id;
+    const response = await MyCartApi.deleteCart(cartId);
+    return response?.body;
+  } catch (error) {
+    if (error instanceof Error) {
+      await message.error(error.message);
+    }
+  }
+});
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -88,9 +100,14 @@ const cartSlice = createSlice({
         state.cart = action.payload;
       }
     });
-    builder.addCase(updateItemQuantity.fulfilled, (state, action) => {
+    builder.addCase(changeItemQuantity.fulfilled, (state, action) => {
       if (action.payload) {
         state.cart = action.payload;
+      }
+    });
+    builder.addCase(deleteActiveCart.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.cart = undefined;
       }
     });
   },
