@@ -73,6 +73,18 @@ export const changeItemQuantity = createAsyncThunk(
   },
 );
 
+export const deleteActiveCart = createAsyncThunk('cart/deleteCart', async () => {
+  try {
+    const cartId = (await MyCartApi.getActiveCart()).body.id;
+    const response = await MyCartApi.deleteCart(cartId);
+    return response?.body;
+  } catch (error) {
+    if (error instanceof Error) {
+      await message.error(error.message);
+    }
+  }
+});
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState: getInitialState(),
@@ -91,6 +103,11 @@ const cartSlice = createSlice({
     builder.addCase(changeItemQuantity.fulfilled, (state, action) => {
       if (action.payload) {
         state.cart = action.payload;
+      }
+    });
+    builder.addCase(deleteActiveCart.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.cart = undefined;
       }
     });
   },
