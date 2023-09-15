@@ -1,6 +1,6 @@
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Cart as CartType, CentPrecisionMoney, TypedMoney } from '@commercetools/platform-sdk';
-import { Button, Image, InputNumber, List, Result, Spin, message } from 'antd';
+import { Button, Col, Image, InputNumber, Result, Row, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,9 @@ import MyCartApi from '../../api/Cart';
 
 import CustomerApi from '../../api/customerApi';
 
+import { removeItem, changeItemQuantity, deleteActiveCart } from '../../app/cartSlice';
+import { useAppDispatch } from '../../app/hooks';
+
 import styles from './cart.module.css';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -16,6 +19,7 @@ const Cart: FC = (): JSX.Element => {
   const [cart, setCart] = useState<CartType>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -45,13 +49,58 @@ const Cart: FC = (): JSX.Element => {
     return (price.centAmount / 100).toFixed(price.fractionDigits) + ' ' + price.currencyCode;
   };
 
+  const removeFromCart = async (lineItemId: string) => {
+    await dispatch(removeItem({ lineItemId }));
+  };
+
+  const changeQuantity = async (lineItemId: string, quantity: number) => {
+    await dispatch(changeItemQuantity({ lineItemId, quantity }));
+  };
+
+  const deleteCart = async () => {
+    await dispatch(deleteActiveCart());
+  };
+
+  const items = cart?.lineItems.map((item) => {
+    return (
+      <div key={item.id}>
+        <Row>
+          <Col span={2} flex={'1 0 100px'}>
+            <Image src={item.variant.images ? item.variant.images[0].url : ''} width={'100px'} />
+          </Col>
+          <Col span={8} flex={'1 2'}>
+            {item.name['en-US']}
+          </Col>
+          <Col span={2}>{convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}</Col>
+          <Col span={4}>
+            <InputNumber
+              defaultValue={item.quantity}
+              onChange={(value) => {
+                if (value) {
+                  void changeQuantity(item.id, value);
+                }
+              }}
+            />
+          </Col>
+          <Col span={4}>{convertPrice(item.totalPrice)}</Col>
+          <Col span={2}>
+            <Button danger onClick={() => void removeFromCart(item.id)}>
+              <DeleteOutlined />
+            </Button>
+          </Col>
+        </Row>
+      </div>
+    );
+  });
+
   return confirmLoading ? (
     <div className={styles.center}>
       <Spin size="large" />
     </div>
-  ) : cart ? (
+  ) : cart?.totalLineItemQuantity ? (
     <>
-      <List
+      {items}
+      {/* <List
         itemLayout="horizontal"
         dataSource={cart?.lineItems}
         renderItem={(item) => (
@@ -66,8 +115,8 @@ const Cart: FC = (): JSX.Element => {
             <Button danger>Remove Item</Button>
           </List.Item>
         )}
-      />
-      <Button danger type="primary">
+      /> */}
+      <Button danger type="primary" onClick={() => void deleteCart()}>
         Clear Cart
       </Button>
     </>
