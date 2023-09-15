@@ -10,11 +10,7 @@ export interface ICartState {
   cart: Cart | undefined;
 }
 
-const getInitialState = (): ICartState => {
-  return {
-    cart: undefined,
-  };
-};
+const initialState: ICartState = { cart: undefined };
 
 export const addItem = createAsyncThunk('cart/addItem', async (product: ProductProjection) => {
   if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
@@ -85,9 +81,20 @@ export const deleteActiveCart = createAsyncThunk('cart/deleteCart', async () => 
   }
 });
 
+export const getActiveCart = createAsyncThunk('cart/getActiveCart', async () => {
+  try {
+    const response = await MyCartApi.getActiveCart();
+    return response?.body;
+  } catch (error) {
+    if (error instanceof Error) {
+      await message.error(error.message);
+    }
+  }
+});
+
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: getInitialState(),
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addItem.fulfilled, (state, action) => {
@@ -108,6 +115,11 @@ const cartSlice = createSlice({
     builder.addCase(deleteActiveCart.fulfilled, (state, action) => {
       if (action.payload) {
         state.cart = undefined;
+      }
+    });
+    builder.addCase(getActiveCart.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.cart = action.payload;
       }
     });
   },

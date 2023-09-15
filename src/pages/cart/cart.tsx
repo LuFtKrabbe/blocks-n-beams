@@ -1,38 +1,29 @@
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Cart as CartType, CentPrecisionMoney, TypedMoney } from '@commercetools/platform-sdk';
-import { Button, Col, Image, InputNumber, Result, Row, Spin, message } from 'antd';
+import { CentPrecisionMoney, TypedMoney } from '@commercetools/platform-sdk';
+import { Button, Col, Divider, Image, InputNumber, Result, Row, Spin } from 'antd';
 import { FC, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import MyCartApi from '../../api/Cart';
-
 import CustomerApi from '../../api/customerApi';
 
-import { removeItem, changeItemQuantity, deleteActiveCart } from '../../app/cartSlice';
-import { useAppDispatch } from '../../app/hooks';
+import { removeItem, changeItemQuantity, deleteActiveCart, ICartState, getActiveCart } from '../../app/cartSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import styles from './cart.module.css';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const Cart: FC = (): JSX.Element => {
-  const [cart, setCart] = useState<CartType>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
   useEffect(() => {
+    setConfirmLoading(true);
+
     const fetchCart = async () => {
-      try {
-        const response = await MyCartApi.getActiveCart();
-        setCart(response.body);
-      } catch (error) {
-        if (error instanceof Error) {
-          await message.error(`Failed. ${error.message}`);
-        }
-      } finally {
-        setConfirmLoading(false);
-      }
+      await dispatch(getActiveCart()); // TODO: Test for error handling and double exec;
+      setConfirmLoading(false);
     };
 
     const isAnonymous = CustomerApi.customerIsAnonymous();
@@ -116,6 +107,8 @@ const Cart: FC = (): JSX.Element => {
           </List.Item>
         )}
       /> */}
+      <Divider></Divider>
+      <div>Total Cost: {convertPrice(cart.totalPrice)}</div>
       <Button danger type="primary" onClick={() => void deleteCart()}>
         Clear Cart
       </Button>
