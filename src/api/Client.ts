@@ -149,7 +149,6 @@ const getInitialApiClient = () => {
 let currentApiClient = getInitialApiClient();
 
 export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions): void => {
-  console.log(`SWITCH TO ${flowType || ''}`);
   switch (flowType) {
     case FlowTypes.DEFAULT:
       currentApiClient = getDefaultApiClient();
