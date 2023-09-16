@@ -6,9 +6,52 @@
 
 .aboutUsWrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    width: 100%;
+    height: 500px;
     border-radius: 10px;
     padding: 20px 20px;
     background-color: rgb(255, 255, 255);
+}
+
+.aboutUs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    flex-direction: column;
+    height: 100%;
+    width: 40%;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.teamInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10%;
+    width: 100%;
+}
+
+.teamMembers {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+    width: 60%;
+}
+
+.logoLink {
+    display: block;
+    width: 100px;
+    height: 40px;
+    z-index: 1;
+}
+
+.logo {
+    position: relative;
+    z-index: -1;
 }
