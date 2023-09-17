@@ -2,6 +2,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.schoolTitle {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 5px 0;
 }
 
 .schoolText {
@@ -9,12 +16,22 @@
     text-indent: 20px;
 }
 
+.schoolJoin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    margin: 4px 0;
+}
+
 .schoolLogo {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 30px;
-    margin: 0 0 0 10px;
+    margin: 0 auto;
+    padding: 0 8px;
 }
 
 .schoolLogoLink {

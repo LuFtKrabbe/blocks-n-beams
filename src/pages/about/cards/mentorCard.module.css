@@ -4,7 +4,7 @@
     justify-content: flex-start;
     flex-direction: column;
     width: 100%;
-    margin: 10px 0;
+    margin: 0 0 10px 0;
 }
 
 .mentorName {
@@ -17,7 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100px;
     width: 100%;
     border-radius: 10px;
 }
@@ -33,6 +32,7 @@
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
+    text-align: justify;
 }
 
 .mentorLinkGitHub,
@@ -40,4 +40,14 @@
 .mentorBio {
     font-size: 0.8rem;
     margin: 3px 0 3px 10px;
+}
+
+@media (max-width: 500px) {
+    .mentorContainer {
+        flex-direction: column;
+    }
+
+    .team {
+        width: 100%;
+    }
 }

@@ -18,7 +18,8 @@ const AboutUs: FC = (): JSX.Element => {
           {mentorCard(elena)}
           {schoolInfo()}
         </div>
-        <div className={styles.teamMembers}>
+        <div className={styles.team}>
+          <div className={styles.title}>Developer team</div>
           {memberCard(alexander)}
           {memberCard(sergey)}
           {memberCard(andrei)}
