@@ -19,10 +19,9 @@ import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 
-// import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
-import { ICartState } from '../../../app/cartSlice';
+import { getActiveCart } from '../../../app/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setQueryArgs } from '../../../app/productsListSlice';
@@ -42,13 +41,19 @@ const Navbar: FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { queryArgs } = useAppSelector((state) => state.productsSearch);
   const { Option } = Select;
-  const { cart } = useAppSelector<ICartState>((state) => state.cart);
+  const { cart } = useAppSelector((state) => state.cart);
+
+  const [isUserCartCountItems, setIsUserCartCountItems] = useState<boolean>(true);
+
+  const fetchCart = async () => {
+    await dispatch(getActiveCart());
+  };
 
   useEffect(() => {
     if (customerId) {
       const fetchData = async () => {
-        const res = await CustomerApi.getCustomer(customerId);
         try {
+          const res = await CustomerApi.getCustomer(customerId);
           setUserName(
             `${res.body.firstName?.charAt(0).toLocaleUpperCase() as string}${
               res.body.lastName?.charAt(0).toLocaleUpperCase() as string
@@ -61,8 +66,22 @@ const Navbar: FC = (): JSX.Element => {
         }
       };
       void fetchData();
+      void fetchCart();
     }
   }, [isLogIn]);
+
+  useEffect(() => {
+    const isAnonymous = CustomerApi.customerIsAnonymous();
+    const isLoggedIn = CustomerApi.customerIsLoggedIn();
+
+    if (isAnonymous || isLoggedIn) {
+      void fetchCart();
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsUserCartCountItems(true);
+  }, [cart?.totalLineItemQuantity, cart]);
 
   const items: MenuProps['items'] = [
     {
@@ -95,7 +114,11 @@ const Navbar: FC = (): JSX.Element => {
     if (e.key === 'logout') {
       CustomerApi.customerLogOut(); // TODO: move all that code to one function that will properly logout
       localStorage.removeItem('customerId');
+
       dispatch(userSlice.actions.setLogInStorage(true));
+
+      setIsUserCartCountItems(false);
+
       navigate('/main');
     }
     setOpen(false);
@@ -105,7 +128,7 @@ const Navbar: FC = (): JSX.Element => {
     setOpen(flag);
   };
   const onSearch = (text: string) => {
-    dispatch(setQueryArgs({ ...queryArgs, 'text.en-US': text })); // my
+    dispatch(setQueryArgs({ ...queryArgs, 'text.en-US': text }));
   };
 
   const handleChange = (value: string) => {
@@ -170,7 +193,7 @@ const Navbar: FC = (): JSX.Element => {
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>
-          <Badge count={cart?.totalLineItemQuantity} overflowCount={99}>
+          <Badge count={isUserCartCountItems ? cart?.totalLineItemQuantity : 0} overflowCount={99}>
             <NavLink to="/cart">
               <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
             </NavLink>

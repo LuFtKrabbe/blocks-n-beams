@@ -39,6 +39,7 @@ const Registration: FC = (): JSX.Element => {
         const { firstName, lastName, id: customerId } = res.body.customer;
         await message.success(`Welcome ${firstName || ''} ${lastName || ''}.\nYour id is: ${customerId}`);
         localStorage.setItem('customerId', customerId);
+        CustomerApi.customerAnonymousLogOut();
         dispatch(userSlice.actions.setLogIn(true));
         navigate('/main');
       } catch (error) {

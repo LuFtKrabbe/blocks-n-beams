@@ -66,9 +66,14 @@ export default class CustomerApi {
     return customerDraft;
   };
 
+  static customerAnonymousLogOut = () => {
+    localStorage.removeItem(window.btoa(`${projectKey}-anonClient`));
+  };
+
   static customerLogOut = () => {
     const tokenKey = window.btoa(`${projectKey}-userClient`);
     localStorage.removeItem(tokenKey);
+    CustomerApi.customerAnonymousLogOut();
     changeApiClient(FlowTypes.DEFAULT);
   };
 

@@ -7,25 +7,21 @@ import { FlowTypes, changeApiClient } from '../api/Client';
 import CustomerApi from '../api/customerApi';
 
 export interface ICartState {
-  cart: Cart | undefined;
+  cart?: Cart;
 }
 
-const initialState: ICartState = { cart: undefined };
+const initialState: ICartState = {};
 
 export const addItem = createAsyncThunk('cart/addItem', async (product: ProductProjection) => {
-  if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
-    changeApiClient(FlowTypes.ANONYMOUS);
-  }
-
   try {
+    if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
+      changeApiClient(FlowTypes.ANONYMOUS);
+      await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
+    }
     await MyCartApi.getActiveCart();
   } catch (error) {
     if (error instanceof Error) {
-      if (error.name === 'NotFound') {
-        await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
-      } else {
-        await message.error(error.message);
-      }
+      await message.error(error.message);
     }
   }
 

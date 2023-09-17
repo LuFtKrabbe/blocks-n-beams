@@ -41,6 +41,7 @@ const Login: FC = (): JSX.Element => {
           </>,
         );
         localStorage.setItem('customerId', customerId);
+        CustomerApi.customerAnonymousLogOut();
         dispatch(userSlice.actions.setLogIn(true));
         navigate('/main');
       } catch (error) {
