@@ -6,6 +6,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import CustomerApi from '../../api/customerApi';
 
+import { getActiveCart } from '../../app/cartSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 
@@ -43,6 +44,7 @@ const Login: FC = (): JSX.Element => {
         localStorage.setItem('customerId', customerId);
         CustomerApi.customerAnonymousLogOut();
         dispatch(userSlice.actions.setLogIn(true));
+        void dispatch(getActiveCart());
         navigate('/main');
       } catch (error) {
         if (error instanceof Error) {
