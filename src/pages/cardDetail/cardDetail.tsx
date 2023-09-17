@@ -1,4 +1,4 @@
-import { RollbackOutlined, EuroOutlined } from '@ant-design/icons';
+import { RollbackOutlined, EuroOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ProductData, ProductProjection } from '@commercetools/platform-sdk';
 import { Button, Carousel, Image, Layout, message, Spin } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
@@ -7,7 +7,8 @@ import { FC, useState, useRef, RefObject, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
-import { useAppSelector } from '../../app/hooks';
+import { ICartState, addItem, removeItem } from '../../app/cartSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import styles from './cardDetail.module.css';
 
@@ -16,10 +17,12 @@ const { Content } = Layout;
 const CardDetail: FC = (): JSX.Element => {
   const BACK = -1;
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const currentLocationCardId = location.pathname.split('/').pop() as string;
   const card = useAppSelector((state) => state.user.currentProductCard) as ProductProjection;
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
+  const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
   const carouselRef = useRef() as RefObject<CarouselRef>;
 
@@ -108,6 +111,24 @@ const CardDetail: FC = (): JSX.Element => {
     carouselRef.current?.goTo(current);
   };
 
+  const addToCart = async (product: ProductProjection) => {
+    await dispatch(addItem(product));
+  };
+
+  const removeFromCart = async (productId: string) => {
+    const lineItemId = cart?.lineItems.find((item) => item.productId === productId)?.id;
+    if (lineItemId) {
+      await dispatch(removeItem({ lineItemId }));
+    }
+  };
+
+  const isProductInCart = (product: ProductProjection) => {
+    if (!cart) {
+      return false;
+    }
+    return cart?.lineItems.some((item) => item.productId === product.id);
+  };
+
   return (
     <Content className={styles.layoutWrapper}>
       <Content className={styles.cardWrapper}>
@@ -156,16 +177,40 @@ const CardDetail: FC = (): JSX.Element => {
               </div>
 
               <div className={styles.cardButtonContent}>
-                <Button
-                  className={styles.buttonBusket}
-                  type="primary"
-                  onClick={() => {
-                    navigate('/cart');
-                  }}
-                >
-                  <EuroOutlined />
-                  Add to basket
-                </Button>
+                {isProductInCart(card) ? (
+                  <div>
+                    <Button
+                      className={styles.buttonBusket}
+                      disabled
+                      type="primary"
+                      onClick={() => {
+                        void addToCart(card);
+                      }}
+                    >
+                      <EuroOutlined />
+                      Add to Cart
+                    </Button>
+                    <Button
+                      danger
+                      onClick={() => {
+                        void removeFromCart(card.id);
+                      }}
+                    >
+                      <DeleteOutlined />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    className={styles.buttonBusket}
+                    type="primary"
+                    onClick={() => {
+                      void addToCart(card);
+                    }}
+                  >
+                    <EuroOutlined />
+                    Add to Cart
+                  </Button>
+                )}
                 <Button
                   className={styles.buttonCatalog}
                   type="primary"
