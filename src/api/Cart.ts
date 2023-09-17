@@ -7,6 +7,7 @@ import {
   MyCartAddLineItemAction,
   MyCartRemoveLineItemAction,
   MyCartChangeLineItemQuantityAction,
+  MyCartAddDiscountCodeAction,
 } from '@commercetools/platform-sdk';
 
 import getApiRoot from './Client';
@@ -90,6 +91,22 @@ export default class MyCartApi {
       .carts()
       .withId({ ID: id })
       .post({ body: { version, actions: [changeLineItemQuantityAction] } })
+      .execute();
+  };
+
+  static addDisountCode = async (code: string) => {
+    const { version, id } = (await this.getActiveCart()).body;
+
+    const addDisountCodeAction: MyCartAddDiscountCodeAction = {
+      action: 'addDiscountCode',
+      code,
+    };
+
+    return getApiRoot()
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: { version, actions: [addDisountCodeAction] } })
       .execute();
   };
 }
