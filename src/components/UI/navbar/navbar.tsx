@@ -21,7 +21,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 import CustomerApi from '../../../api/customerApi';
 
-import { getActiveCart } from '../../../app/cartSlice';
+import { getActiveCart, resetCart } from '../../../app/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setQueryArgs } from '../../../app/productsListSlice';
@@ -116,6 +116,7 @@ const Navbar: FC = (): JSX.Element => {
       localStorage.removeItem('customerId');
 
       dispatch(userSlice.actions.setLogInStorage(true));
+      dispatch(resetCart());
 
       setIsUserCartCountItems(false);
 

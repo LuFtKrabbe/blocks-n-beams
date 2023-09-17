@@ -8,6 +8,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import CustomerApi from '../../api/customerApi';
 
+import { resetCart } from '../../app/cartSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { userSlice } from '../../app/reducers';
 
@@ -74,6 +75,7 @@ const Profile: FC = (): JSX.Element => {
     CustomerApi.customerLogOut();
     localStorage.removeItem('customerId');
     dispatch(userSlice.actions.setLogInStorage(true));
+    dispatch(resetCart());
     navigate('/main');
   };
 
