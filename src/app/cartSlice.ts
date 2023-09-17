@@ -7,10 +7,10 @@ import { FlowTypes, changeApiClient } from '../api/Client';
 import CustomerApi from '../api/customerApi';
 
 export interface ICartState {
-  cart: Cart | undefined;
+  cart?: Cart;
 }
 
-const initialState: ICartState = { cart: undefined };
+const initialState: ICartState = {};
 
 export const addItem = createAsyncThunk('cart/addItem', async (product: ProductProjection) => {
   if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
