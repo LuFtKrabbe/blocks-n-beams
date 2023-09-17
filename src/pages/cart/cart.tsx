@@ -1,6 +1,5 @@
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { CentPrecisionMoney, TypedMoney } from '@commercetools/platform-sdk';
-import { Button, Col, Divider, Image, InputNumber, Result, Row, Spin } from 'antd';
+import { Button, Col, Divider, Image, InputNumber, Result, Row, Space, Spin } from 'antd';
 import { FC, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +9,9 @@ import CustomerApi from '../../api/customerApi';
 import { removeItem, changeItemQuantity, deleteActiveCart, ICartState, getActiveCart } from '../../app/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
+import PromoForm from './PromoForm';
 import styles from './cart.module.css';
+import { convertPrice, getPriceElement, getTotalCartCostElement } from './utils';
 
 const Cart: FC = (): JSX.Element => {
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
@@ -36,10 +37,6 @@ const Cart: FC = (): JSX.Element => {
     }
   }, []);
 
-  const convertPrice = (price: TypedMoney | CentPrecisionMoney) => {
-    return (price.centAmount / 100).toFixed(price.fractionDigits) + ' ' + price.currencyCode;
-  };
-
   const removeFromCart = async (lineItemId: string) => {
     await dispatch(removeItem({ lineItemId }));
   };
@@ -62,7 +59,7 @@ const Cart: FC = (): JSX.Element => {
           <Col span={8} flex={'1 2'}>
             {item.name['en-US']}
           </Col>
-          <Col span={2}>{convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}</Col>
+          <Col span={2}>{getPriceElement(item)}</Col>
           <Col span={4}>
             <InputNumber
               defaultValue={item.quantity}
@@ -91,27 +88,16 @@ const Cart: FC = (): JSX.Element => {
   ) : cart?.totalLineItemQuantity ? (
     <>
       {items}
-      {/* <List
-        itemLayout="horizontal"
-        dataSource={cart?.lineItems}
-        renderItem={(item) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Image src={item.variant.images ? item.variant.images[0].url : ''} width={'100px'} />}
-              title={item.name['en-US']}
-            />
-            Price: {convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}
-            Count: <InputNumber value={item.quantity} />
-            Total Cost: {convertPrice(item.totalPrice)}
-            <Button danger>Remove Item</Button>
-          </List.Item>
-        )}
-      /> */}
       <Divider></Divider>
-      <div>Total Cost: {convertPrice(cart.totalPrice)}</div>
-      <Button danger type="primary" onClick={() => void deleteCart()}>
-        Clear Cart
-      </Button>
+      {getTotalCartCostElement(cart)}
+      <Divider></Divider>
+      <PromoForm />
+      <Divider></Divider>
+      <Space>
+        <Button danger type="primary" onClick={() => void deleteCart()}>
+          Clear Cart
+        </Button>
+      </Space>
     </>
   ) : (
     <Result
