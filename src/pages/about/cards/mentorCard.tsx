@@ -1,7 +1,8 @@
 import { GithubOutlined } from '@ant-design/icons';
 
-import styles from './mentorCard.module.css';
 import { type MemberData } from '../aboutUsData';
+
+import styles from './mentorCard.module.css';
 
 const mentorCard = (props: MemberData) => {
   return (
@@ -10,11 +11,11 @@ const mentorCard = (props: MemberData) => {
       <img src={props.photo} className={styles.mentorImage} />
       <div className={styles.mentorInfo}>
         <div className={styles.mentorRole}>
-          <span style={{fontWeight: 700}}>Role: </span>
+          <span style={{ fontWeight: 700 }}>Role: </span>
           {props.role}
         </div>
         <div className={styles.mentorBio}>
-          <span style={{fontWeight: 700}}>Bio: </span>
+          <span style={{ fontWeight: 700 }}>Bio: </span>
           {props.bio}
         </div>
         <div className={styles.mentorLinkGitHub}>

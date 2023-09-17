@@ -1,0 +1,17 @@
+.introTitle {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.0rem;
+    margin: 0 0 6px 0;
+}
+
+.introHello {
+    margin: 0 0 6px 0 !important;
+}
+
+.intro p:not(.introTitle) {
+    font-size: 0.8rem;
+    text-indent: 25px;
+    text-align: justify;
+    margin: 0 0 2px 0;
+}
