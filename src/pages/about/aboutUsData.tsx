@@ -27,7 +27,7 @@ export const alexander: MemberData = {
   content filling, implementation of detailed product card and about us pages, 
   stylization of the project and tests writing`,
   bio: `Master's and bachelor's degree with honor in Civil Engineering. Structural design engineer 
-  with 2 years of work experience.`,
+  with 2 years of work experience`,
   link: 'https://github.com/LuFtKrabbe',
   photo: photoAlexander,
 };
