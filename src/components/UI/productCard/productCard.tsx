@@ -1,6 +1,6 @@
 import { DeleteOutlined, EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Image, Card, Button, Space } from 'antd';
+import { Image, Card, Button } from 'antd';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
 import styles from './productCard.module.css';
-import classNames from 'classnames';
 
 const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardList }): JSX.Element => {
   const navigate = useNavigate();
