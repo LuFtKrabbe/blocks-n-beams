@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
 import styles from './productCard.module.css';
+import classNames from 'classnames';
 
 const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardList }): JSX.Element => {
   const navigate = useNavigate();
@@ -79,21 +80,45 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
           className={styles.pricesWrapper}
           avatar={<EuroOutlined className={styles.pricesIcon} />}
           description={
-            <div className={styles.prices}>
-              <span className={productPriceDiscount() === 'No discount' ? styles.price : styles.priceOff}>
-                {' '}
-                {productPrice()}{' '}
-              </span>
-              <span
-                className={productPriceDiscount() === 'No discount' ? styles.priceDiscountOff : styles.priceDiscount}
-              >
-                {' '}
-                {productPriceDiscount()}{' '}
-              </span>
-              {isProductInCart(productCardList) ? (
-                <Space>
+            <>
+              <div className={styles.prices}>
+                <span className={productPriceDiscount() === 'No discount' ? styles.price : styles.priceOff}>
+                  {' '}
+                  {productPrice()}{' '}
+                </span>
+                <span
+                  className={productPriceDiscount() === 'No discount' ? styles.priceDiscountOff : styles.priceDiscount}
+                >
+                  {' '}
+                  {productPriceDiscount()}{' '}
+                </span>
+              </div>
+              <div className={styles.buttonsAddRemoveContainer}>
+                {isProductInCart(productCardList) ? (
+                  <>
+                    <Button
+                      disabled
+                      type="primary"
+                      className={styles.buttonAddToCart}
+                      onClick={() => {
+                        void addToCart(productCardList);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                    <Button
+                      className={styles.buttonRemoveFromCart}
+                      danger
+                      onClick={() => {
+                        void removeFromCart(productCardList.id);
+                      }}
+                    >
+                      <DeleteOutlined />
+                    </Button>
+                  </>
+                ) : (
                   <Button
-                    disabled
+                    className={styles.buttonAddToCart}
                     type="primary"
                     onClick={() => {
                       void addToCart(productCardList);
@@ -101,28 +126,9 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
                   >
                     Add to Cart
                   </Button>
-                  <Button
-                    danger
-                    onClick={() => {
-                      void removeFromCart(productCardList.id);
-                    }}
-                  >
-                    <DeleteOutlined />
-                  </Button>
-                </Space>
-              ) : (
-                <Space>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      void addToCart(productCardList);
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
-                </Space>
-              )}
-            </div>
+                )}
+              </div>
+            </>
           }
         />
       </Card>
