@@ -38,7 +38,8 @@ export const sergey: MemberData = {
   contribution: `Repository and environment configuration setup, work with session 
   flows, login and registration of the users and their profile information, products searching 
   and user's basket implementation, errors handling and bug fixing`,
-  bio: 'The best developer',
+  bio: `Specialist degree in Information Systems and Technologies at Peter the Great St. Petersburg Polytechnic University. 
+  9 years of work experience as HPC Cluster System Engineer`,
   link: 'https://github.com/severgun',
   photo: photoAndrei,
 };
