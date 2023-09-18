@@ -13,19 +13,15 @@ export interface ICartState {
 const initialState: ICartState = {};
 
 export const addItem = createAsyncThunk('cart/addItem', async (product: ProductProjection) => {
-  if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
-    changeApiClient(FlowTypes.ANONYMOUS);
-  }
-
   try {
+    if (!CustomerApi.customerIsLoggedIn() && !CustomerApi.customerIsAnonymous()) {
+      changeApiClient(FlowTypes.ANONYMOUS);
+      await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
+    }
     await MyCartApi.getActiveCart();
   } catch (error) {
     if (error instanceof Error) {
-      if (error.name === 'NotFound') {
-        await MyCartApi.createCart(MyCartApi.createCartDraft('EUR'));
-      } else {
-        await message.error(error.message);
-      }
+      await message.error(error.message);
     }
   }
 
@@ -95,7 +91,11 @@ export const getActiveCart = createAsyncThunk('cart/getActiveCart', async () => 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
-  reducers: {},
+  reducers: {
+    resetCart(state: ICartState) {
+      state.cart = undefined;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(addItem.fulfilled, (state, action) => {
       if (action.payload) {
@@ -125,4 +125,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { resetCart } = cartSlice.actions;
 export default cartSlice.reducer;
