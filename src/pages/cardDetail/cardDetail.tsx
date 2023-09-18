@@ -178,9 +178,9 @@ const CardDetail: FC = (): JSX.Element => {
 
               <div className={styles.cardButtonContent}>
                 {isProductInCart(card) ? (
-                  <div>
+                  <div className={styles.cardButtonAddRemoveContent}>
                     <Button
-                      className={styles.buttonBusket}
+                      className={styles.buttonAddToCart}
                       disabled
                       type="primary"
                       onClick={() => {
@@ -191,6 +191,7 @@ const CardDetail: FC = (): JSX.Element => {
                       Add to Cart
                     </Button>
                     <Button
+                      className={styles.buttonRemoveFromCart}
                       danger
                       onClick={() => {
                         void removeFromCart(card.id);
@@ -201,7 +202,7 @@ const CardDetail: FC = (): JSX.Element => {
                   </div>
                 ) : (
                   <Button
-                    className={styles.buttonBusket}
+                    className={styles.buttonAddToCart}
                     type="primary"
                     onClick={() => {
                       void addToCart(card);
