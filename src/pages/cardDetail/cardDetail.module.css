@@ -52,7 +52,7 @@
   justify-content: space-between;
   padding: 0 0 0 10px;
   width: 50%;
-  height: 100%;
+  min-height: 300px;
 }
 
 .cardTextContent {
@@ -140,19 +140,32 @@
   width: 100%;
 }
 
-.buttonBusket {
-  justify-content: center;
-  color: black;
-  order: 1;
-  font-weight: 700;
-  background-color: rgb(144, 199, 144);
-  margin-bottom: 0px;
-  margin-left: 5px;
+.cardButtonAddRemoveContent {
+  display: flex;
+  justify-content: space-between;
   max-width: 250px;
   width: 100%;
 }
 
-.buttonBusket:hover {
+.buttonAddToCart {
+  justify-content: center;
+  color: black;
+  font-weight: 700;
+  background-color: rgb(144, 199, 144);
+  margin: 5px 0;
+  max-width: 250px;
+  width: 100%;
+}
+
+.buttonRemoveFromCart {
+  margin: 5px 0;
+}
+
+.buttonAddToCart:disabled {
+  max-width: 190px;
+}
+
+.buttonAddToCart:hover:enabled {
   background-color: rgb(67, 177, 67) !important;
 }
 
@@ -242,6 +255,19 @@
     font-size: 0.7rem;
     height: 28px;
     min-width: 130px;
+  }
+}
+
+@media (max-width: 576px) {
+  .buttonAddToCart:disabled {
+    max-width: 250px;
+  }
+  .cardButtonAddRemoveContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 250px;
+    width: 100%;
   }
 }
 

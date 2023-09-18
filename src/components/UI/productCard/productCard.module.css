@@ -4,7 +4,7 @@
 
 .productCard {
   width: 250px;
-  height: 480px;
+  min-height: 480px;
   margin-top: 10px;
 }
 
@@ -57,6 +57,35 @@
   margin-left: 10px;
 }
 
+.buttonsAddRemoveContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.buttonAddToCart {
+  color: black;
+  font-weight: 700;
+  background-color: rgb(144, 199, 144);
+  margin: 5px 0;
+  max-width: 151px;
+  width: 100%;
+}
+
+.buttonRemoveFromCart {
+  margin: 5px 0;
+  padding: 4px 13px;
+  max-width: 40px;
+}
+
+.buttonAddToCart:disabled {
+  max-width: 105px;
+}
+
+.buttonAddToCart:hover:enabled {
+  background-color: rgb(67, 177, 67) !important;
+}
+
 @media (max-width: 900px) {
   .cardWrapper {
     margin: 10px 10px 10px 10px;
@@ -65,7 +94,7 @@
   .productCard {
     text-align: center;
     width: 140px;
-    height: 270px;
+    min-height: 270px;
     margin-top: 5px;
   }
 
@@ -99,5 +128,22 @@
   .pricesIcon {
     font-size: 1rem;
     margin-left: 10px;
+  }
+
+  .buttonsAddRemoveContainer {
+    flex-direction: column;
+  }
+
+  .buttonAddToCart {
+    max-width: 102px;
+    padding: 4px 4px;
+  }
+
+  .buttonRemoveFromCart {
+    max-width: 102px;
+  }
+  
+  .buttonAddToCart:disabled {
+    max-width: 102px;
   }
 }

@@ -1,12 +1,12 @@
-import { EuroOutlined } from '@ant-design/icons/lib/icons';
+import { DeleteOutlined, EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Image, Card, Button } from 'antd';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { addItem } from '../../../app/cartSlice';
-import { useAppDispatch } from '../../../app/hooks';
+import { ICartState, addItem, removeItem } from '../../../app/cartSlice';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
 import styles from './productCard.module.css';
@@ -15,6 +15,7 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   const navigate = useNavigate();
   // const categories = useAppSelector((state) => state.categories);
   const dispatch = useAppDispatch();
+  const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
   const location = useLocation();
   const currentLocationCardId = location.pathname.split('/').pop() as string;
@@ -46,6 +47,20 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     await dispatch(addItem(product));
   };
 
+  const removeFromCart = async (productId: string) => {
+    const lineItemId = cart?.lineItems.find((item) => item.productId === productId)?.id;
+    if (lineItemId) {
+      await dispatch(removeItem({ lineItemId }));
+    }
+  };
+
+  const isProductInCart = (product: ProductProjection) => {
+    if (!cart) {
+      return false;
+    }
+    return cart?.lineItems.some((item) => item.productId === product.id);
+  };
+
   return (
     <div className={styles.cardWrapper}>
       <Card
@@ -64,26 +79,55 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
           className={styles.pricesWrapper}
           avatar={<EuroOutlined className={styles.pricesIcon} />}
           description={
-            <div className={styles.prices}>
-              <span className={productPriceDiscount() === 'No discount' ? styles.price : styles.priceOff}>
-                {' '}
-                {productPrice()}{' '}
-              </span>
-              <span
-                className={productPriceDiscount() === 'No discount' ? styles.priceDiscountOff : styles.priceDiscount}
-              >
-                {' '}
-                {productPriceDiscount()}{' '}
-              </span>
-              <Button
-                type="primary"
-                onClick={() => {
-                  void addToCart(productCardList);
-                }}
-              >
-                Add to Cart
-              </Button>
-            </div>
+            <>
+              <div className={styles.prices}>
+                <span className={productPriceDiscount() === 'No discount' ? styles.price : styles.priceOff}>
+                  {' '}
+                  {productPrice()}{' '}
+                </span>
+                <span
+                  className={productPriceDiscount() === 'No discount' ? styles.priceDiscountOff : styles.priceDiscount}
+                >
+                  {' '}
+                  {productPriceDiscount()}{' '}
+                </span>
+              </div>
+              <div className={styles.buttonsAddRemoveContainer}>
+                {isProductInCart(productCardList) ? (
+                  <>
+                    <Button
+                      disabled
+                      type="primary"
+                      className={styles.buttonAddToCart}
+                      onClick={() => {
+                        void addToCart(productCardList);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                    <Button
+                      className={styles.buttonRemoveFromCart}
+                      danger
+                      onClick={() => {
+                        void removeFromCart(productCardList.id);
+                      }}
+                    >
+                      <DeleteOutlined />
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    className={styles.buttonAddToCart}
+                    type="primary"
+                    onClick={() => {
+                      void addToCart(productCardList);
+                    }}
+                  >
+                    Add to Cart
+                  </Button>
+                )}
+              </div>
+            </>
           }
         />
       </Card>
