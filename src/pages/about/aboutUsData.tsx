@@ -52,5 +52,5 @@ export const andrei: MemberData = {
   menu and cards with its sorting and pagination, work with user's basket`,
   bio: 'The best developer',
   link: 'https://github.com/Nevold',
-  photo: photoSergei,
+  photo: photoAndrei,
 };
