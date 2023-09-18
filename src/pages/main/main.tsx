@@ -1,7 +1,8 @@
+import { GroupOutlined } from '@ant-design/icons';
 import { DiscountCode, ProductProjection } from '@commercetools/platform-sdk';
-import { Button, Layout, Menu, MenuProps, Pagination, PaginationProps, Spin, message } from 'antd';
+import { Button, Layout, Menu, Pagination, PaginationProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
@@ -9,32 +10,70 @@ import PromoApi from '../../api/Promo';
 import { useAppSelector } from '../../app/hooks';
 import ProductCard from '../../components/UI/productCard/productCard';
 
-import { NUMBER_LIMIT, PAGE_SIZE, items, rootSubmenuKeys } from '../categories/shared';
+import { PAGE_SIZE, MenuItem } from '../categories/shared';
 
 import styles from './main.module.css';
 
 const { Content, Footer, Sider } = Layout;
 
 const Main: FC = (): JSX.Element => {
-  const [openKeys, setOpenKeys] = useState(['']);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCardsResults, setTotalCardsResults] = useState(0);
   const [promos, setPromos] = useState<DiscountCode[]>([]);
-
-  const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
-    if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === NUMBER_LIMIT) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
 
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
   const { queryArgs } = useAppSelector((state) => state.productsSearch);
   const navigate = useNavigate();
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+    type?: 'group',
+    onTitleClick?: () => void,
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+      onTitleClick,
+    } as MenuItem;
+  }
+
+  const items: MenuItem[] = [
+    getItem(
+      'Blocks',
+      'blocks',
+      <GroupOutlined />,
+      [
+        getItem(null, '1', <Link to={'/main/bricks'}>Bricks</Link>),
+        getItem(null, '2', <Link to={'/main/aerocrete'}>Aerocrete</Link>),
+      ],
+      undefined,
+      () => {
+        navigate('/main/blocks');
+      },
+    ),
+    getItem(
+      'Beams',
+      'beams',
+      <GroupOutlined />,
+      [
+        getItem(null, '3', <Link to={'/main/reinforced-concrete'}>Reinforced concrete</Link>),
+        getItem(null, '4', <Link to={'/main/timber'}>Timber</Link>),
+      ],
+      undefined,
+      () => {
+        navigate('/main/beams');
+      },
+    ),
+    getItem(<Link to={'/main/aggregates'}>Aggregates</Link>, '5', <GroupOutlined />),
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +129,7 @@ const Main: FC = (): JSX.Element => {
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
           <Sider className={styles.menuWrapper}>
-            <Menu mode="inline" openKeys={openKeys} onOpenChange={onOpenChange} className={styles.menu} items={items} />
+            <Menu mode="vertical" className={styles.menu} items={items} />
           </Sider>
           <Content className={styles.productContainerWrapper}>
             <div className={styles.cardContainer}>

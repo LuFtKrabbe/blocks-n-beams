@@ -13,7 +13,6 @@ import styles from './productCard.module.css';
 
 const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardList }): JSX.Element => {
   const navigate = useNavigate();
-  // const categories = useAppSelector((state) => state.categories);
   const dispatch = useAppDispatch();
   const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
@@ -62,14 +61,14 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
   };
 
   return (
-    <div className={styles.cardWrapper}>
+    <div className={styles.cardWrapper} onClick={onClick}>
       <Card
         title={productCardList.name['en-US']}
         bordered
         hoverable
         className={styles.productCard}
         extra={<a onClick={onClick}>Details</a>}
-        cover={<Image className={styles.productImage} src={productImage ? productImage : 'No image'} />}
+        cover={<Image preview={false} className={styles.productImage} src={productImage ? productImage : 'No image'} />}
       >
         <Meta
           className={styles.description}
