@@ -1,7 +1,8 @@
+import { GroupOutlined } from '@ant-design/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, MenuProps, Pagination, PaginationProps, Spin, message } from 'antd';
+import { Layout, Menu, Pagination, PaginationProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
@@ -10,22 +11,11 @@ import ProductCard from '../../components/UI/productCard/productCard';
 
 import styles from '../main/main.module.css';
 
-import { NUMBER_LIMIT, PAGE_SIZE, items, rootSubmenuKeys } from './shared';
+import { MenuItem, PAGE_SIZE } from './shared';
 
 const { Content, Footer, Sider } = Layout;
 
 const Timber: FC = (): JSX.Element => {
-  const [openKeys, setOpenKeys] = useState(['sub2']);
-
-  const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
-    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === NUMBER_LIMIT);
-    if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === NUMBER_LIMIT) {
-      setOpenKeys(keys);
-    } else {
-      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-    }
-  };
-
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
 
@@ -35,6 +25,54 @@ const Timber: FC = (): JSX.Element => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCardsResults, setTotalCardsResults] = useState(0);
+
+  function getItem(
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+    type?: 'group',
+    onTitleClick?: () => void,
+  ): MenuItem {
+    return {
+      key,
+      icon,
+      children,
+      label,
+      type,
+      onTitleClick,
+    } as MenuItem;
+  }
+
+  const items: MenuItem[] = [
+    getItem(
+      'Blocks',
+      'blocks',
+      <GroupOutlined />,
+      [
+        getItem(null, '1', <Link to={'/main/bricks'}>Bricks</Link>),
+        getItem(null, '2', <Link to={'/main/aerocrete'}>Aerocrete</Link>),
+      ],
+      undefined,
+      () => {
+        navigate('/main/blocks');
+      },
+    ),
+    getItem(
+      'Beams',
+      'beams',
+      <GroupOutlined />,
+      [
+        getItem(null, '3', <Link to={'/main/reinforced-concrete'}>Reinforced concrete</Link>),
+        getItem(null, '4', <Link to={'/main/timber'}>Timber</Link>),
+      ],
+      undefined,
+      () => {
+        navigate('/main/beams');
+      },
+    ),
+    getItem(<Link to={'/main/aggregates'}>Aggregates</Link>, '5', <GroupOutlined />),
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,14 +114,7 @@ const Timber: FC = (): JSX.Element => {
         </Content>
         <Layout className={styles.menuProductContainerWrapper}>
           <Sider className={styles.menuWrapper}>
-            <Menu
-              mode="inline"
-              openKeys={openKeys}
-              onOpenChange={onOpenChange}
-              selectedKeys={['4']}
-              className={styles.menu}
-              items={items}
-            />
+            <Menu mode="vertical" selectedKeys={['4']} className={styles.menu} items={items} />
           </Sider>
           <Content className={styles.productContainerWrapper}>
             <div className={styles.cardContainer}>
