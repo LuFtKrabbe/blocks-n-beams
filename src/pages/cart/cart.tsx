@@ -56,30 +56,48 @@ const Cart: FC = (): JSX.Element => {
     return (
       <div key={item.id}>
         <Row>
-          <Col span={2} flex={'1 0 100px'}>
+          <Col span={4} className={styles.imageContainer}>
             <Image src={item.variant.images ? item.variant.images[0].url : ''} width={'100px'} />
           </Col>
-          <Col span={8} flex={'1 2'}>
+          <Col className={styles.itemName} span={7}>
             {item.name['en-US']}
           </Col>
-          <Col span={2}>{convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}</Col>
-          <Col span={4}>
-            <InputNumber
-              defaultValue={item.quantity}
-              onChange={(value) => {
-                if (value) {
-                  void changeQuantity(item.id, value);
-                }
-              }}
-            />
+          <Col span={4} style={{ minWidth: '50px' }}>
+            <div>
+              <div className={styles.title}>Price:</div>
+              {convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}
+            </div>
           </Col>
-          <Col span={4}>{convertPrice(item.totalPrice)}</Col>
-          <Col span={2}>
+          <Col span={4} style={{ minWidth: '60px' }}>
+            <div>
+              <div className={styles.title}>Quantity:</div>
+              <InputNumber
+                defaultValue={item.quantity}
+                className={styles.quantityInput}
+                min={1}
+                max={99}
+                size="small"
+                onChange={(value) => {
+                  if (value) {
+                    void changeQuantity(item.id, value);
+                  }
+                }}
+              />
+            </div>
+          </Col>
+          <Col span={4}>
+            <div>
+              <div className={styles.title}>Total Cost:</div>
+              {convertPrice(item.totalPrice)}
+            </div>
+          </Col>
+          <Col span={1}>
             <Button danger onClick={() => void removeFromCart(item.id)}>
               <DeleteOutlined />
             </Button>
           </Col>
         </Row>
+        <Divider></Divider>
       </div>
     );
   });
@@ -89,30 +107,13 @@ const Cart: FC = (): JSX.Element => {
       <Spin size="large" />
     </div>
   ) : cart?.totalLineItemQuantity ? (
-    <>
+    <div className={styles.wrapper}>
       {items}
-      {/* <List
-        itemLayout="horizontal"
-        dataSource={cart?.lineItems}
-        renderItem={(item) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Image src={item.variant.images ? item.variant.images[0].url : ''} width={'100px'} />}
-              title={item.name['en-US']}
-            />
-            Price: {convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}
-            Count: <InputNumber value={item.quantity} />
-            Total Cost: {convertPrice(item.totalPrice)}
-            <Button danger>Remove Item</Button>
-          </List.Item>
-        )}
-      /> */}
-      <Divider></Divider>
-      <div>Total Cost: {convertPrice(cart.totalPrice)}</div>
+      <div className={styles.totalCost}>Total Cost: {convertPrice(cart.totalPrice)}</div>
       <Button danger type="primary" onClick={() => void deleteCart()}>
         Clear Cart
       </Button>
-    </>
+    </div>
   ) : (
     <Result
       icon={<ShoppingCartOutlined />}

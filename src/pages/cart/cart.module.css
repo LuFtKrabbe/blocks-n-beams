@@ -1,13 +1,34 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  font-size: 5rem;
+.wrapper {
+  margin: 36px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 1200px;
 }
 
-.logoutButtonContainer {
+.title {
+  margin-bottom: 10px;
+}
+
+.quantityInput {
+  max-width: 50px;
+}
+
+.itemName {
   display: flex;
   align-items: center;
-  justify-content: center;
+}
+
+.imageContainer {
+  min-width: 100px;
+}
+
+.totalCost {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 660px) {
+  .imageContainer {
+    min-width: 100%;
+  }
 }
