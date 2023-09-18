@@ -1,4 +1,3 @@
-import { Content } from 'antd/es/layout/layout';
 import { FC } from 'react';
 
 import styles from './aboutUs.module.css';
@@ -11,7 +10,7 @@ import schoolInfo from './schoolInfo/schoolInfo';
 
 const AboutUs: FC = (): JSX.Element => {
   return (
-    <Content className={styles.layoutWrapper}>
+    <div className={styles.layoutWrapper}>
       <div className={styles.aboutUsWrapper}>
         <div className={styles.aboutUs}>
           {intro()}
@@ -25,7 +24,7 @@ const AboutUs: FC = (): JSX.Element => {
           {memberCard(andrei)}
         </div>
       </div>
-    </Content>
+    </div>
   );
 };
 
