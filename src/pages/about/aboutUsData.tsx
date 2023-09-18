@@ -41,7 +41,7 @@ export const sergey: MemberData = {
   bio: `Specialist degree in Information Systems and Technologies at Peter the Great St. Petersburg Polytechnic University. 
   9 years of work experience as HPC Cluster System Engineer`,
   link: 'https://github.com/severgun',
-  photo: photoAndrei,
+  photo: photoSergey,
 };
 
 export const andrei: MemberData = {
