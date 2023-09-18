@@ -6,6 +6,7 @@ import {
   ExistingTokenMiddlewareOptions,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
   TokenStore,
   UserAuthOptions,
 } from '@commercetools/sdk-client-v2';
@@ -116,6 +117,28 @@ const getUserApiClientByExistingToken = (): Client => {
   };
   const storedValue = localStorage.getItem(tokenKey) || '';
   const parsed = JSON.parse(storedValue) as TokenStore;
+
+  if (Date.now() > parsed.expirationTime) {
+    console.log('OUTDATED');
+
+    const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
+      host: process.env.REACT_APP_CTP_AUTH_URL || '',
+      projectKey,
+      credentials: {
+        clientId: process.env.REACT_APP_CTP_CLIENT_ID || '',
+        clientSecret: process.env.REACT_APP_CTP_CLIENT_SECRET || '',
+      },
+      refreshToken: parsed.refreshToken || '',
+      tokenCache: makePersistentTokenCache(tokenKey),
+      fetch,
+    };
+
+    return new ClientBuilder()
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withProjectKey(projectKey)
+      .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
+      .build();
+  }
 
   if (process.env.NODE_ENV === 'production') {
     return new ClientBuilder()
