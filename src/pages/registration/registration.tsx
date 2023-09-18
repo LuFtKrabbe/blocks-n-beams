@@ -131,7 +131,7 @@ const Registration: FC = (): JSX.Element => {
                     if (value) {
                       return age >= ValidationAge.MIN && age <= ValidationAge.MAX
                         ? Promise.resolve()
-                        : Promise.reject(`Your age should be from ${ValidationAge.MIN} to ${ValidationAge.MIN}.`);
+                        : Promise.reject(`Your age should be from ${ValidationAge.MIN} to ${ValidationAge.MAX}.`);
                     } else {
                       return Promise.reject('Please enter a date of birth');
                     }
