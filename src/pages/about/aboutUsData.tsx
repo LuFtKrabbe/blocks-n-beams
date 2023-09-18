@@ -1,7 +1,7 @@
 import photoAlexander from '../../assets/photoAlexander.png';
-import photoSergei from '../../assets/photoAndrei.png';
+import photoAndrei from '../../assets/photoAndrei.png';
 import photoElena from '../../assets/photoElena.png';
-import photoAndrei from '../../assets/photoSergey.png';
+import photoSergey from '../../assets/photoSergey.png';
 
 export type MemberData = {
   name: string;
