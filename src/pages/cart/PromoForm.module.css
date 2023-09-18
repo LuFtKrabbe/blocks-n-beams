@@ -1,0 +1,25 @@
+
+.promoFormContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.promoForm {
+  width: 270px;
+}
+
+.promoFormApplyButton {
+  min-width: 270px;
+  background-color: rgb(144, 199, 144);
+  font-weight: 700;
+  color: black;
+}
+
+.promoFormApplyButton:hover {
+  color: white;
+  background-color: rgb(67, 177, 67) !important;
+}
+
+.promoFormItemInput {
+  margin-bottom: 10px;
+}

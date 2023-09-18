@@ -1,6 +1,6 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
+//TODO: Rename file. To be consistent through project.
 export interface IState {
   isLogIn: boolean;
   isLogInStorage: boolean;

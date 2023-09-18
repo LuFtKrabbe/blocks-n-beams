@@ -11,9 +11,10 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
 } from '@ant-design/icons';
+
 import type { MenuProps } from 'antd';
 
-import { Button, Dropdown, Select, Space, message } from 'antd';
+import { Badge, Button, Dropdown, Select, Space, message } from 'antd';
 import Search from 'antd/es/input/Search';
 import { Header } from 'antd/es/layout/layout';
 import { FC, useEffect, useState } from 'react';
@@ -22,10 +23,12 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 // import ProductApi from '../../../api/Product';
 import CustomerApi from '../../../api/customerApi';
 
+import { ICartState } from '../../../app/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setQueryArgs } from '../../../app/productsListSlice';
 import { userSlice } from '../../../app/reducers';
+import AbouUsIcon from '../../../assets/aboutUsIcon';
 
 import logo from './../../../assets/logo.png';
 
@@ -41,6 +44,7 @@ const Navbar: FC = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { queryArgs } = useAppSelector((state) => state.productsSearch);
   const { Option } = Select;
+  const { cart } = useAppSelector<ICartState>((state) => state.cart);
 
   useEffect(() => {
     if (customerId) {
@@ -165,12 +169,17 @@ const Navbar: FC = (): JSX.Element => {
           <Button type="primary" onClick={handleReset}>
             Reset Filter
           </Button>
+          <NavLink to="/about-us">
+            <AbouUsIcon style={{ fontSize: '25px', margin: '0px 4px' }} />
+          </NavLink>
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>
-          <NavLink to="/cart">
-            <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
-          </NavLink>
+          <Badge count={cart?.totalLineItemQuantity} overflowCount={99}>
+            <NavLink to="/cart">
+              <ShoppingCartOutlined style={{ fontSize: '28px', margin: '0px 4px' }} />
+            </NavLink>
+          </Badge>
           {(customerId && isLogIn) || customerId || (customerId && isLogInStorage) ? (
             <Dropdown
               menu={{

@@ -5,16 +5,18 @@ import dayjs from 'dayjs';
 import { RegistrationFormType } from '../types';
 
 import getApiRoot, { FlowTypes, changeApiClient, projectKey } from './Client';
-
+//TODO: Rename file. To be consistent through project.
 export default class CustomerApi {
   static customerSignIn = async ({ username, password }: UserAuthOptions) => {
-    changeApiClient(FlowTypes.PASSWORD, { username, password });
-
     const res = await getApiRoot()
       .me()
       .login()
       .post({ body: { email: username, password } })
       .execute();
+
+    changeApiClient(FlowTypes.PASSWORD, { username, password });
+
+    // TODO: remove anon creds after successful sign in;
     return res;
   };
 
@@ -74,8 +76,13 @@ export default class CustomerApi {
     return getApiRoot().me().get().execute();
   };
 
+  // TODO: Maybe move to Client.ts
   static customerIsLoggedIn = () => {
     return localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
+  };
+  // TODO: Maybe move to Client.ts
+  static customerIsAnonymous = () => {
+    return localStorage.getItem(window.btoa(`${projectKey}-anonClient`)) ? true : false;
   };
 
   static getCustomer = (customerId: string) => {

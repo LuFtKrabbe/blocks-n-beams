@@ -1,11 +1,12 @@
 import { GroupOutlined } from '@ant-design/icons';
-import { ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, Pagination, PaginationProps, Spin, message } from 'antd';
+import { DiscountCode, ProductProjection } from '@commercetools/platform-sdk';
+import { Button, Layout, Menu, Pagination, PaginationProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import ProductApi from '../../api/Product';
 
+import PromoApi from '../../api/Promo';
 import { useAppSelector } from '../../app/hooks';
 import ProductCard from '../../components/UI/productCard/productCard';
 
@@ -18,6 +19,7 @@ const { Content, Footer, Sider } = Layout;
 const Main: FC = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCardsResults, setTotalCardsResults] = useState(0);
+  const [promos, setPromos] = useState<DiscountCode[]>([]);
 
   const [productList, setProductList] = useState<ProductProjection[]>();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(true);
@@ -82,6 +84,9 @@ const Main: FC = (): JSX.Element => {
         if (res.body.total) {
           setTotalCardsResults(res.body.total);
         }
+
+        const availablePromos = (await PromoApi.getDiscountCodes()).body.results;
+        setPromos(availablePromos);
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -94,6 +99,23 @@ const Main: FC = (): JSX.Element => {
   }, [queryArgs, currentPage]);
 
   const viewCardsList = productList?.map((elem) => <ProductCard key={elem.id} productCardList={elem} />);
+
+  const promoCodes = promos.map((item) => {
+    return (
+      <li key={item.id} title={item.description ? item.description['en-US'] : ''}>
+        <Button
+          className={styles.promoCodeButton}
+          type="primary"
+          onClick={() => {
+            void navigator.clipboard.writeText(item.code);
+            void message.success('Promo code copied to clipboard');
+          }}
+        >
+          {item.code}
+        </Button>
+      </li>
+    );
+  });
 
   const onChange: PaginationProps['onChange'] = (page) => {
     setCurrentPage(page);
@@ -117,6 +139,11 @@ const Main: FC = (): JSX.Element => {
                 </div>
               ) : (
                 <>
+                  <div className={styles.promoCodesContainer}>
+                    <div>
+                      Available promos: <ul className={styles.promoCodesList}>{promoCodes}</ul>
+                    </div>
+                  </div>
                   <div className={styles.container}>{viewCardsList}</div>
                   {totalCardsResults > PAGE_SIZE ? (
                     <Pagination

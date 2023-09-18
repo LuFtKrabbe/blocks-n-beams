@@ -1,0 +1,51 @@
+.member {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 32%;
+    width: 100%;
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.memberImage {
+    height: 150px;
+    width: 125px;
+    border-radius: 10px;
+}
+
+.memberInfo {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 10px;
+    border: rgb(219, 219, 219) solid 1px;
+    border-radius: 10px;
+    margin: 0 0 0 20px;
+}
+
+.memberName {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+}
+
+.memberContribution,
+.memberLinkGitHub,
+.memberRole,
+.memberBio {
+    text-align: justify;
+    font-size: 0.7rem;
+    margin: 3px 0;
+}
+
+@media (max-width: 500px) {
+    .member {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .memberInfo {
+        margin: 10px 0 0 0;
+    }
+}

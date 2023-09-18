@@ -6,6 +6,7 @@ export enum ValidationPattern {
   Region = '^[ A-Za-z]{1,32}$',
   City = '^[ A-Za-z-]{1,32}$',
   Phone = '^\\+?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4,6}$',
+  Promo = '^[A-Z0-9]{1,16}$',
 }
 
 export enum ValidationMessage {
@@ -16,6 +17,7 @@ export enum ValidationMessage {
   Region = 'May contain alphabet, space and dash (length 1-32).',
   City = 'May contain alphabet, space and dash (length 1-32).',
   Phone = 'Enter correct phone number (e.g. +79681112233)',
+  Promo = 'Please enter a valid promo code. Uppercase alphabet and numbers (length 1-16).',
 }
 
 export enum ValidationAge {
