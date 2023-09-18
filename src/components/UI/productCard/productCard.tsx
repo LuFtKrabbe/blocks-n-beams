@@ -1,7 +1,6 @@
 import { EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { Image, Card } from 'antd';
-// import classNames from 'classnames';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,7 +12,6 @@ import styles from './productCard.module.css';
 
 const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardList }): JSX.Element => {
   const navigate = useNavigate();
-  // const categories = useAppSelector((state) => state.categories);
   const dispatch = useAppDispatch();
 
   const location = useLocation();
@@ -42,14 +40,14 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     // navigate(`/main/${currentLocationCardId}/${productCardList.id}`);
   };
   return (
-    <div className={styles.cardWrapper}>
+    <div className={styles.cardWrapper} onClick={onClick}>
       <Card
         title={productCardList.name['en-US']}
         bordered
         hoverable
         className={styles.productCard}
         extra={<a onClick={onClick}>Details</a>}
-        cover={<Image className={styles.productImage} src={productImage ? productImage : 'No image'} />}
+        cover={<Image preview={false} className={styles.productImage} src={productImage ? productImage : 'No image'} />}
       >
         <Meta
           className={styles.description}
