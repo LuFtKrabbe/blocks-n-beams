@@ -19,7 +19,7 @@ describe('Login', () => {
       };
   });
 
-  it('Renders Login component', async () => {
+  it('Renders Login component successfully', async () => {
     const { getByLabelText, getByText } = render(
       <Provider store={store}>
         <Router>
@@ -81,7 +81,9 @@ describe('Login', () => {
       fireEvent.click(loginButton);
     })
 
-    expect(await findByText(/Login failed. Customer account with the given credentials not found./i)).toBeInTheDocument();
+    console.log = function() {}; //remove output of the response and request from server
+
+    expect(await findByText(/Login failed. Account with the given credentials not found./i)).toBeInTheDocument();
   });
 
   it('Correct attempt to login', async () => {
