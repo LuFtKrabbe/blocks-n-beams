@@ -50,7 +50,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 100%;
   width: 100%;
+}
+
+.promoCodesContainer {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  font-weight: 700;
+}
+
+.promoCodesList {
+  list-style-type: none;
+}
+
+.promoCodeButton {
+  margin-top: 5px;
+  background-color: #f24236;
+  color: black;
+  font-weight: 700  ;
+}
+
+.promoCodeButton:hover {  
+  background-color: rgb(67, 177, 67);
+  color: black !important;
 }

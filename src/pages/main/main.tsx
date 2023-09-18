@@ -1,5 +1,5 @@
 import { DiscountCode, ProductProjection } from '@commercetools/platform-sdk';
-import { Layout, Menu, MenuProps, Pagination, PaginationProps, Spin, message } from 'antd';
+import { Button, Layout, Menu, MenuProps, Pagination, PaginationProps, Spin, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -64,7 +64,16 @@ const Main: FC = (): JSX.Element => {
   const promoCodes = promos.map((item) => {
     return (
       <li key={item.id} title={item.description ? item.description['en-US'] : ''}>
-        {item.code}
+        <Button
+          className={styles.promoCodeButton}
+          type="primary"
+          onClick={() => {
+            void navigator.clipboard.writeText(item.code);
+            void message.success('Promo code copied to clipboard');
+          }}
+        >
+          {item.code}
+        </Button>
       </li>
     );
   });
@@ -91,8 +100,10 @@ const Main: FC = (): JSX.Element => {
                 </div>
               ) : (
                 <>
-                  <div>
-                    Available promos: <ul>{promoCodes}</ul>
+                  <div className={styles.promoCodesContainer}>
+                    <div>
+                      Available promos: <ul className={styles.promoCodesList}>{promoCodes}</ul>
+                    </div>
                   </div>
                   <div className={styles.container}>{viewCardsList}</div>
                   {totalCardsResults > PAGE_SIZE ? (
