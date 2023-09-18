@@ -62,7 +62,7 @@ const Cart: FC = (): JSX.Element => {
           <Col span={4} style={{ minWidth: '50px' }}>
             <div>
               <div className={styles.title}>Price:</div>
-              {convertPrice(item.price.discounted ? item.price.discounted.value : item.price.value)}
+              {getPriceElement(item)}
             </div>
           </Col>
           <Col span={4} style={{ minWidth: '60px' }}>

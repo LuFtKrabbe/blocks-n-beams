@@ -1,5 +1,7 @@
 import { Cart, CentPrecisionMoney, LineItem, TypedMoney } from '@commercetools/platform-sdk';
 
+import styles from './cart.module.css';
+
 export const convertPrice = (price: TypedMoney | CentPrecisionMoney) => {
   return (price.centAmount / 100).toFixed(price.fractionDigits) + ' ' + price.currencyCode;
 };
@@ -14,21 +16,25 @@ export const getTotalCartCostElement = (cart: Cart) => {
   });
 
   if (total.centAmount !== cart.totalPrice.centAmount) {
-    // TODO: Add styling
     return (
       <div>
-        Total Cost: <span>{convertPrice(total)}</span> / <span>{convertPrice(cart.totalPrice)}</span>
+        Total Cost: <span className={styles.oldPrice}>{convertPrice(total)}</span> /{' '}
+        <span className={styles.price}>{convertPrice(cart.totalPrice)}</span>
       </div>
     );
   }
-  return <div>Total Cost: {convertPrice(cart.totalPrice)}</div>;
+  return (
+    <div>
+      Total Cost: <span className={styles.price}>{convertPrice(cart.totalPrice)}</span>
+    </div>
+  );
 };
 
 export const getPriceElement = (item: LineItem) => {
-  // TODO: Add styling
   return item.price.discounted ? (
     <div>
-      <span>{convertPrice(item.price.value)}</span> / <span>{convertPrice(item.price.discounted.value)}</span>
+      <span className={styles.oldPrice}>{convertPrice(item.price.value)}</span> /{' '}
+      <span className={styles.price}>{convertPrice(item.price.discounted.value)}</span>
     </div>
   ) : (
     <div>
