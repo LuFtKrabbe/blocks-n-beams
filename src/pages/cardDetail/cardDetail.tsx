@@ -1,5 +1,5 @@
 import { RollbackOutlined, EuroOutlined } from '@ant-design/icons';
-import { ProductProjection } from '@commercetools/platform-sdk';
+import { ProductData, ProductProjection } from '@commercetools/platform-sdk';
 import { Button, Carousel, Image, Layout, message, Spin } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import classNames from 'classnames';
@@ -24,9 +24,13 @@ const CardDetail: FC = (): JSX.Element => {
   const carouselRef = useRef() as RefObject<CarouselRef>;
 
   const [currentProductImage, setCurrentProductImage] = useState<number>(0);
-  const [productName, setproductName] = useState<string>('loading...');
-  const [productDescription, setproductDescription] = useState<string>('No description for this product');
-  const [productImages, setproductImages] = useState<string[]>(['string']);
+  const [productName, setProductName] = useState<string>('loading...');
+  const [productUnit, setProductUnit] = useState<string>('unit');
+  const [productColor, setProductColor] = useState<string>('no color');
+  const [productMark, setProductMark] = useState<string>('no mark');
+  const [productDimensions, setProductDimensions] = useState<string>('no dimensions');
+  const [productDescription, setProductDescription] = useState<string>('No description for this product');
+  const [productImages, setProductImages] = useState<string[]>(['string']);
   const [productPrice, setProductPrice] = useState<string>('');
   const [productPriceDiscount, setProductPriceDiscount] = useState<string>('');
   const [isPriceDiscount, setIsPriceDiscount] = useState<boolean>(false);
@@ -35,29 +39,8 @@ const CardDetail: FC = (): JSX.Element => {
     const fetchData = async () => {
       try {
         const getProduct = await ProductApi.getCardById(card.id ? card.id : currentLocationCardId);
-        const productName = getProduct.body.masterData.current.name['en-US'];
-        const productDescription = getProduct.body.masterData.current.metaDescription?.['en-US'];
-        const productImages = getProduct.body.masterData.current.masterVariant.images;
-        const productPrice = getProduct.body.masterData.current.masterVariant.prices?.[0].value;
-        const productPriceDiscount = getProduct.body.masterData.current.masterVariant.prices?.[0].discounted?.value;
-
-        setproductName(productName);
-
-        if (productDescription) {
-          setproductDescription(productDescription);
-        }
-        if (productImages) {
-          setproductImages(productImages.map((value) => value.url));
-        }
-        if (productPrice) {
-          setProductPrice((productPrice.centAmount / 100).toFixed(2) + ' ' + productPrice.currencyCode);
-        }
-        if (productPriceDiscount) {
-          setIsPriceDiscount(true);
-          setProductPriceDiscount(
-            (productPriceDiscount.centAmount / 100).toFixed(2) + ' ' + productPriceDiscount.currencyCode,
-          );
-        }
+        const currentProductData = getProduct.body.masterData.current;
+        setProductProperties(currentProductData);
       } catch (error) {
         if (error instanceof Error) {
           await message.error(`Failed. ${error.message}`);
@@ -67,79 +50,137 @@ const CardDetail: FC = (): JSX.Element => {
         setConfirmLoading(false);
       }
     };
+
     void fetchData();
   }, []);
+
+  function setProductProperties(data: ProductData) {
+    const productName = data.name['en-US'];
+    const productDescription = data.description?.['en-US'];
+    const productImages = data.masterVariant.images;
+    const productPrice = data.masterVariant.prices?.[0].value;
+    const productPriceDiscount = data.masterVariant.prices?.[0].discounted?.value;
+    const productAttributes = data.masterVariant.attributes;
+
+    if (productName && productImages && productPrice) {
+      setProductName(productName);
+      setProductImages(productImages.map((value) => value.url));
+      setProductPrice((productPrice.centAmount / 100).toFixed(2) + ' ' + productPrice.currencyCode);
+    }
+
+    if (productDescription) {
+      setProductDescription(productDescription);
+    }
+
+    if (productPriceDiscount) {
+      setIsPriceDiscount(true);
+      setProductPriceDiscount(
+        (productPriceDiscount.centAmount / 100).toFixed(2) + ' ' + productPriceDiscount.currencyCode,
+      );
+    }
+
+    if (productAttributes) {
+      for (const attr of productAttributes) {
+        switch (attr.name.slice(0, attr.name.indexOf('-'))) {
+          case 'unit':
+            setProductUnit(attr.value as string);
+            break;
+          case 'color':
+            setProductColor(attr.value as string);
+            break;
+          case 'mark':
+            setProductMark(attr.value as string);
+            break;
+          case 'dimensions':
+            setProductDimensions(attr.value as string);
+            break;
+        }
+      }
+    }
+  }
 
   const setCurrentSlide = (currentSlide: number) => {
     setCurrentProductImage(currentSlide);
   };
 
-  const setCurrentCarouselSlide = (current: number, prevCurrent: number) => {
+  const setCurrentCarouselSlide = (current: number) => {
     setCurrentProductImage(current);
     carouselRef.current?.goTo(current);
   };
 
   return (
-    <Content className={styles.cardWrapper}>
-      {confirmLoading ? (
-        <div className={styles.center}>
-          <Spin size="large" />
-        </div>
-      ) : (
-        <div className={styles.cardContent}>
-          <div className={styles.cardImageContent}>
-            <div className={styles.carouselWrapper}>
-              <Carousel afterChange={setCurrentSlide} className={styles.carousel} ref={carouselRef}>
-                {productImages.map((value, index) => (
-                  <Image.PreviewGroup
-                    preview={{ current: currentProductImage, onChange: setCurrentCarouselSlide }}
-                    items={productImages}
-                    key={index}
-                  >
-                    <Image src={value} preview={{ mask: <> </> }} className={classNames(styles.carousel)} />
-                  </Image.PreviewGroup>
-                ))}
-              </Carousel>
-            </div>
+    <Content className={styles.layoutWrapper}>
+      <Content className={styles.cardWrapper}>
+        {confirmLoading ? (
+          <div className={styles.center}>
+            <Spin size="large" />
           </div>
+        ) : (
+          <div className={styles.cardContent}>
+            <div className={styles.cardImageContent}>
+              <div className={styles.carouselWrapper}>
+                <Carousel afterChange={setCurrentSlide} className={styles.carousel} ref={carouselRef}>
+                  {productImages.map((value, index) => (
+                    <Image.PreviewGroup
+                      preview={{ current: currentProductImage, onChange: setCurrentCarouselSlide }}
+                      items={productImages}
+                      key={index}
+                    >
+                      <Image src={value} preview={{ mask: <> </> }} className={classNames(styles.carousel)} />
+                    </Image.PreviewGroup>
+                  ))}
+                </Carousel>
+              </div>
+            </div>
 
-          <div className={classNames(styles.cardTextButtonContent)}>
-            <div className={styles.cardTextContent}>
-              <p className={styles.title}>{productName}</p>
-              <div className={styles.prices}>
-                <p className={isPriceDiscount ? styles.priceOff : styles.price}> {productPrice} </p>
-                <p className={isPriceDiscount ? styles.priceDiscount : styles.priceDiscountOff}>
-                  {productPriceDiscount}
+            <div className={classNames(styles.cardTextButtonContent)}>
+              <div className={styles.cardTextContent}>
+                <p className={styles.title}>{productName}</p>
+                <div className={styles.prices}>
+                  <p className={isPriceDiscount ? styles.priceOff : styles.price}> {productPrice} </p>
+                  <p className={isPriceDiscount ? styles.priceDiscount : styles.priceDiscountOff}>
+                    {productPriceDiscount}
+                  </p>
+                </div>
+                <p className={styles.unit}> price per 1 {productUnit} </p>
+                <p className={styles.description}>{productDescription}</p>
+                <p className={styles.color}>
+                  Color:&nbsp;<span>{productColor}</span>
+                </p>
+                <p className={styles.mark}>
+                  Mark:&nbsp;<span>{productMark}</span>
+                </p>
+                <p className={styles.dimensions}>
+                  Dimensions:&nbsp;<span>{productDimensions}</span>
                 </p>
               </div>
-              <p className={styles.description}>{productDescription}</p>
-            </div>
 
-            <div className={styles.cardButtonContent}>
-              <Button
-                className={styles.buttonBusket}
-                type="primary"
-                onClick={() => {
-                  navigate('/cart');
-                }}
-              >
-                <EuroOutlined />
-                Add to basket
-              </Button>
-              <Button
-                className={styles.buttonCatalog}
-                type="primary"
-                onClick={() => {
-                  navigate(BACK);
-                }}
-              >
-                <RollbackOutlined />
-                Catalog
-              </Button>
+              <div className={styles.cardButtonContent}>
+                <Button
+                  className={styles.buttonBusket}
+                  type="primary"
+                  onClick={() => {
+                    navigate('/cart');
+                  }}
+                >
+                  <EuroOutlined />
+                  Add to basket
+                </Button>
+                <Button
+                  className={styles.buttonCatalog}
+                  type="primary"
+                  onClick={() => {
+                    navigate(BACK);
+                  }}
+                >
+                  <RollbackOutlined />
+                  Catalog
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Content>
     </Content>
   );
 };

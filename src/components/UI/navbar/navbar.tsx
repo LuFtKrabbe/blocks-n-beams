@@ -11,6 +11,7 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
 } from '@ant-design/icons';
+
 import type { MenuProps } from 'antd';
 
 import { Badge, Button, Dropdown, Select, Space, message } from 'antd';
@@ -27,6 +28,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 
 import { setQueryArgs } from '../../../app/productsListSlice';
 import { userSlice } from '../../../app/reducers';
+import AbouUsIcon from '../../../assets/aboutUsIcon';
 
 import logo from './../../../assets/logo.png';
 
@@ -167,6 +169,9 @@ const Navbar: FC = (): JSX.Element => {
           <Button type="primary" onClick={handleReset}>
             Reset Filter
           </Button>
+          <NavLink to="/about-us">
+            <AbouUsIcon style={{ fontSize: '25px', margin: '0px 4px' }} />
+          </NavLink>
           <NavLink to="/main">
             <ShopOutlined style={{ fontSize: '25px', margin: '0px 4px' }} />
           </NavLink>

@@ -98,7 +98,7 @@ const Blocks: FC = (): JSX.Element => {
                       current={currentPage}
                       onChange={onChange}
                       total={totalCardsResults}
-                      pageSize={PAGE_SIZE}
+                      pageSize={Number(PAGE_SIZE)}
                     />
                   ) : (
                     ''

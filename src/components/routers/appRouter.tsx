@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import AboutUs from '../../pages/about/aboutUs';
 import CardDetail from '../../pages/cardDetail/cardDetail';
 import Cart from '../../pages/cart/cart';
 import Aerocrete from '../../pages/categories/aerocrete';
@@ -32,13 +33,14 @@ const AppRouter: FC = (): JSX.Element => {
       <Route path="/main/reinforced-concrete" element={<ReinforcedConcrete />} />
       <Route path="/main/timber" element={<Timber />} />
       <Route path="/main/aggregates" element={<Aggregates />} />
-      <Route path="/main/beams/:id" element={<Beams />} />
-      <Route path="/main/blocks/:id" element={<Blocks />} />
+      <Route path="/main/beams/:id" element={<CardDetail />} />
+      <Route path="/main/blocks/:id" element={<CardDetail />} />
       <Route path="/main/bricks/:id" element={<CardDetail />} />
       <Route path="/main/aerocrete/:id" element={<CardDetail />} />
       <Route path="/main/reinforced-concrete/:id" element={<CardDetail />} />
       <Route path="/main/timber/:id" element={<CardDetail />} />
       <Route path="/main/aggregates/:id" element={<CardDetail />} />
+      <Route path="/about-us" element={<AboutUs />} />
       <Route path="/login" element={<PrivateRoute page={<Login />} />} />
       <Route path="/registration" element={<PrivateRoute page={<Registration />} />} />
       <Route path="/profile/:id" element={<Profile />} />

@@ -14,7 +14,7 @@ interface IProductsSearchList {
 const initialState: IProductsSearchList = {
   isSearching: false,
   productsSearchList: [],
-  queryArgs: { limit: PAGE_SIZE as number, fuzzy: true },
+  queryArgs: { limit: PAGE_SIZE, fuzzy: true },
 };
 
 const productsSearchListSlice = createSlice({
