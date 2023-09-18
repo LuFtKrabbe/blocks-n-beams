@@ -1,11 +1,11 @@
 import { EuroOutlined } from '@ant-design/icons/lib/icons';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { Image, Card } from 'antd';
-// import classNames from 'classnames';
+import { Image, Card, Button } from 'antd';
 import { FC } from 'react';
 const { Meta } = Card;
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { addItem } from '../../../app/cartSlice';
 import { useAppDispatch } from '../../../app/hooks';
 import { userSlice } from '../../../app/reducers';
 
@@ -41,6 +41,11 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
     );
     // navigate(`/main/${currentLocationCardId}/${productCardList.id}`);
   };
+
+  const addToCart = async (product: ProductProjection) => {
+    await dispatch(addItem(product));
+  };
+
   return (
     <div className={styles.cardWrapper}>
       <Card
@@ -70,6 +75,14 @@ const ProductCard: FC<{ productCardList: ProductProjection }> = ({ productCardLi
                 {' '}
                 {productPriceDiscount()}{' '}
               </span>
+              <Button
+                type="primary"
+                onClick={() => {
+                  void addToCart(productCardList);
+                }}
+              >
+                Add to Cart
+              </Button>
             </div>
           }
         />

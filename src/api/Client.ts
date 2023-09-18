@@ -108,8 +108,10 @@ const getUserApiClientByPassword = ({ username, password }: UserAuthOptions): Cl
   }
 };
 
-const getUserApiClientByExistingToken = (): Client => {
-  const tokenKey = window.btoa(`${projectKey}-userClient`);
+const getApiClientByExistingToken = (): Client => {
+  const tokenKey = (localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false)
+    ? window.btoa(`${projectKey}-userClient`)
+    : window.btoa(`${projectKey}-anonClient`);
 
   const existingTokenMiddlewareOptions: ExistingTokenMiddlewareOptions = {
     force: true,
@@ -134,9 +136,11 @@ const getUserApiClientByExistingToken = (): Client => {
 };
 
 const getInitialApiClient = () => {
-  const customerIsLoggedIn = localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false;
-  if (customerIsLoggedIn) {
-    return getUserApiClientByExistingToken();
+  if (
+    (localStorage.getItem(window.btoa(`${projectKey}-userClient`)) ? true : false) ||
+    (localStorage.getItem(window.btoa(`${projectKey}-anonClient`)) ? true : false)
+  ) {
+    return getApiClientByExistingToken();
   } else {
     return getDefaultApiClient();
   }
@@ -167,6 +171,6 @@ export const changeApiClient = (flowType?: string, userCreds?: UserAuthOptions):
 const getApiRoot = () => {
   return createApiBuilderFromCtpClient(currentApiClient).withProjectKey({ projectKey });
 };
-
+// TODO: Refactor exports to be consistent through file and project
 export { getDefaultApiClient, getAnonApiClient, getUserApiClientByPassword, currentApiClient };
 export default getApiRoot;

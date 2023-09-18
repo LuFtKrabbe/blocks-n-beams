@@ -1,13 +1,48 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60vh;
-  font-size: 5rem;
+.wrapper {
+  margin: 36px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  max-width: 1200px;
 }
 
-.logoutButtonContainer {
+.title {
+  margin-bottom: 10px;
+}
+
+.quantityInput {
+  max-width: 50px;
+}
+
+.itemName {
   display: flex;
   align-items: center;
-  justify-content: center;
+}
+
+.imageContainer {
+  min-width: 100px;
+}
+
+.totalCost {
+  margin-bottom: 10px;
+}
+
+.price {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: rgb(184, 214, 184);
+}
+
+.oldPrice {
+  color: rgb(90, 90, 90);
+  text-decoration: line-through;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: rgb(194, 190, 190);
+}
+
+@media (max-width: 660px) {
+  .imageContainer {
+    min-width: 100%;
+  }
 }
