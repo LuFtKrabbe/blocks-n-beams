@@ -1,4 +1,4 @@
-import { Button, Form, Input, Space, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { FC } from 'react';
 
 import MyCartApi from '../../api/Cart';
@@ -6,6 +6,8 @@ import MyCartApi from '../../api/Cart';
 import { getActiveCart } from '../../app/cartSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { ValidationMessage, ValidationPattern } from '../../validationRules';
+
+import styles from './PromoForm.module.css';
 
 interface IpromoCodeFormValue {
   promoCode: string;
@@ -27,13 +29,14 @@ const PromoForm: FC = (): JSX.Element => {
   };
 
   return (
-    <Space>
+    <div className={styles.promoFormContainer}>
       <Form
         form={promoCodeForm}
         name="promoCodeForm"
-        labelCol={{ span: 10 }}
-        wrapperCol={{ span: 14 }}
-        style={{ maxWidth: 400, margin: '20px auto 10px auto' }} // TODO: Maybe we should move all styles to CSS
+        layout="horizontal"
+        labelCol={{ span: 9 }}
+        wrapperCol={{ span: 15 }}
+        className={styles.promoForm}
         autoComplete="off"
         onFinish={(value) => {
           void onFinishPromoForm(value);
@@ -42,6 +45,7 @@ const PromoForm: FC = (): JSX.Element => {
         <Form.Item<IpromoCodeFormValue>
           label="Promo Code"
           name={'promoCode'}
+          className={styles.promoFormItemInput}
           rules={[
             { required: false, whitespace: true },
             {
@@ -53,11 +57,11 @@ const PromoForm: FC = (): JSX.Element => {
         >
           <Input />
         </Form.Item>
-        <Button key="submit" type="primary" htmlType="submit" style={{ margin: '5px 10px' }}>
+        <Button className={styles.promoFormApplyButton} key="submit" type="primary" htmlType="submit">
           Apply
         </Button>
       </Form>
-    </Space>
+    </div>
   );
 };
 
